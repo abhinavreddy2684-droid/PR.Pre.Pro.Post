@@ -71,18 +71,18 @@ export default function Navbar() {
             href="#home"
             className="flex items-center gap-3"
           >
-            <div className="w-12 h-12 rounded-full border border-amber-500/30 bg-amber-500/10 flex items-center justify-center">
-              <Clapperboard className="text-amber-400" />
-            </div>
+              <div className="w-12 h-12 rounded-full border border-amber-500/30 bg-amber-500/10 flex items-center justify-center">
+                <span className="text-amber-400"> PR </span> 
+              </div>
 
             <div>
-              <h1 className="text-xl md:text-2xl font-black tracking-[0.3em] text-amber-400 uppercase">
-                24 Crafts
+              <h1 className="text-md md:text font-black tracking-[0.3em] text-amber-400 uppercase">
+                 PRE PRO POST  
               </h1>
 
-              <p className="text-[10px] uppercase tracking-[0.35em] text-neutral-500">
-                Of Cinema
-              </p>
+              {/* <p className="text-[15px] uppercase tracking-[0.35em] text-neutral-500">
+                
+              </p> */}
             </div>
           </motion.a>
 
