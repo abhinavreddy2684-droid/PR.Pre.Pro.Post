@@ -1,4 +1,6 @@
-const talents = [
+import crafts from "./crafts";
+
+const playbackSingers = [
   {
     id: 1,
     name: "Aarav Menon",
@@ -89,4 +91,64 @@ const talents = [
   },
 ];
 
-export default talents;
+const names = [
+  ["Arjun Mehta", "Priya Nair", "Ritvik Rao"],
+  ["Dev Malhotra", "Ira Kapoor", "Karan Bose"],
+  ["Aditya Sen", "Tara Menon", "Neil Varma"],
+  ["Kabir Anand", "Maya Iyer", "Rishi Das"],
+  ["Vihaan Shah", "Anika Rao", "Samar Khan"],
+  ["Arnav Kapoor", "Diya Menon", "Rohan Nair"],
+  ["Ayaan Mehta", "Sara Bose", "Yash Varma"],
+  ["Reyansh Das", "Kiara Shah", "Manav Rao"],
+];
+
+const locations = [
+  "Mumbai, India",
+  "Hyderabad, India",
+  "Chennai, India",
+  "Bengaluru, India",
+  "Pune, India",
+  "Kochi, India",
+  "Delhi, India",
+  "Kolkata, India",
+];
+
+const images = [
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?auto=format&fit=crop&w=900&q=85",
+  "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=85",
+];
+
+const genres = ["Film", "Indie", "Commercial", "Classical", "Contemporary", "Experimental"];
+const availability = ["Available", "Available", "On request"];
+
+const generatedTalents = crafts
+  .filter((craft) => craft.title !== "Playback Singing")
+  .flatMap((craft, craftIndex) =>
+    craft.talentTypes.slice(0, 3).map((role, index) => {
+      const person = names[craftIndex % names.length][index];
+      const id = 100 + craftIndex * 3 + index;
+
+      return {
+        id,
+        name: person,
+        craft: craft.title,
+        role,
+        location: locations[(craftIndex + index) % locations.length],
+        experience: `${5 + ((craftIndex + index) % 9)} years`,
+        genres: [
+          genres[(craftIndex + index) % genres.length],
+          genres[(craftIndex + index + 2) % genres.length],
+          genres[(craftIndex + index + 4) % genres.length],
+        ],
+        availability: availability[(craftIndex + index) % availability.length],
+        image: images[(craftIndex + index) % images.length],
+        bio: `${role} with a production-focused practice and experience across independent and commercial work.`,
+      };
+    }),
+  );
+
+export default [...playbackSingers, ...generatedTalents];
