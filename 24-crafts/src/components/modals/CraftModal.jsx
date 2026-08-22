@@ -6,14 +6,20 @@ import {
   Layers3,
   ArrowRight,
 } from "lucide-react";
-
-import Button from "../ui/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function CraftModal({
   craft,
   isOpen,
   onClose,
 }) {
+  const navigate = useNavigate();
+
+  const handleExploreTalent = () => {
+    onClose();
+    navigate(`/talent?craft=${encodeURIComponent(craft.title)}`);
+  };
+
   return (
     <AnimatePresence>
       {isOpen && craft && (
@@ -29,14 +35,10 @@ export default function CraftModal({
             p-6
           "
         >
-          {/* Overlay */}
-
           <div
             className="absolute inset-0"
             onClick={onClose}
           />
-
-          {/* Modal */}
 
           <motion.div
             initial={{ opacity: 0, y: 80, scale: 0.95 }}
@@ -52,8 +54,6 @@ export default function CraftModal({
               bg-neutral-950
             "
           >
-            {/* Header */}
-
             <div
               className="
                 relative p-10 md:p-14
@@ -61,12 +61,9 @@ export default function CraftModal({
                 overflow-hidden
               "
             >
-              {/* Glow */}
-
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,158,11,0.14),transparent_45%)]" />
 
               <div className="relative flex items-start justify-between gap-6">
-                
                 <div>
                   <p className="uppercase tracking-[0.35em] text-sm text-amber-400">
                     Cinema Craft
@@ -83,6 +80,7 @@ export default function CraftModal({
 
                 <button
                   onClick={onClose}
+                  aria-label="Close craft details"
                   className="
                     w-14 h-14 rounded-full
                     border border-white/10
@@ -97,93 +95,61 @@ export default function CraftModal({
               </div>
             </div>
 
-            {/* Body */}
-
             <div className="grid lg:grid-cols-2 gap-10 p-10 md:p-14">
-              
-              {/* Services */}
-
               <div>
                 <div className="flex items-center gap-3 mb-8">
                   <Briefcase className="text-amber-400" />
                   <h3 className="text-2xl font-bold">
-                    Services Offered
+                    Find Talent
                   </h3>
                 </div>
 
-                <div className="space-y-4">
-                  {craft.services?.map((service) => (
-                    <div
-                      key={service}
-                      className="
-                        px-5 py-4 rounded-2xl
-                        border border-white/10
-                        bg-white/[0.03]
-                        text-neutral-300
-                      "
-                    >
-                      {service}
-                    </div>
-                  ))}
-                </div>
+                <p className="text-neutral-400 leading-relaxed">
+                  Explore professionals in this craft, review their work, and discover the right talent for your next project.
+                </p>
               </div>
-
-              {/* Industries */}
 
               <div>
                 <div className="flex items-center gap-3 mb-8">
                   <Clapperboard className="text-amber-400" />
                   <h3 className="text-2xl font-bold">
-                    Industries Served
+                    Built for Production
                   </h3>
                 </div>
 
-                <div className="flex flex-wrap gap-4">
-                  {craft.industries?.map((industry) => (
-                    <div
-                      key={industry}
-                      className="
-                        px-5 py-3 rounded-full
-                        bg-amber-500/10
-                        border border-amber-500/20
-                        text-amber-300
-                        uppercase tracking-[0.15em]
-                        text-sm
-                      "
-                    >
-                      {industry}
-                    </div>
-                  ))}
-                </div>
+                <p className="text-neutral-400 leading-relaxed">
+                  Browse structured, searchable talent profiles instead of relying on static resumes or scattered referrals.
+                </p>
 
-                {/* Workflow */}
-
-                <div className="mt-12">
-                  
-                  <div className="flex items-center gap-3 mb-6">
-                    <Layers3 className="text-amber-400" />
-
-                    <h3 className="text-2xl font-bold">
-                      Workflow
-                    </h3>
-                  </div>
-
-                  <p className="text-neutral-400 leading-relaxed">
-                    {craft.workflow}
-                  </p>
+                <div className="mt-10 flex items-center gap-3">
+                  <Layers3 className="text-amber-400" />
+                  <span className="text-sm uppercase tracking-[0.2em] text-neutral-500">
+                    Discover · Evaluate · Hire
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Footer */}
+            <div className="p-10 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <p className="text-sm text-neutral-500">
+                Explore available talent in {craft.title}.
+              </p>
 
-            <div className="p-10 border-t border-white/10 flex justify-end">
-              
-              <Button className="flex items-center gap-3">
-                Request This Service
-
+              <button
+                onClick={handleExploreTalent}
+                className="
+                  inline-flex items-center justify-center gap-3
+                  rounded-full px-7 py-4
+                  bg-amber-400 text-black
+                  font-semibold
+                  hover:bg-amber-300
+                  hover:gap-4
+                  transition-all duration-300
+                "
+              >
+                Explore Talent
                 <ArrowRight size={18} />
-              </Button>
+              </button>
             </div>
           </motion.div>
         </motion.div>
