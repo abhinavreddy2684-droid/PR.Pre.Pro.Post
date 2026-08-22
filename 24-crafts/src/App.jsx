@@ -9,6 +9,7 @@ import CraftPage from "./pages/CraftPage";
 import Productions from "./pages/Productions";
 import Artists from "./pages/Artists";
 import TalentDiscovery from "./pages/TalentDiscovery";
+import TalentProfile from "./pages/TalentProfile";
 
 export default function App() {
   return (
@@ -24,6 +25,11 @@ export default function App() {
         <Route
           path="/talent"
           element={<TalentDiscovery />}
+        />
+
+        <Route
+          path="/talent/:talentId"
+          element={<TalentProfile />}
         />
 
         <Route
