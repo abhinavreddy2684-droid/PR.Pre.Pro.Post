@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -15,14 +15,20 @@ import TalentProfile from "./pages/TalentProfile";
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const previousScrollRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+
     if (hash) {
       const target = document.getElementById(hash.slice(1));
       target?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    return () => {
+      window.history.scrollRestoration = previousScrollRestoration;
+    };
   }, [pathname, hash]);
 
   return null;
