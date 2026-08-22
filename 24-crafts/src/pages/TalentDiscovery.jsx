@@ -158,7 +158,7 @@ export default function TalentDiscovery() {
                       {talent.location}
                     </div>
 
-                    <p className="mt-4 text-sm leading-relaxed text-neutral-500 line-clamp-2">
+                    <p className="mt-4 text-sm leading-relaxed text-neutral-500">
                       {talent.bio}
                     </p>
 
@@ -175,10 +175,13 @@ export default function TalentDiscovery() {
 
                     <div className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between">
                       <span className="text-xs text-neutral-500">{talent.experience} experience</span>
-                      <button className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-amber-300 transition-colors">
+                      <Link
+                        to={`/talent/${talent.id}`}
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-amber-300 transition-colors"
+                      >
                         View profile
                         <ArrowRight size={16} />
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </article>
