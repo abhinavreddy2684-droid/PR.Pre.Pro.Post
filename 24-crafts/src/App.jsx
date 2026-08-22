@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import CraftPage from "./pages/CraftPage";
 import Productions from "./pages/Productions";
 import Artists from "./pages/Artists";
+import TalentDiscovery from "./pages/TalentDiscovery";
 
 export default function App() {
   return (
@@ -18,6 +19,11 @@ export default function App() {
         <Route
           path="/crafts"
           element={<CraftPage />}
+        />
+
+        <Route
+          path="/talent"
+          element={<TalentDiscovery />}
         />
 
         <Route
