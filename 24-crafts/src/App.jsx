@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import {
   BrowserRouter,
   Routes,
   Route,
+  useLocation,
 } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -10,9 +12,26 @@ import Artists from "./pages/Artists";
 import TalentDiscovery from "./pages/TalentDiscovery";
 import TalentProfile from "./pages/TalentProfile";
 
+function RouteScrollManager() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const target = document.getElementById(hash.slice(1));
+      target?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname, hash]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <RouteScrollManager />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/talent" element={<TalentDiscovery />} />
