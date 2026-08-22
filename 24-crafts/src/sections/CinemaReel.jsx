@@ -87,7 +87,7 @@ export default function CinemaReel() {
 
       <section
         aria-live="polite"
-        className="relative max-w-6xl mx-auto px-6 pt-16 pb-[calc(100svh-6rem)] md:pt-20"
+        className="relative max-w-6xl mx-auto px-6 pt-16 pb-20 md:pt-20"
       >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
