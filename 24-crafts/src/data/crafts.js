@@ -2,169 +2,146 @@ const crafts = [
   {
     id: 1,
     title: "Direction",
-    description:
-      "The visionary force shaping narrative, performance, and cinematic execution.",
+    description: "The visionary force shaping narrative, performance, and cinematic execution.",
+    talentTypes: ["Film Directors", "Assistant Directors", "Commercial Directors", "Music Video Directors"],
   },
-
   {
     id: 2,
     title: "Screenplay",
-    description:
-      "Crafting cinematic narratives, pacing, structure, and emotional storytelling.",
+    description: "Crafting cinematic narratives, pacing, structure, and emotional storytelling.",
+    talentTypes: ["Screenwriters", "Script Writers", "Story Writers", "Screenplay Consultants"],
   },
-
   {
     id: 3,
     title: "Cinematography",
-    description:
-      "Painting emotion with light, movement, composition, and cinematic framing.",
+    description: "Painting emotion with light, movement, composition, and cinematic framing.",
+    talentTypes: ["Directors of Photography", "Cinematographers", "Camera Operators", "Steadicam Operators"],
   },
-
   {
     id: 4,
     title: "Music Direction",
-    description:
-      "Building emotional identity through cinematic composition and sound.",
+    description: "Building emotional identity through cinematic composition and sound.",
+    talentTypes: ["Music Directors", "Film Composers", "Background Score Composers", "Music Producers"],
   },
-
   {
     id: 5,
     title: "Editing",
-    description:
-      "Shaping rhythm, pacing, emotion, and cinematic continuity.",
+    description: "Shaping rhythm, pacing, emotion, and cinematic continuity.",
+    talentTypes: ["Film Editors", "Trailer Editors", "Assistant Editors", "Post-Production Editors"],
   },
-
   {
     id: 6,
     title: "Art Direction",
-    description:
-      "Designing cinematic spaces, aesthetics, environments, and visual atmosphere.",
+    description: "Designing cinematic spaces, aesthetics, environments, and visual atmosphere.",
+    talentTypes: ["Art Directors", "Set Designers", "Set Decorators", "Visual Concept Artists"],
   },
-
   {
     id: 7,
     title: "Action & Stunts",
-    description:
-      "Crafting dynamic action choreography and cinematic stunt execution.",
+    description: "Crafting dynamic action choreography and cinematic stunt execution.",
+    talentTypes: ["Stunt Performers", "Stunt Coordinators", "Action Choreographers", "Fight Choreographers"],
   },
-
   {
     id: 8,
     title: "Dance Choreography",
-    description:
-      "Creating movement, rhythm, and expressive cinematic dance storytelling.",
+    description: "Creating movement, rhythm, and expressive cinematic dance storytelling.",
+    talentTypes: ["Dance Choreographers", "Dance Directors", "Movement Directors", "Dance Performers"],
   },
-
   {
     id: 9,
     title: "Makeup & Hair",
-    description:
-      "Transforming actors through styling, prosthetics, and visual character creation.",
+    description: "Transforming actors through styling, prosthetics, and visual character creation.",
+    talentTypes: ["Makeup Artists", "Hair Stylists", "Prosthetic Makeup Artists", "Character Makeup Artists"],
   },
-
   {
     id: 10,
     title: "Costume Design",
-    description:
-      "Designing wardrobe aesthetics that define character and cinematic identity.",
+    description: "Designing wardrobe aesthetics that define character and cinematic identity.",
+    talentTypes: ["Costume Designers", "Wardrobe Stylists", "Costume Supervisors", "Costume Assistants"],
   },
-
   {
     id: 11,
     title: "Sound Design",
-    description:
-      "Building immersive sonic worlds through effects, ambience, and mixing.",
+    description: "Building immersive sonic worlds through effects, ambience, and mixing.",
+    talentTypes: ["Sound Designers", "Foley Artists", "Re-Recording Mixers", "Location Sound Recordists"],
   },
-
   {
     id: 12,
     title: "VFX & CGI",
-    description:
-      "Enhancing cinematic storytelling through advanced visual effects and CGI.",
+    description: "Enhancing cinematic storytelling through advanced visual effects and CGI.",
+    talentTypes: ["VFX Artists", "CGI Artists", "Compositors", "3D Artists"],
   },
-
   {
     id: 13,
     title: "Dubbing",
-    description:
-      "Professional voice replacement and cinematic dialogue synchronization.",
+    description: "Professional voice replacement and cinematic dialogue synchronization.",
+    talentTypes: ["Dubbing Artists", "Voice Actors", "ADR Artists", "Dubbing Directors"],
   },
-
   {
     id: 14,
     title: "Playback Singing",
-    description:
-      "Delivering cinematic vocal performances for songs and soundtracks.",
+    description: "Delivering cinematic vocal performances for songs and soundtracks.",
+    talentTypes: ["Playback Singers", "Session Singers", "Vocalists", "Backing Vocalists"],
   },
-
   {
     id: 15,
     title: "Lyric Writing",
-    description:
-      "Crafting poetic cinematic lyrics that elevate storytelling through music.",
+    description: "Crafting poetic cinematic lyrics that elevate storytelling through music.",
+    talentTypes: ["Lyricists", "Songwriters", "Poets", "Music Writers"],
   },
-
   {
     id: 16,
     title: "Story Development",
-    description:
-      "Developing concepts, themes, and cinematic narrative foundations.",
+    description: "Developing concepts, themes, and cinematic narrative foundations.",
+    talentTypes: ["Story Developers", "Story Writers", "Creative Consultants", "Narrative Designers"],
   },
-
   {
     id: 17,
     title: "Dialogue Writing",
-    description:
-      "Writing emotionally resonant and character-driven cinematic dialogue.",
+    description: "Writing emotionally resonant and character-driven cinematic dialogue.",
+    talentTypes: ["Dialogue Writers", "Screenwriters", "Script Consultants", "Dialogue Consultants"],
   },
-
   {
     id: 18,
     title: "Production Design",
-    description:
-      "Overseeing the complete visual language and cinematic world-building.",
+    description: "Overseeing the complete visual language and cinematic world-building.",
+    talentTypes: ["Production Designers", "Art Department Heads", "Visual Designers", "Set Designers"],
   },
-
   {
     id: 19,
     title: "PR & Publicity",
-    description:
-      "Building audience engagement, marketing campaigns, and cinematic branding.",
+    description: "Building audience engagement, marketing campaigns, and cinematic branding.",
+    talentTypes: ["PR Professionals", "Publicists", "Film Marketers", "Entertainment Communications Specialists"],
   },
-
   {
     id: 20,
     title: "Still Photography",
-    description:
-      "Capturing iconic promotional and behind-the-scenes cinematic imagery.",
+    description: "Capturing iconic promotional and behind-the-scenes cinematic imagery.",
+    talentTypes: ["Film Photographers", "Still Photographers", "Unit Photographers", "Behind-the-Scenes Photographers"],
   },
-
   {
     id: 21,
     title: "Casting",
-    description:
-      "Discovering and selecting talent that brings cinematic characters to life.",
+    description: "Discovering and selecting talent that brings cinematic characters to life.",
+    talentTypes: ["Casting Directors", "Casting Associates", "Talent Scouts", "Casting Assistants"],
   },
-
   {
     id: 22,
     title: "Subtitling",
-    description:
-      "Localizing cinematic storytelling for multilingual global audiences.",
+    description: "Localizing cinematic storytelling for multilingual global audiences.",
+    talentTypes: ["Subtitle Editors", "Subtitle Translators", "Localization Specialists", "Captioning Professionals"],
   },
-
   {
     id: 23,
     title: "Color Grading (DI)",
-    description:
-      "Crafting cinematic tone, mood, and visual consistency through grading.",
+    description: "Crafting cinematic tone, mood, and visual consistency through grading.",
+    talentTypes: ["Colorists", "DI Colorists", "Color Grading Artists", "Online Editors"],
   },
-
   {
     id: 24,
     title: "Production Management",
-    description:
-      "Managing schedules, logistics, budgeting, and execution across production.",
+    description: "Managing schedules, logistics, budgeting, and execution across production.",
+    talentTypes: ["Production Managers", "Line Producers", "Production Coordinators", "Production Supervisors"],
   },
 ];
 
