@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, BriefcaseBusiness, Clapperboard, Layers3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,24 @@ import CinemaReelCraftButton from "../components/ui/CinemaReelCraftButton";
 export default function CinemaReel() {
   const navigate = useNavigate();
   const [activeCraft, setActiveCraft] = useState(crafts[1]);
+  const detailRef = useRef(null);
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
+    detailRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [activeCraft]);
+
+  const handleCraftSelect = (craft) => {
+    setActiveCraft(craft);
+  };
 
   const exploreTalent = () => {
     navigate(`/talent?craft=${encodeURIComponent(activeCraft.title)}`);
@@ -38,7 +56,9 @@ export default function CinemaReel() {
               key={craft.id}
               craftId={craft.id}
               active={activeCraft.id === craft.id}
-              onClick={() => setActiveCraft(craft)}
+              onClick={() => handleCraftSelect(craft)}
+              aria-label={`View details for ${craft.title}`}
+              aria-pressed={activeCraft.id === craft.id}
             >
               {craft.title}
             </CinemaReelCraftButton>
@@ -50,7 +70,11 @@ export default function CinemaReel() {
         </div>
       </section>
 
-      <section className="relative max-w-6xl mx-auto px-6 py-20 md:py-28">
+      <section
+        ref={detailRef}
+        aria-live="polite"
+        className="relative max-w-6xl mx-auto px-6 pt-16 pb-28 md:pt-20 md:pb-32 scroll-mt-20"
+      >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
         <div key={activeCraft.id} className="relative z-10 rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up">
