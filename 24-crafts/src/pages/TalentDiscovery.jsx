@@ -10,19 +10,22 @@ import Select from "../components/ui/Select";
 import talents from "../data/talents";
 
 const formatCraft = (craft) => {
-  if (!craft) return "Talent";
+  if (!craft) return "Talent Network";
   if (craft === "Playback Singing") return "Playback Singers";
-  return `${craft}s`;
+  return craft;
 };
 
 export default function TalentDiscovery() {
   const [searchParams] = useSearchParams();
-  const craft = searchParams.get("craft") || "Playback Singing";
+  const craft = searchParams.get("craft");
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("All locations");
   const [availability, setAvailability] = useState("Any availability");
 
-  const craftTalents = useMemo(() => talents.filter((talent) => talent.craft === craft), [craft]);
+  const craftTalents = useMemo(
+    () => (craft ? talents.filter((talent) => talent.craft === craft) : talents),
+    [craft],
+  );
 
   const locations = [
     "All locations",
@@ -33,14 +36,16 @@ export default function TalentDiscovery() {
     const query = search.trim().toLowerCase();
 
     return craftTalents.filter((talent) => {
-      const matchesSearch = !query || [
+      const searchableFields = [
         talent.name,
         talent.location,
         talent.craft,
+        talent.role,
         talent.bio,
         ...talent.genres,
-      ].some((value) => value.toLowerCase().includes(query));
+      ].filter(Boolean);
 
+      const matchesSearch = !query || searchableFields.some((value) => value.toLowerCase().includes(query));
       const matchesLocation = location === "All locations" || talent.location.startsWith(location);
       const matchesAvailability = availability === "Any availability" || talent.availability === availability;
 
@@ -54,17 +59,17 @@ export default function TalentDiscovery() {
 
       <main className="pt-32 pb-24 px-6">
         <div className="max-w-7xl mx-auto">
-          <Link to="/crafts" className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-amber-400 transition-colors">
+          <Link to="/#cinema-reel" className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-amber-400 transition-colors">
             <ArrowLeft size={16} />
-            Back to crafts
+            Back to CinemaReel
           </Link>
 
           <div className="mt-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
             <div className="max-w-3xl">
-              <p className="uppercase tracking-[0.35em] text-xs text-amber-400">Discover the craft</p>
+              <p className="uppercase tracking-[0.35em] text-xs text-amber-400">Explore talent</p>
               <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tight">{formatCraft(craft)}</h1>
               <p className="mt-6 text-lg text-neutral-400 leading-relaxed">
-                Discover skilled {craft.toLowerCase()} professionals, explore their work, and find the right creative talent for your next production.
+                Discover skilled professionals, explore their work, and find the right creative talent for your next production.
               </p>
             </div>
 
@@ -81,7 +86,7 @@ export default function TalentDiscovery() {
                 <Input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
-                  placeholder={`Search ${formatCraft(craft).toLowerCase()} by name, genre or location`}
+                  placeholder={`Search ${formatCraft(craft).toLowerCase()} by name, craft or location`}
                 />
               </label>
 
@@ -97,9 +102,9 @@ export default function TalentDiscovery() {
               <label className="flex items-center gap-3 rounded-2xl bg-black/40 border border-white/10 px-4 py-4">
                 <SlidersHorizontal size={18} className="text-amber-400" />
                 <Select value={availability} onChange={(event) => setAvailability(event.target.value)} className="min-w-40">
-                  <option className="bg-neutral-950">Any availability</option>
-                  <option className="bg-neutral-950">Available</option>
-                  <option className="bg-neutral-950">On request</option>
+                  <option value="Any availability" className="bg-neutral-950">Any availability</option>
+                  <option value="Available" className="bg-neutral-950">Available</option>
+                  <option value="On request" className="bg-neutral-950">On request</option>
                 </Select>
               </label>
             </div>
