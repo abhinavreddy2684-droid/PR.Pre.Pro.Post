@@ -15,9 +15,22 @@ export default function CinemaReel() {
     setActiveCraft(craft);
 
     requestAnimationFrame(() => {
-      detailRef.current?.scrollIntoView({
+      const detail = detailRef.current;
+      if (!detail) return;
+
+      const navbar = document.querySelector("header");
+      const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
+      const topGap = 24;
+      const detailTop = detail.getBoundingClientRect().top + window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const targetScroll = Math.min(
+        Math.max(detailTop - navbarHeight - topGap, 0),
+        maxScroll,
+      );
+
+      window.scrollTo({
+        top: targetScroll,
         behavior: "smooth",
-        block: "center",
       });
     });
   };
