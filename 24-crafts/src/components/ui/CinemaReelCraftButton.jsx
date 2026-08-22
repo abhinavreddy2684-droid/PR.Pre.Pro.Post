@@ -5,6 +5,7 @@ export default function CinemaReelCraftButton({
   active = false,
   onClick,
   craftId,
+  ...props
 }) {
   return (
     <motion.button
@@ -16,6 +17,7 @@ export default function CinemaReelCraftButton({
           ? "bg-amber-500 scale-110 z-10 shadow-[0_0_30px_rgba(245,158,11,0.4)]"
           : "bg-neutral-900 hover:bg-neutral-800 opacity-60 hover:opacity-100"
       }`}
+      {...props}
     >
       <div className="absolute inset-1 border border-neutral-950/20 rounded-sm" />
       <span
