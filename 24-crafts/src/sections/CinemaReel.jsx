@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowRight, BriefcaseBusiness, Clapperboard, Layers3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,13 +10,9 @@ export default function CinemaReel() {
   const navigate = useNavigate();
   const [activeCraft, setActiveCraft] = useState(crafts[1]);
   const detailRef = useRef(null);
-  const hasMounted = useRef(false);
 
-  useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      return;
-    }
+  const handleCraftSelect = (craft) => {
+    setActiveCraft(craft);
 
     requestAnimationFrame(() => {
       detailRef.current?.scrollIntoView({
@@ -24,10 +20,6 @@ export default function CinemaReel() {
         block: "start",
       });
     });
-  }, [activeCraft]);
-
-  const handleCraftSelect = (craft) => {
-    setActiveCraft(craft);
   };
 
   const exploreTalent = () => {
@@ -72,15 +64,14 @@ export default function CinemaReel() {
         </div>
       </section>
 
-      <section className="relative max-w-6xl mx-auto px-6 pt-16 pb-28 md:pt-20 md:pb-32">
+      <section
+        ref={detailRef}
+        aria-live="polite"
+        className="relative max-w-6xl mx-auto px-6 pt-16 pb-28 md:pt-20 md:pb-32 scroll-mt-20"
+      >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
-        <div
-          ref={detailRef}
-          aria-live="polite"
-          className="relative z-10 rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up scroll-mt-24"
-          key={activeCraft.id}
-        >
+        <div key={activeCraft.id} className="relative z-10 rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up">
           <div className="relative p-8 md:p-14 border-b border-white/10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.13),transparent_45%)] pointer-events-none" />
             <div className="relative max-w-4xl">
