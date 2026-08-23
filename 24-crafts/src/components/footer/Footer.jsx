@@ -4,32 +4,24 @@ import {
   Briefcase,
   Mail,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const links = [
-  "Home",
-  "Crafts",
-  "Talent Network",
-  "Productions",
-  "About",
-  "Contact",
+  { label: "Home", href: "/" },
+  { label: "Crafts", href: "/#cinema-reel" },
+  { label: "Talent Network", href: "/talent" },
+  { label: "Productions", href: "/productions" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Footer() {
   return (
     <footer className="relative border-t border-white/10 overflow-hidden">
-      
-      {/* Ambient */}
-
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,158,11,0.08),transparent_40%)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-20">
-        
-        {/* Top */}
-
         <div className="grid lg:grid-cols-3 gap-16">
-          
-          {/* Brand */}
-
           <div>
             <h2 className="text-4xl font-black uppercase tracking-[0.3em] text-amber-400">
               24 Crafts
@@ -40,8 +32,6 @@ export default function Footer() {
               artists, storytellers, and production professionals
               across all 24 crafts of cinema.
             </p>
-
-            {/* Social */}
 
             <div className="flex items-center gap-5 mt-8">
               {[Camera, Play, Briefcase, Mail].map((Icon, index) => (
@@ -63,8 +53,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Navigation */}
-
           <div>
             <h3 className="text-white text-lg font-semibold uppercase tracking-[0.2em]">
               Navigation
@@ -72,9 +60,9 @@ export default function Footer() {
 
             <div className="mt-8 flex flex-col gap-5">
               {links.map((item) => (
-                <a
-                  key={item}
-                  href="/"
+                <Link
+                  key={item.label}
+                  to={item.href}
                   className="
                     text-neutral-400
                     hover:text-amber-400
@@ -83,13 +71,11 @@ export default function Footer() {
                     text-sm
                   "
                 >
-                  {item}
-                </a>
+                  {item.label}
+                </Link>
               ))}
             </div>
           </div>
-
-          {/* Statement */}
 
           <div>
             <h3 className="text-white text-lg font-semibold uppercase tracking-[0.2em]">
@@ -97,15 +83,11 @@ export default function Footer() {
             </h3>
 
             <div className="mt-8 space-y-5 text-neutral-400 leading-relaxed">
-              <p>
-                Cinema is collaboration.
-              </p>
-
+              <p>Cinema is collaboration.</p>
               <p>
                 From screenplay to final color grading,
                 every frame is shaped by artists.
               </p>
-
               <p>
                 We exist to connect creators with the
                 talent required to bring stories to life.
@@ -114,14 +96,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom */}
-
         <div className="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
-          
           <p className="text-neutral-500 text-sm uppercase tracking-[0.18em]">
             © 2026 — 24 Crafts Of Cinema
           </p>
-
           <p className="text-neutral-600 text-xs uppercase tracking-[0.25em]">
             Built For Storytellers Worldwide
           </p>
