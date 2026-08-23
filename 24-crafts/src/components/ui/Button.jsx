@@ -19,7 +19,7 @@ export default function Button({
       type={type}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.98 }}
-      className={`px-8 py-4 rounded-full font-semibold tracking-wide transition-all duration-300 ${variants[variant]} ${className}`}
+      className={`min-h-12 px-5 py-3 md:px-8 md:py-4 rounded-full font-semibold tracking-wide transition-all duration-300 ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
