@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import Button from "../ui/Button";
 import MobileMenu from "./MobileMenu";
@@ -16,12 +16,28 @@ const navLinks = [
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleCraftsClick = (event) => {
+    if (location.pathname !== "/") return;
+
+    event.preventDefault();
+
+    const target = document.getElementById("cinema-reel");
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (window.location.hash !== "#cinema-reel") {
+      window.history.pushState(null, "", "/#cinema-reel");
+    }
+  };
 
   return (
     <motion.nav
@@ -42,7 +58,12 @@ export default function Navbar() {
 
         <div className="hidden lg:flex items-center gap-8 xl:gap-10">
           {navLinks.map((item) => (
-            <Link key={item.label} to={item.href} className="text-sm uppercase tracking-[0.18em] text-neutral-300 hover:text-amber-400 transition-all duration-300">
+            <Link
+              key={item.label}
+              to={item.href}
+              onClick={item.label === "Crafts" ? handleCraftsClick : undefined}
+              className="text-sm uppercase tracking-[0.18em] text-neutral-300 hover:text-amber-400 transition-all duration-300"
+            >
               {item.label}
             </Link>
           ))}
