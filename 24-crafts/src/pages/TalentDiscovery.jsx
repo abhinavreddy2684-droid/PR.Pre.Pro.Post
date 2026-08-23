@@ -57,18 +57,18 @@ export default function TalentDiscovery() {
     <div className="min-h-screen bg-[#090909] text-white">
       <Navbar />
 
-      <main className="pt-32 pb-24 px-6">
+      <main className="pt-24 sm:pt-28 lg:pt-32 pb-16 sm:pb-24 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <Link to="/#cinema-reel" className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-amber-400 transition-colors">
+          <Link to="/#cinema-reel" className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-500 hover:text-amber-400 transition-colors">
             <ArrowLeft size={16} />
             Back to CinemaReel
           </Link>
 
-          <div className="mt-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+          <div className="mt-7 sm:mt-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 sm:gap-8">
             <div className="max-w-3xl">
-              <p className="uppercase tracking-[0.35em] text-xs text-amber-400">Explore talent</p>
-              <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tight">{formatCraft(craft)}</h1>
-              <p className="mt-6 text-lg text-neutral-400 leading-relaxed">
+              <p className="uppercase tracking-[0.28em] text-[10px] sm:text-xs text-amber-400">Explore talent</p>
+              <h1 className="mt-3 sm:mt-4 text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[0.95]">{formatCraft(craft)}</h1>
+              <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-neutral-400 leading-relaxed">
                 Discover skilled professionals, explore their work, and find the right creative talent for your next production.
               </p>
             </div>
@@ -79,9 +79,9 @@ export default function TalentDiscovery() {
             </div>
           </div>
 
-          <div className="mt-12 rounded-3xl border border-white/10 bg-white/[0.035] backdrop-blur-xl p-4">
-            <div className="grid lg:grid-cols-[1fr_auto_auto] gap-3">
-              <label className="flex items-center gap-3 rounded-2xl bg-black/40 border border-white/10 px-5 py-4">
+          <div className="mt-7 sm:mt-12 rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.035] backdrop-blur-xl p-3 sm:p-4">
+            <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
+              <label className="flex min-h-12 items-center gap-3 rounded-xl sm:rounded-2xl bg-black/40 border border-white/10 px-4 sm:px-5 py-3">
                 <Search size={18} className="text-neutral-500 shrink-0" />
                 <Input
                   value={search}
@@ -90,18 +90,18 @@ export default function TalentDiscovery() {
                 />
               </label>
 
-              <label className="flex items-center gap-3 rounded-2xl bg-black/40 border border-white/10 px-4 py-4">
-                <MapPin size={18} className="text-amber-400" />
-                <Select value={location} onChange={(event) => setLocation(event.target.value)} className="min-w-40">
+              <label className="flex min-h-12 items-center gap-3 rounded-xl sm:rounded-2xl bg-black/40 border border-white/10 px-4 py-3">
+                <MapPin size={18} className="text-amber-400 shrink-0" />
+                <Select value={location} onChange={(event) => setLocation(event.target.value)} className="w-full lg:min-w-40">
                   {locations.map((item) => (
                     <option key={item} value={item} className="bg-neutral-950">{item}</option>
                   ))}
                 </Select>
               </label>
 
-              <label className="flex items-center gap-3 rounded-2xl bg-black/40 border border-white/10 px-4 py-4">
-                <SlidersHorizontal size={18} className="text-amber-400" />
-                <Select value={availability} onChange={(event) => setAvailability(event.target.value)} className="min-w-40">
+              <label className="flex min-h-12 items-center gap-3 rounded-xl sm:rounded-2xl bg-black/40 border border-white/10 px-4 py-3">
+                <SlidersHorizontal size={18} className="text-amber-400 shrink-0" />
+                <Select value={availability} onChange={(event) => setAvailability(event.target.value)} className="w-full lg:min-w-40">
                   <option value="Any availability" className="bg-neutral-950">Any availability</option>
                   <option value="Available" className="bg-neutral-950">Available</option>
                   <option value="On request" className="bg-neutral-950">On request</option>
@@ -110,16 +110,16 @@ export default function TalentDiscovery() {
             </div>
           </div>
 
-          <div className="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="mt-7 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {filteredTalents.map((talent) => (
               <TalentCard key={talent.id} talent={talent} />
             ))}
           </div>
 
           {filteredTalents.length === 0 && (
-            <div className="mt-12 rounded-3xl border border-white/10 bg-white/[0.03] p-16 text-center">
-              <p className="text-xl font-semibold">No talent matches your filters.</p>
-              <p className="mt-3 text-neutral-500">Try a different search or broaden your filters.</p>
+            <div className="mt-8 rounded-2xl sm:rounded-3xl border border-white/10 bg-white/[0.03] p-10 sm:p-16 text-center">
+              <p className="text-lg sm:text-xl font-semibold">No talent matches your filters.</p>
+              <p className="mt-3 text-sm sm:text-base text-neutral-500">Try a different search or broaden your filters.</p>
             </div>
           )}
         </div>
