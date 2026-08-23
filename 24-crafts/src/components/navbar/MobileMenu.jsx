@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 
 export default function MobileMenu({ navLinks }) {
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const iconButtonClass = "!p-0 w-12 h-12 flex items-center justify-center";
 
   useEffect(() => {
     if (!open) return;
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.overflow = previousOverflow;
     };
@@ -22,7 +22,11 @@ export default function MobileMenu({ navLinks }) {
 
   const handleNavigation = (href) => {
     setOpen(false);
-    navigate(href);
+
+    // Use a real browser navigation for mobile menu links. This keeps
+    // route changes and hash changes reliable even when the menu is
+    // rendered through a portal outside the normal page tree.
+    window.location.assign(href);
   };
 
   const menuOverlay = open ? (
