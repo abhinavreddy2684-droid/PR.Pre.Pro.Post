@@ -4,368 +4,236 @@ import {
   BadgeCheck,
   BriefcaseBusiness,
   Camera,
-  CheckCircle2,
+  Check,
   ChevronLeft,
   ChevronRight,
-  CircleDot,
   Clapperboard,
   FileText,
   Layers3,
   MapPin,
-  Music2,
   Play,
-  Scissors,
   Search,
   Sparkles,
-  Star,
   Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const crafts = [
-  { name: "Screenplay", icon: FileText, tone: "from-amber-500/30 via-amber-900/10 to-black" },
-  { name: "Direction", icon: Clapperboard, tone: "from-orange-500/25 via-stone-900/20 to-black" },
-  { name: "Cinematography", icon: Camera, tone: "from-yellow-500/20 via-neutral-900/20 to-black" },
-  { name: "Editing", icon: Scissors, tone: "from-amber-400/20 via-zinc-900/30 to-black" },
-  { name: "Music", icon: Music2, tone: "from-orange-400/20 via-neutral-900/20 to-black" },
-  { name: "Acting", icon: Users, tone: "from-yellow-400/20 via-stone-900/20 to-black" },
-];
-
 const chapters = [
   {
-    id: "world",
-    kicker: "01 / THE WORLD",
-    title: "24 crafts. One cinematic ecosystem.",
-    description: "Filmmaking is never one discipline. It is a constellation of specialists whose work becomes one story.",
-  },
-  {
-    id: "craft",
-    kicker: "02 / THE CRAFTS",
-    title: "Every craft has a place in the story.",
-    description: "From the first page of a screenplay to the final frame, every specialist can be discovered through the same cinematic network.",
-  },
-  {
     id: "talent",
-    kicker: "03 / THE TALENT",
-    title: "Turn your work into a discoverable identity.",
-    description: "Profiles are built around real work — credits, reels, skills, location, availability and the proof behind the craft.",
+    label: "Talent",
+    title: "Good work deserves to be discovered.",
+    copy: "A home for cinema professionals to present their craft, body of work, and creative identity in one considered profile.",
   },
   {
-    id: "recruiter",
-    kicker: "04 / THE SEARCH",
-    title: "Recruiters search for the exact fit.",
-    description: "Instead of searching through disconnected contacts, recruiters can narrow the field by craft, location, experience, budget and availability.",
+    id: "portfolio",
+    label: "Portfolio",
+    title: "Your work becomes the introduction.",
+    copy: "Reels, credits, craft, experience, and selected work come together so the work speaks before the first conversation.",
+  },
+  {
+    id: "search",
+    label: "Discovery",
+    title: "Recruiters search with intent.",
+    copy: "Projects can move from a broad search to a focused shortlist using the details that actually matter to a production.",
   },
   {
     id: "match",
-    kicker: "05 / THE MATCH",
-    title: "Discovery becomes a confident match.",
-    description: "The right people rise to the surface because the platform understands both sides of the brief — talent and project.",
+    label: "Match",
+    title: "The right people rise to the surface.",
+    copy: "Talent and project requirements meet through craft, experience, location, availability, and creative fit.",
   },
   {
-    id: "ecosystem",
-    kicker: "06 / THE ECOSYSTEM",
-    title: "From brief to collaboration.",
-    description: "Pre Pro Post becomes the cinematic layer connecting people, portfolios, projects and production opportunities.",
+    id: "connect",
+    label: "Connection",
+    title: "Discovery becomes collaboration.",
+    copy: "The journey ends where filmmaking begins — with the right people finding each other and moving the work forward.",
   },
 ];
 
+const craftNames = ["Screenplay", "Direction", "Cinematography", "Editing", "Sound", "Music"];
+
 function FilmGrain() {
-  return <div className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:radial-gradient(rgba(255,255,255,0.45)_0.6px,transparent_0.6px)] [background-size:5px_5px]" />;
+  return <div className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:radial-gradient(rgba(255,255,255,0.7)_0.5px,transparent_0.5px)] [background-size:4px_4px]" />;
 }
 
-function MiniMetric({ label, value }) {
+function Window({ children, className = "" }) {
   return (
-    <div className="rounded-xl border border-white/[0.08] bg-white/[0.025] px-3 py-2">
-      <p className="text-[7px] uppercase tracking-[0.2em] text-neutral-600">{label}</p>
-      <p className="mt-1 text-[11px] font-medium text-neutral-200">{value}</p>
+    <div className={`overflow-hidden rounded-2xl border border-white/[0.09] bg-[#0a0a0a] shadow-[0_24px_70px_rgba(0,0,0,0.28)] ${className}`}>
+      <div className="flex h-8 items-center gap-1.5 border-b border-white/[0.07] px-3">
+        <span className="h-1.5 w-1.5 rounded-full bg-white/10" />
+        <span className="h-1.5 w-1.5 rounded-full bg-white/10" />
+        <span className="h-1.5 w-1.5 rounded-full bg-white/10" />
+        <span className="ml-2 text-[6px] uppercase tracking-[0.22em] text-neutral-700">pre pro post</span>
+      </div>
+      {children}
     </div>
   );
 }
 
-function CraftTile({ craft, active = false }) {
-  const Icon = craft.icon;
+function TalentScene() {
   return (
-    <motion.div
-      layout
-      className={`relative overflow-hidden rounded-2xl border ${active ? "border-amber-400/45" : "border-white/[0.08]"} bg-gradient-to-br ${craft.tone} p-3`}
-    >
-      <div className="absolute right-2 top-2 h-10 w-10 rounded-full bg-amber-400/[0.05] blur-xl" />
-      <div className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/35">
-        <Icon size={16} className={active ? "text-amber-300" : "text-neutral-500"} />
-      </div>
-      <p className="relative mt-3 text-[9px] font-medium uppercase tracking-[0.16em] text-neutral-300">{craft.name}</p>
-      <p className="relative mt-1 text-[8px] leading-relaxed text-neutral-600">Discoverable craft profile</p>
-    </motion.div>
-  );
-}
-
-function WorldStep() {
-  return (
-    <div className="grid grid-cols-[1.1fr_0.9fr] gap-3 sm:gap-4">
-      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0b0b0b] p-4 sm:p-5">
-        <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-amber-400/10 blur-3xl" />
-        <div className="relative flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-amber-400/25 bg-amber-400/[0.06]">
-            <span className="text-lg font-semibold text-amber-300">24</span>
-          </div>
-          <div>
-            <p className="text-[8px] uppercase tracking-[0.2em] text-amber-400">CINEMA CRAFTS</p>
-            <p className="mt-1 text-[11px] text-neutral-300">One network, many disciplines.</p>
-          </div>
-        </div>
-        <div className="mt-5 h-px bg-gradient-to-r from-amber-400/30 via-white/10 to-transparent" />
-        <div className="mt-5 grid grid-cols-2 gap-2">
-          <MiniMetric label="Talent" value="Discoverable" />
-          <MiniMetric label="Recruiters" value="Searchable" />
-          <MiniMetric label="Portfolios" value="Work-first" />
-          <MiniMetric label="Connection" value="Direct" />
-        </div>
-        <div className="mt-4 flex items-center gap-2 text-[8px] uppercase tracking-[0.18em] text-neutral-600">
-          <CircleDot size={11} className="text-amber-500/70" />
-          The gateway into filmmaking
+    <div className="grid grid-cols-[0.8fr_1.2fr] gap-3">
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-b from-[#19130c] to-[#080808] p-4">
+        <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-amber-400/10 blur-3xl" />
+        <div className="relative flex aspect-[4/5] items-end rounded-xl border border-white/[0.08] bg-[radial-gradient(circle_at_50%_30%,rgba(245,158,11,.22),transparent_25%),linear-gradient(145deg,#21170c,#0a0a09_65%)] p-3">
+          <div className="absolute left-1/2 top-[25%] h-12 w-12 -translate-x-1/2 rounded-full border border-amber-300/25 bg-amber-200/[0.07]" />
+          <div className="absolute bottom-[11%] left-1/2 h-20 w-24 -translate-x-1/2 rounded-t-[40px] border border-white/[0.08] bg-black/40" />
+          <div className="relative flex w-full items-center justify-between text-[6px] uppercase tracking-[0.2em] text-neutral-600"><span>PROFILE</span><span>CRAFT</span></div>
+          <div className="absolute bottom-3 left-3 flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-black/60"><Play size={10} className="ml-0.5 fill-current text-amber-300" /></div>
         </div>
       </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        {crafts.slice(0, 4).map((craft, index) => <CraftTile key={craft.name} craft={craft} active={index === 0} />)}
-      </div>
-    </div>
-  );
-}
-
-function CraftStep() {
-  return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-2">
-        {crafts.slice(0, 3).map((craft, index) => <CraftTile key={craft.name} craft={craft} active={index === 1} />)}
-      </div>
-      <div className="relative overflow-hidden rounded-2xl border border-amber-400/20 bg-gradient-to-r from-amber-400/[0.07] via-black to-black p-4 sm:p-5">
-        <div className="absolute right-0 top-0 h-28 w-28 rounded-full bg-amber-400/10 blur-3xl" />
-        <div className="relative flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-amber-400/25 bg-black/50">
-            <Camera size={20} className="text-amber-300" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[8px] uppercase tracking-[0.22em] text-amber-400">CINEMATOGRAPHY</p>
-            <p className="mt-1 text-sm font-medium text-white">Visual language becomes a profile.</p>
-            <p className="mt-2 max-w-lg text-[9px] leading-relaxed text-neutral-500">Reels, credits, specialties, equipment and experience give recruiters context before the conversation even begins.</p>
-          </div>
-        </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {["Feature Films", "Commercials", "Music Videos", "OTT", "Documentary"].map((item) => <span key={item} className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[7px] uppercase tracking-[0.12em] text-neutral-500">{item}</span>)}
-        </div>
-      </div>
-      <div className="grid grid-cols-3 gap-2">
-        {crafts.slice(3).map((craft) => <CraftTile key={craft.name} craft={craft} />)}
-      </div>
-    </div>
-  );
-}
-
-function TalentStep() {
-  return (
-    <div className="grid grid-cols-[0.82fr_1.18fr] gap-3 sm:gap-4">
-      <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-amber-950/30 via-[#11100d] to-black p-4">
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-amber-400/10 to-transparent" />
-        <div className="relative flex aspect-[4/5] items-end overflow-hidden rounded-xl border border-white/10 bg-[radial-gradient(circle_at_50%_28%,rgba(245,158,11,.3),transparent_22%),linear-gradient(145deg,#33200d,#12100d_48%,#050505)] p-3">
-          <div className="absolute left-1/2 top-[22%] h-16 w-16 -translate-x-1/2 rounded-full border border-amber-300/30 bg-amber-200/10 shadow-[0_0_45px_rgba(245,158,11,.14)]" />
-          <div className="absolute bottom-[10%] left-1/2 h-24 w-28 -translate-x-1/2 rounded-t-[48px] border border-white/10 bg-black/50" />
-          <div className="relative flex w-full items-center justify-between text-[7px] uppercase tracking-[0.15em] text-neutral-500"><span>REEL</span><span>8+ YRS</span></div>
-          <div className="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-black/60"><Play size={12} className="ml-0.5 fill-current text-amber-300" /></div>
-        </div>
-        <div className="mt-3 flex items-center justify-between"><span className="text-[8px] uppercase tracking-[0.18em] text-neutral-500">Talent identity</span><BadgeCheck size={14} className="text-amber-400" /></div>
-      </div>
-
       <div className="space-y-2">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div><p className="text-sm font-semibold text-white">Aarav Mehta</p><p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-amber-400">Cinematographer</p></div>
-            <BadgeCheck size={16} className="text-amber-400" />
-          </div>
-          <div className="mt-3 flex items-center gap-2 text-[8px] text-neutral-500"><MapPin size={11} /> Mumbai, Maharashtra</div>
-          <div className="mt-3 grid grid-cols-2 gap-2"><MiniMetric label="Projects" value="42+" /><MiniMetric label="Rating" value="4.9 / 5" /></div>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
-          <p className="text-[8px] uppercase tracking-[0.2em] text-neutral-600">PORTFOLIO SIGNALS</p>
-          <div className="mt-3 space-y-2">
-            {["Feature Films", "Commercials", "Low-light cinematography", "ARRI / RED / Sony"].map((item, index) => <div key={item} className="flex items-center gap-2 text-[9px] text-neutral-400"><CheckCircle2 size={12} className={index === 0 ? "text-amber-400" : "text-neutral-700"} />{item}</div>)}
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="h-14 rounded-xl border border-white/10 bg-[linear-gradient(135deg,#2d1d0c,#090909)]" />
-          <div className="h-14 rounded-xl border border-white/10 bg-[linear-gradient(135deg,#19150e,#050505)]" />
-          <div className="h-14 rounded-xl border border-white/10 bg-[linear-gradient(135deg,#3a2410,#0a0907)]" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function RecruiterStep() {
-  return (
-    <div className="space-y-3">
-      <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-3">
-        <div className="flex items-center gap-2 rounded-xl border border-amber-400/20 bg-black/50 px-3 py-2.5">
-          <Search size={14} className="text-amber-400" />
-          <span className="text-[9px] text-neutral-400">Search cinematographers for a feature film...</span>
-          <span className="ml-auto rounded-lg bg-amber-400 px-2 py-1 text-[7px] font-semibold text-black">SEARCH</span>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {["Cinematography", "Mumbai", "5+ Years", "Available", "₹1L–₹3L"].map((item) => <span key={item} className="rounded-full border border-amber-400/15 bg-amber-400/[0.04] px-2.5 py-1 text-[7px] uppercase tracking-[0.12em] text-amber-200/70">{item}</span>)}
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        {["Aarav Mehta", "Ishita Rao", "Kabir Nair", "Maya Thomas"].map((name, index) => (
-          <div key={name} className="rounded-2xl border border-white/10 bg-[#0b0b0b] p-3">
-            <div className="flex gap-3">
-              <div className="h-11 w-11 shrink-0 rounded-xl border border-white/10 bg-[radial-gradient(circle_at_50%_35%,rgba(245,158,11,.25),transparent_30%),linear-gradient(135deg,#21170d,#070707)]" />
-              <div className="min-w-0"><div className="flex items-center gap-1"><p className="truncate text-[10px] font-medium text-neutral-200">{name}</p><BadgeCheck size={10} className="shrink-0 text-amber-400" /></div><p className="mt-1 text-[7px] uppercase tracking-[0.15em] text-neutral-600">Cinematographer</p><div className="mt-2 flex items-center gap-1 text-[7px] text-neutral-500"><Star size={9} className="fill-amber-400 text-amber-400" />{(4.7 + index * 0.05).toFixed(1)}</div></div>
+        <Window>
+          <div className="p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[7px] uppercase tracking-[0.2em] text-amber-400">CINEMATOGRAPHY</p>
+                <p className="mt-1.5 text-sm font-medium text-white">A craft, presented with context.</p>
+              </div>
+              <BadgeCheck size={15} className="text-amber-400" />
             </div>
-            <div className="mt-3 flex items-center justify-between text-[7px] text-neutral-600"><span>{index + 8} yrs experience</span><ArrowRight size={11} /></div>
+            <div className="mt-4 flex items-center gap-2 text-[7px] text-neutral-600"><MapPin size={10} /> Location · Availability</div>
+            <div className="mt-4 h-px bg-white/[0.07]" />
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              {["Selected work", "Credits", "Specialties", "Experience"].map((item) => <div key={item} className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-2.5 py-2"><p className="text-[6px] uppercase tracking-[0.15em] text-neutral-700">{item}</p><div className="mt-2 h-1 w-2/3 rounded-full bg-white/10" /></div>)}
+            </div>
           </div>
-        ))}
+        </Window>
+        <div className="grid grid-cols-3 gap-2">
+          {["REEL", "CREDITS", "CRAFT"].map((item) => <div key={item} className="rounded-xl border border-white/[0.07] bg-white/[0.02] px-2 py-2.5 text-center text-[6px] uppercase tracking-[0.16em] text-neutral-600">{item}</div>)}
+        </div>
       </div>
     </div>
   );
 }
 
-function MatchStep() {
-  return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-3">
-      <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-4">
-        <p className="text-[7px] uppercase tracking-[0.2em] text-neutral-600">PROJECT BRIEF</p>
-        <p className="mt-2 text-xs font-medium text-white">Feature Film / Mumbai</p>
-        <div className="mt-3 space-y-2 text-[8px] text-neutral-500"><span className="block">Visual tone · Atmospheric</span><span className="block">Experience · 5+ years</span><span className="block">Availability · October</span></div>
-      </div>
-      <motion.div animate={{ scale: [1, 1.08, 1], rotate: [0, 3, 0] }} transition={{ duration: 2.6, repeat: Infinity }} className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-400/40 bg-amber-400/[0.08] shadow-[0_0_45px_rgba(245,158,11,.18)]"><Sparkles size={18} className="text-amber-300" /></motion.div>
-      <div className="rounded-2xl border border-amber-400/25 bg-gradient-to-br from-amber-400/[0.08] to-black p-4">
-        <div className="flex items-center justify-between"><p className="text-[7px] uppercase tracking-[0.2em] text-amber-400">BEST MATCH</p><span className="text-lg font-semibold text-amber-300">92%</span></div>
-        <p className="mt-2 text-xs font-medium text-white">Aarav Mehta</p>
-        <p className="mt-1 text-[8px] text-neutral-500">Cinematographer · 42 projects</p>
-        <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10"><motion.div initial={{ width: 0 }} animate={{ width: "92%" }} transition={{ duration: 1 }} className="h-full rounded-full bg-amber-400" /></div>
-      </div>
-      <div className="col-span-3 mt-1 grid grid-cols-3 gap-2"><MiniMetric label="Craft fit" value="Excellent" /><MiniMetric label="Location" value="Matched" /><MiniMetric label="Availability" value="Aligned" /></div>
-    </div>
-  );
-}
-
-function EcosystemStep() {
-  const flow = [
-    ["01", "Brief", FileText],
-    ["02", "Discover", Search],
-    ["03", "Portfolio", Play],
-    ["04", "Match", Sparkles],
-    ["05", "Connect", BriefcaseBusiness],
-  ];
+function PortfolioScene() {
   return (
     <div className="space-y-3">
-      <div className="rounded-2xl border border-amber-400/20 bg-gradient-to-br from-amber-400/[0.08] via-black to-black p-5 text-center">
-        <p className="text-[8px] uppercase tracking-[0.25em] text-amber-400">THE GATEWAY</p>
-        <p className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">People → portfolios → projects.</p>
-        <p className="mx-auto mt-2 max-w-md text-[9px] leading-relaxed text-neutral-500">A single cinematic layer for discovery, hiring and collaboration across the full ecosystem.</p>
-      </div>
-      <div className="grid grid-cols-5 gap-1.5">
-        {flow.map(([number, label, Icon], index) => (
-          <div key={label} className="relative rounded-xl border border-white/10 bg-white/[0.025] p-2.5 text-center">
-            <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full border border-amber-400/20 bg-amber-400/[0.05]"><Icon size={13} className="text-amber-400" /></div>
-            <p className="mt-2 text-[6px] uppercase tracking-[0.18em] text-neutral-700">{number}</p>
-            <p className="mt-1 text-[8px] text-neutral-300">{label}</p>
-            {index < flow.length - 1 && <ArrowRight size={10} className="absolute -right-2 top-7 z-10 text-neutral-700" />}
+      <Window>
+        <div className="p-3 sm:p-4">
+          <div className="flex items-center justify-between border-b border-white/[0.07] pb-3">
+            <div className="flex items-center gap-2"><div className="flex h-8 w-8 items-center justify-center rounded-lg border border-amber-400/20 bg-amber-400/[0.05]"><Camera size={13} className="text-amber-400" /></div><div><p className="text-[7px] uppercase tracking-[0.18em] text-amber-400">SELECTED WORK</p><p className="mt-1 text-[9px] text-neutral-300">A visual body of work</p></div></div>
+            <span className="rounded-full border border-white/10 px-2 py-1 text-[6px] uppercase tracking-[0.16em] text-neutral-600">VIEW REEL</span>
           </div>
-        ))}
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {[
+              "from-amber-950 via-stone-900 to-black",
+              "from-stone-800 via-neutral-950 to-black",
+              "from-orange-950 via-stone-900 to-black",
+            ].map((gradient, index) => <div key={index} className={`relative aspect-[4/3] overflow-hidden rounded-xl border border-white/[0.07] bg-gradient-to-br ${gradient}`}><div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_30%,rgba(245,158,11,.18),transparent_24%)]" /><span className="absolute bottom-2 left-2 text-[6px] uppercase tracking-[0.14em] text-white/35">0{index + 1}</span></div>)}
+          </div>
+        </div>
+      </Window>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3"><p className="text-[6px] uppercase tracking-[0.18em] text-neutral-700">CRAFT PROFILE</p><div className="mt-2 flex flex-wrap gap-1.5">{craftNames.map((name) => <span key={name} className="rounded-full border border-white/[0.07] px-2 py-1 text-[6px] text-neutral-500">{name}</span>)}</div></div>
+        <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3"><p className="text-[6px] uppercase tracking-[0.18em] text-neutral-700">WORK CONTEXT</p><div className="mt-3 space-y-2"><div className="h-1 w-full rounded-full bg-white/[0.07]" /><div className="h-1 w-4/5 rounded-full bg-white/[0.07]" /><div className="h-1 w-3/5 rounded-full bg-amber-400/20" /></div></div>
       </div>
-      <div className="flex items-center justify-center gap-2 text-[7px] uppercase tracking-[0.2em] text-neutral-700"><Layers3 size={11} className="text-amber-500/60" />One ecosystem, built around the work</div>
     </div>
   );
 }
 
-function StepContent({ id }) {
-  switch (id) {
-    case "world": return <WorldStep />;
-    case "craft": return <CraftStep />;
-    case "talent": return <TalentStep />;
-    case "recruiter": return <RecruiterStep />;
-    case "match": return <MatchStep />;
-    default: return <EcosystemStep />;
-  }
+function SearchScene() {
+  const candidates = ["Cinematography", "Production Design", "Editing"];
+  return (
+    <div className="space-y-3">
+      <Window>
+        <div className="p-3 sm:p-4">
+          <div className="flex items-center gap-2 rounded-xl border border-amber-400/15 bg-black/50 px-3 py-2.5"><Search size={13} className="text-amber-400" /><span className="text-[8px] text-neutral-500">Find talent by craft, location, experience...</span><div className="ml-auto h-6 w-6 rounded-lg bg-amber-400/[0.08]" /></div>
+          <div className="mt-2 flex flex-wrap gap-1.5">{["Craft", "Location", "Experience", "Availability"].map((filter) => <span key={filter} className="rounded-full border border-white/[0.07] px-2.5 py-1 text-[6px] uppercase tracking-[0.14em] text-neutral-600">{filter}</span>)}</div>
+        </div>
+      </Window>
+      <div className="grid grid-cols-3 gap-2">
+        {candidates.map((name, index) => <motion.div key={name} animate={{ y: [0, -2, 0] }} transition={{ duration: 3.5, delay: index * 0.3, repeat: Infinity, ease: "easeInOut" }} className="rounded-xl border border-white/[0.08] bg-[#0a0a0a] p-3"><div className="h-12 rounded-lg border border-white/[0.06] bg-[radial-gradient(circle_at_50%_35%,rgba(245,158,11,.18),transparent_26%),linear-gradient(135deg,#1c140b,#080808)]" /><div className="mt-2 flex items-center gap-1"><span className="text-[7px] text-neutral-300">{name}</span><BadgeCheck size={9} className="text-amber-400" /></div><div className="mt-1 h-1 w-2/3 rounded-full bg-white/[0.07]" /><div className="mt-3 flex items-center justify-between text-[6px] uppercase tracking-[0.12em] text-neutral-700"><span>View profile</span><ArrowRight size={9} /></div></motion.div>)}
+      </div>
+    </div>
+  );
+}
+
+function MatchScene() {
+  return (
+    <div className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4">
+        <p className="text-[6px] uppercase tracking-[0.2em] text-neutral-700">PROJECT BRIEF</p>
+        <p className="mt-2 text-xs font-medium text-white">A new production needs a visual voice.</p>
+        <div className="mt-3 space-y-2 text-[7px] text-neutral-600"><span className="block">Craft · Cinematography</span><span className="block">Location · Mumbai</span><span className="block">Experience · Feature work</span></div>
+      </div>
+      <div className="relative flex h-14 w-14 items-center justify-center rounded-full border border-amber-400/30 bg-black shadow-[0_0_55px_rgba(245,158,11,.12)]"><motion.div animate={{ scale: [0.8, 1.2, 0.8], opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 2.5, repeat: Infinity }} className="absolute inset-2 rounded-full bg-amber-400/10" /><Sparkles size={17} className="relative text-amber-300" /></div>
+      <div className="rounded-2xl border border-amber-400/20 bg-gradient-to-br from-amber-400/[0.08] to-black p-4">
+        <p className="text-[6px] uppercase tracking-[0.2em] text-amber-400">CREATIVE FIT</p>
+        <p className="mt-2 text-xs font-medium text-white">The shortlist takes shape.</p>
+        <div className="mt-3 space-y-2"><div className="flex items-center gap-2 text-[7px] text-neutral-500"><Check size={10} className="text-amber-400" />Craft aligned</div><div className="flex items-center gap-2 text-[7px] text-neutral-500"><Check size={10} className="text-amber-400" />Location aligned</div><div className="flex items-center gap-2 text-[7px] text-neutral-500"><Check size={10} className="text-amber-400" />Brief aligned</div></div>
+      </div>
+      <motion.div initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: 1.2, delay: 0.2 }} className="absolute left-[29%] right-[29%] top-1/2 h-px origin-left bg-gradient-to-r from-amber-400/20 via-amber-400/50 to-amber-400/20" />
+    </div>
+  );
+}
+
+function ConnectScene() {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-amber-400/20 bg-gradient-to-br from-amber-400/[0.08] via-black to-black p-5 sm:p-6">
+      <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl" />
+      <div className="relative text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-amber-400/30 bg-black shadow-[0_0_50px_rgba(245,158,11,.12)]"><BriefcaseBusiness size={20} className="text-amber-300" /></div>
+        <p className="mt-4 text-[7px] uppercase tracking-[0.25em] text-amber-400">DISCOVER · MATCH · CONNECT</p>
+        <p className="mx-auto mt-2 max-w-sm text-xl font-semibold tracking-tight text-white sm:text-2xl">The right introduction can change a production.</p>
+        <p className="mx-auto mt-2 max-w-md text-[9px] leading-relaxed text-neutral-500">A talent finds an opportunity. A recruiter finds the right craft. The work moves forward.</p>
+      </div>
+      <div className="relative mt-6 grid grid-cols-3 gap-2 border-t border-white/[0.07] pt-4 text-center"><div><Users size={13} className="mx-auto text-neutral-600" /><p className="mt-2 text-[6px] uppercase tracking-[0.15em] text-neutral-700">Talent</p></div><div><Sparkles size={13} className="mx-auto text-amber-400" /><p className="mt-2 text-[6px] uppercase tracking-[0.15em] text-neutral-700">Gateway</p></div><div><BriefcaseBusiness size={13} className="mx-auto text-neutral-600" /><p className="mt-2 text-[6px] uppercase tracking-[0.15em] text-neutral-700">Production</p></div></div>
+    </div>
+  );
+}
+
+function Scene({ id }) {
+  if (id === "talent") return <TalentScene />;
+  if (id === "portfolio") return <PortfolioScene />;
+  if (id === "search") return <SearchScene />;
+  if (id === "match") return <MatchScene />;
+  return <ConnectScene />;
 }
 
 export default function EcosystemStory() {
   const [step, setStep] = useState(0);
   const [paused, setPaused] = useState(false);
-  const current = chapters[step];
+  const chapter = chapters[step];
 
   useEffect(() => {
     if (paused) return undefined;
-    const timer = window.setInterval(() => setStep((value) => (value + 1) % chapters.length), 7000);
+    const timer = window.setInterval(() => setStep((value) => (value + 1) % chapters.length), 6500);
     return () => window.clearInterval(timer);
   }, [paused]);
 
-  const go = (direction) => setStep((value) => (value + direction + chapters.length) % chapters.length);
+  const move = (amount) => setStep((value) => (value + amount + chapters.length) % chapters.length);
 
   return (
-    <div
-      className="relative min-h-[680px] overflow-hidden rounded-[2rem] border border-white/[0.1] bg-[#070707] shadow-[0_0_100px_rgba(245,158,11,0.08)] sm:min-h-[720px]"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
+    <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.1] bg-[#060606] shadow-[0_30px_100px_rgba(0,0,0,0.38)]" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
       <FilmGrain />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(245,158,11,0.12),transparent_34%),radial-gradient(circle_at_10%_80%,rgba(120,70,20,0.08),transparent_28%)]" />
-      <div className="pointer-events-none absolute -left-20 top-1/3 h-64 w-64 rounded-full bg-amber-400/[0.035] blur-3xl" />
-
-      <div className="relative z-10 flex h-full min-h-[680px] flex-col p-4 sm:min-h-[720px] sm:p-5 lg:p-6">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(245,158,11,0.085),transparent_38%)]" />
+      <div className="relative z-10 p-4 sm:p-5 lg:p-6">
         <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
-          <div>
-            <p className="text-[8px] uppercase tracking-[0.3em] text-amber-500">THE ECOSYSTEM</p>
-            <p className="mt-1 text-[9px] text-neutral-600">A six-chapter journey through Pre Pro Post</p>
-          </div>
-          <div className="flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.025] px-2.5 py-1.5 text-[7px] uppercase tracking-[0.18em] text-neutral-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,.7)]" />
-            {String(step + 1).padStart(2, "0")} / 06
-          </div>
+          <div><div className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_9px_rgba(245,158,11,.7)]" /><p className="text-[7px] uppercase tracking-[0.28em] text-amber-500">THE GATEWAY</p></div><p className="mt-1 text-[8px] text-neutral-700">A story of discovery, told through the work</p></div>
+          <span className="text-[7px] uppercase tracking-[0.2em] text-neutral-700">{String(step + 1).padStart(2, "0")} / 05</span>
         </div>
 
-        <div className="mt-4 flex gap-1.5">
-          {chapters.map((chapter, index) => (
-            <button key={chapter.id} type="button" aria-label={`Go to chapter ${index + 1}`} onClick={() => setStep(index)} className="group flex-1">
-              <div className={`h-1 overflow-hidden rounded-full bg-white/[0.06] ${index === step ? "bg-amber-400/20" : ""}`}>
-                <motion.div className="h-full rounded-full bg-amber-400" initial={false} animate={{ width: index < step ? "100%" : index === step ? "70%" : "0%" }} transition={{ duration: 0.45 }} />
-              </div>
-              <span className={`mt-1 hidden text-[6px] uppercase tracking-[0.12em] sm:block ${index === step ? "text-amber-400" : "text-neutral-700"}`}>{chapter.kicker.replace(/^0\d \/ /, "")}</span>
-            </button>
-          ))}
+        <div className="mt-4 flex gap-1">
+          {chapters.map((item, index) => <button key={item.id} type="button" aria-label={`Open ${item.label} chapter`} onClick={() => setStep(index)} className="group flex-1"><div className="h-0.5 overflow-hidden rounded-full bg-white/[0.07]"><motion.div className="h-full bg-amber-400" initial={false} animate={{ width: index < step ? "100%" : index === step ? "100%" : "0%" }} transition={{ duration: 0.35 }} /></div><span className={`mt-1.5 hidden text-[6px] uppercase tracking-[0.12em] sm:block ${index === step ? "text-amber-400" : "text-neutral-700"}`}>{item.label}</span></button>)}
         </div>
 
-        <div className="mt-5 flex items-start justify-between gap-4">
-          <div className="max-w-xl">
-            <p className="text-[8px] uppercase tracking-[0.24em] text-amber-400">{current.kicker}</p>
-            <h3 className="mt-2 text-xl font-semibold leading-tight tracking-tight text-white sm:text-2xl">{current.title}</h3>
-            <p className="mt-2 max-w-lg text-[9px] leading-relaxed text-neutral-500 sm:text-[10px]">{current.description}</p>
-          </div>
-          <div className="flex shrink-0 gap-1.5">
-            <button type="button" onClick={() => go(-1)} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.025] text-neutral-500 transition hover:border-amber-400/30 hover:text-amber-300"><ChevronLeft size={14} /></button>
-            <button type="button" onClick={() => go(1)} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.025] text-neutral-500 transition hover:border-amber-400/30 hover:text-amber-300"><ChevronRight size={14} /></button>
-          </div>
+        <div className="mt-5 flex items-start justify-between gap-3">
+          <div><p className="text-[7px] uppercase tracking-[0.22em] text-amber-400">0{step + 1} · {chapter.label}</p><h3 className="mt-2 max-w-[480px] text-xl font-semibold leading-tight tracking-tight text-white sm:text-2xl">{chapter.title}</h3><p className="mt-2 max-w-[500px] text-[9px] leading-relaxed text-neutral-500 sm:text-[10px]">{chapter.copy}</p></div>
+          <div className="flex shrink-0 gap-1.5"><button type="button" aria-label="Previous chapter" onClick={() => move(-1)} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-neutral-600 transition hover:border-amber-400/30 hover:text-amber-300"><ChevronLeft size={13} /></button><button type="button" aria-label="Next chapter" onClick={() => move(1)} className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-neutral-600 transition hover:border-amber-400/30 hover:text-amber-300"><ChevronRight size={13} /></button></div>
         </div>
 
-        <div className="relative mt-5 flex-1">
+        <div className="mt-5 min-h-[300px]">
           <AnimatePresence mode="wait">
-            <motion.div key={current.id} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.45, ease: "easeOut" }}>
-              <StepContent id={current.id} />
+            <motion.div key={chapter.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.38, ease: "easeOut" }}>
+              <Scene id={chapter.id} />
             </motion.div>
           </AnimatePresence>
         </div>
 
-        <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4">
-          <div className="flex items-center gap-2 text-[7px] uppercase tracking-[0.18em] text-neutral-700">
-            <CircleDot size={10} className={paused ? "text-neutral-700" : "text-amber-500/60"} />
-            {paused ? "Paused — explore the chapter" : "Auto-playing story"}
-          </div>
-          <button type="button" onClick={() => go(1)} className="group flex items-center gap-2 text-[8px] uppercase tracking-[0.18em] text-neutral-500 transition hover:text-amber-300">
-            Next chapter <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
+        <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4"><div className="flex items-center gap-2 text-[6px] uppercase tracking-[0.18em] text-neutral-700"><span className={`h-1.5 w-1.5 rounded-full ${paused ? "bg-neutral-700" : "bg-amber-400/60"}`} />{paused ? "Paused" : "Playing"}</div><button type="button" onClick={() => move(1)} className="group flex items-center gap-2 text-[7px] uppercase tracking-[0.18em] text-neutral-600 transition hover:text-amber-300">Continue <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" /></button></div>
       </div>
     </div>
   );
