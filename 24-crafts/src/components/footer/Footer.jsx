@@ -4,7 +4,7 @@ import {
   Briefcase,
   Mail,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const links = [
   { label: "Home", href: "/" },
@@ -16,6 +16,34 @@ const links = [
 ];
 
 export default function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleNavigation = (event, href) => {
+    const url = new URL(href, window.location.origin);
+
+    if (location.pathname !== url.pathname) return;
+
+    event.preventDefault();
+
+    if (url.hash) {
+      document.getElementById(url.hash.slice(1))?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      if (window.location.hash !== url.hash) {
+        navigate(`${url.pathname}${url.hash}`);
+      }
+      return;
+    }
+
+    if (window.location.hash) {
+      navigate(url.pathname);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <footer className="relative border-t border-white/10 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,158,11,0.08),transparent_40%)]" />
@@ -37,15 +65,7 @@ export default function Footer() {
               {[Camera, Play, Briefcase, Mail].map((Icon, index) => (
                 <button
                   key={index}
-                  className="
-                    w-12 h-12 rounded-full
-                    border border-white/10
-                    bg-white/5
-                    hover:border-amber-500/40
-                    hover:bg-amber-500/10
-                    transition-all duration-300
-                    flex items-center justify-center
-                  "
+                  className="w-12 h-12 rounded-full border border-white/10 bg-white/5 hover:border-amber-500/40 hover:bg-amber-500/10 transition-all duration-300 flex items-center justify-center"
                 >
                   <Icon size={18} />
                 </button>
@@ -63,13 +83,8 @@ export default function Footer() {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="
-                    text-neutral-400
-                    hover:text-amber-400
-                    transition-all duration-300
-                    uppercase tracking-[0.18em]
-                    text-sm
-                  "
+                  onClick={(event) => handleNavigation(event, item.href)}
+                  className="text-neutral-400 hover:text-amber-400 transition-all duration-300 uppercase tracking-[0.18em] text-sm"
                 >
                   {item.label}
                 </Link>
