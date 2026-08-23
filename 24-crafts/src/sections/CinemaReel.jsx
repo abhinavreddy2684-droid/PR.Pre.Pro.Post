@@ -23,11 +23,21 @@ export default function CinemaReel() {
       const navbar = document.querySelector("header");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
       const topGap = 16;
+      const bottomGap = 16;
       const cardTop = cardRect.top + window.scrollY;
-      const cardCenter = cardTop + cardRect.height / 2;
-      const availableViewportHeight = window.innerHeight - navbarHeight - topGap;
-      const availableViewportCenter = navbarHeight + topGap + availableViewportHeight / 2;
-      const targetScroll = Math.max(cardCenter - availableViewportCenter, 0);
+      const cardHeight = cardRect.height;
+      const availableViewportHeight = window.innerHeight - navbarHeight - topGap - bottomGap;
+
+      // Keep the card between the fixed navbar and the bottom of the viewport.
+      // The card itself is sized to the available viewport, so this places its
+      // top and bottom edges naturally inside the visible screen.
+      const viewportTop = navbarHeight + topGap;
+      const viewportBottom = window.innerHeight - bottomGap;
+      const fitsViewport = cardHeight <= availableViewportHeight;
+      const targetViewportTop = fitsViewport
+        ? viewportTop
+        : Math.max(viewportBottom - cardHeight, viewportTop);
+      const targetScroll = Math.max(cardTop - targetViewportTop, 0);
 
       window.scrollTo({
         top: targetScroll,
@@ -91,35 +101,35 @@ export default function CinemaReel() {
 
       <section
         aria-live="polite"
-        className="relative max-w-6xl mx-auto px-6 pt-16 pb-20 md:pt-20"
+        className="relative max-w-6xl mx-auto px-6 py-8 md:py-10 min-h-[calc(100svh-7rem)] flex items-start"
       >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
         <div
           ref={detailCardRef}
           key={activeCraft.id}
-          className="relative z-10 rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up"
+          className="relative z-10 w-full min-h-[calc(100svh-9rem)] rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up flex flex-col"
         >
-          <div className="relative p-8 md:p-14 border-b border-white/10">
+          <div className="relative p-7 md:p-10 border-b border-white/10 shrink-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.13),transparent_45%)] pointer-events-none" />
             <div className="relative max-w-4xl">
               <p className="uppercase tracking-[0.35em] text-xs text-amber-400">Cinema Craft · {String(activeCraft.id).padStart(2, "0")}</p>
-              <h3 className="mt-5 text-5xl md:text-7xl font-black tracking-tight">{activeCraft.title}</h3>
-              <p className="mt-7 text-lg md:text-xl text-neutral-400 leading-relaxed max-w-3xl">{activeCraft.description}</p>
+              <h3 className="mt-4 text-5xl md:text-6xl font-black tracking-tight">{activeCraft.title}</h3>
+              <p className="mt-5 text-lg md:text-xl text-neutral-400 leading-relaxed max-w-3xl">{activeCraft.description}</p>
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10">
-            <div className="p-8 md:p-12">
+          <div className="grid lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10 flex-1">
+            <div className="p-7 md:p-9 flex flex-col justify-center">
               <div className="flex items-center gap-4">
                 <BriefcaseBusiness className="text-amber-400" />
                 <h4 className="text-2xl font-bold">Find Talent</h4>
               </div>
-              <p className="mt-6 text-neutral-400 leading-relaxed">
+              <p className="mt-5 text-neutral-400 leading-relaxed">
                 Explore professionals in this craft, review their work, and discover the right talent for your next project.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-2">
+              <div className="mt-7 flex flex-wrap gap-2">
                 {activeCraft.talentTypes.map((talentType) => (
                   <span key={talentType} className="px-3 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm text-neutral-300">
                     {talentType}
@@ -128,23 +138,23 @@ export default function CinemaReel() {
               </div>
             </div>
 
-            <div className="p-8 md:p-12">
+            <div className="p-7 md:p-9 flex flex-col justify-center">
               <div className="flex items-center gap-4">
                 <Clapperboard className="text-amber-400" />
                 <h4 className="text-2xl font-bold">Built for Production</h4>
               </div>
-              <p className="mt-6 text-neutral-400 leading-relaxed">
+              <p className="mt-5 text-neutral-400 leading-relaxed">
                 Browse structured, searchable talent profiles instead of relying on static resumes or scattered referrals.
               </p>
 
-              <div className="mt-8 flex items-center gap-3">
+              <div className="mt-7 flex items-center gap-3">
                 <Layers3 className="text-amber-400" size={20} />
                 <span className="text-sm uppercase tracking-[0.2em] text-neutral-500">Discover · Evaluate · Hire</span>
               </div>
             </div>
           </div>
 
-          <div className="p-8 md:p-10 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 bg-black/20">
+          <div className="p-6 md:p-8 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 bg-black/20 shrink-0">
             <div>
               <p className="text-sm text-neutral-500">Explore available talent in {activeCraft.title}.</p>
               <p className="mt-2 text-xs text-neutral-600">Profiles are currently powered by mock marketplace data.</p>
