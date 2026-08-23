@@ -37,8 +37,11 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-32 px-6 scroll-mt-24">
-      <div className="max-w-7xl mx-auto">
+    <section
+      id="how-it-works"
+      className="min-h-[calc(100svh-5rem)] flex items-center py-16 sm:py-20 lg:py-24 px-6 scroll-mt-20"
+    >
+      <div className="max-w-7xl mx-auto w-full">
         <SectionHeading
           eyebrow="Workflow"
           title="How It Works"
@@ -46,7 +49,7 @@ export default function HowItWorks() {
           center
         />
 
-        <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="mt-12 sm:mt-14 lg:mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 lg:gap-8">
           {steps.map((step, index) => (
             <WorkflowCard key={step.title} step={step} index={index} />
           ))}
