@@ -66,19 +66,16 @@ export default function CinemaReel() {
       </header>
 
       <section className="w-full relative py-12">
+        {/* Film sprocket holes — part of the reel and visible on every viewport. */}
         <div className="w-full h-4 bg-black border-y border-neutral-800 flex justify-around items-center px-4 overflow-hidden">
-          {[...Array(50)].map((_, index) => <div key={`top-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1" />)}
+          {[...Array(50)].map((_, index) => (
+            <div key={`top-${index}`} className="w-3 h-2 bg-neutral-800 rounded-sm mx-1 shrink-0" />
+          ))}
         </div>
 
         <div className="relative w-full bg-black py-6 overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center px-8 space-x-6 snap-x snap-mandatory">
-          {/* Reel rails: these are intentionally visible on mobile as well. */}
-          <div className="pointer-events-none absolute inset-y-0 left-5 w-px bg-amber-500/20 z-20" />
-          <div className="pointer-events-none absolute inset-y-0 right-5 w-px bg-amber-500/20 z-20" />
-
           {crafts.map((craft) => (
-            <div key={craft.id} className="relative shrink-0 snap-center lg:pr-3">
-              {/* Desktop-only craft separators. Mobile has no vertical dividers between cards. */}
-              <span className="pointer-events-none absolute -right-0.5 top-0 bottom-0 hidden lg:block w-px bg-white/10" />
+            <div key={craft.id} className="relative shrink-0 snap-center">
               <CinemaReelCraftButton
                 craftId={craft.id}
                 active={activeCraft.id === craft.id}
@@ -92,8 +89,11 @@ export default function CinemaReel() {
           ))}
         </div>
 
+        {/* Film sprocket holes — mirrored rail on the bottom edge. */}
         <div className="w-full h-4 bg-black border-y border-neutral-800 flex justify-around items-center px-4 overflow-hidden">
-          {[...Array(50)].map((_, index) => <div key={`bottom-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1" />)}
+          {[...Array(50)].map((_, index) => (
+            <div key={`bottom-${index}`} className="w-3 h-2 bg-neutral-800 rounded-sm mx-1 shrink-0" />
+          ))}
         </div>
       </section>
 
