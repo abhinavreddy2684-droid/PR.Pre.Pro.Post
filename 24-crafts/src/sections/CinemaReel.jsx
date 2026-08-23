@@ -15,41 +15,40 @@ export default function CinemaReel() {
   useEffect(() => {
     if (!shouldScrollToCraft) return;
 
-    const scrollToDetailCard = () => {
+    const positionDetailCard = () => {
       const card = detailCardRef.current;
       if (!card) return;
 
-      const cardRect = card.getBoundingClientRect();
       const navbar = document.querySelector("header");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
       const topGap = 16;
       const bottomGap = 16;
-      const cardTop = cardRect.top + window.scrollY;
-      const cardHeight = cardRect.height;
-      const availableViewportHeight = window.innerHeight - navbarHeight - topGap - bottomGap;
+      const availableHeight = Math.max(
+        window.innerHeight - navbarHeight - topGap - bottomGap,
+        0,
+      );
 
-      // Keep the card between the fixed navbar and the bottom of the viewport.
-      // The card itself is sized to the available viewport, so this places its
-      // top and bottom edges naturally inside the visible screen.
-      const viewportTop = navbarHeight + topGap;
-      const viewportBottom = window.innerHeight - bottomGap;
-      const fitsViewport = cardHeight <= availableViewportHeight;
-      const targetViewportTop = fitsViewport
-        ? viewportTop
-        : Math.max(viewportBottom - cardHeight, viewportTop);
-      const targetScroll = Math.max(cardTop - targetViewportTop, 0);
+      // Make the card exactly as tall as the visible area below the navbar.
+      // This guarantees that its top and bottom can both sit inside one viewport.
+      card.style.height = `${availableHeight}px`;
 
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
+      requestAnimationFrame(() => {
+        const cardTop = card.getBoundingClientRect().top + window.scrollY;
+        const targetScroll = Math.max(
+          cardTop - navbarHeight - topGap,
+          0,
+        );
+
+        window.scrollTo({
+          top: targetScroll,
+          behavior: "smooth",
+        });
+
+        setShouldScrollToCraft(false);
       });
-
-      setShouldScrollToCraft(false);
     };
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(scrollToDetailCard);
-    });
+    requestAnimationFrame(positionDetailCard);
   }, [activeCraft, shouldScrollToCraft]);
 
   const handleCraftSelect = (craft) => {
@@ -101,14 +100,14 @@ export default function CinemaReel() {
 
       <section
         aria-live="polite"
-        className="relative max-w-6xl mx-auto px-6 py-8 md:py-10 min-h-[calc(100svh-7rem)] flex items-start"
+        className="relative max-w-6xl mx-auto px-6 py-8 md:py-10"
       >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
         <div
           ref={detailCardRef}
           key={activeCraft.id}
-          className="relative z-10 w-full min-h-[calc(100svh-9rem)] rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up flex flex-col"
+          className="relative z-10 w-full min-h-0 rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up flex flex-col"
         >
           <div className="relative p-7 md:p-10 border-b border-white/10 shrink-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.13),transparent_45%)] pointer-events-none" />
@@ -119,8 +118,8 @@ export default function CinemaReel() {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10 flex-1">
-            <div className="p-7 md:p-9 flex flex-col justify-center">
+          <div className="grid lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/10 flex-1 min-h-0">
+            <div className="p-7 md:p-9 flex flex-col justify-center min-h-0">
               <div className="flex items-center gap-4">
                 <BriefcaseBusiness className="text-amber-400" />
                 <h4 className="text-2xl font-bold">Find Talent</h4>
@@ -138,7 +137,7 @@ export default function CinemaReel() {
               </div>
             </div>
 
-            <div className="p-7 md:p-9 flex flex-col justify-center">
+            <div className="p-7 md:p-9 flex flex-col justify-center min-h-0">
               <div className="flex items-center gap-4">
                 <Clapperboard className="text-amber-400" />
                 <h4 className="text-2xl font-bold">Built for Production</h4>
