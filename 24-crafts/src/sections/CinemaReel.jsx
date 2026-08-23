@@ -71,12 +71,14 @@ export default function CinemaReel() {
         </div>
 
         <div className="relative w-full bg-black py-6 overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center px-8 space-x-6 snap-x snap-mandatory">
-          <div className="pointer-events-none absolute inset-y-0 left-5 w-px bg-amber-500/20" />
-          <div className="pointer-events-none absolute inset-y-0 right-5 w-px bg-amber-500/20" />
+          {/* Reel rails: these are intentionally visible on mobile as well. */}
+          <div className="pointer-events-none absolute inset-y-0 left-5 w-px bg-amber-500/20 z-20" />
+          <div className="pointer-events-none absolute inset-y-0 right-5 w-px bg-amber-500/20 z-20" />
 
           {crafts.map((craft) => (
-            <div key={craft.id} className="relative shrink-0 snap-center pr-3">
-              <span className="pointer-events-none absolute -right-0.5 top-0 bottom-0 w-px bg-white/10" />
+            <div key={craft.id} className="relative shrink-0 snap-center lg:pr-3">
+              {/* Desktop-only craft separators. Mobile has no vertical dividers between cards. */}
+              <span className="pointer-events-none absolute -right-0.5 top-0 bottom-0 hidden lg:block w-px bg-white/10" />
               <CinemaReelCraftButton
                 craftId={craft.id}
                 active={activeCraft.id === craft.id}
