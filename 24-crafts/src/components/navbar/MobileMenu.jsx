@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 
 export default function MobileMenu({ navLinks }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const iconButtonClass = "!p-0 w-12 h-12 flex items-center justify-center";
 
   useEffect(() => {
@@ -23,10 +26,29 @@ export default function MobileMenu({ navLinks }) {
   const handleNavigation = (href) => {
     setOpen(false);
 
-    // Use a real browser navigation for mobile menu links. This keeps
-    // route changes and hash changes reliable even when the menu is
-    // rendered through a portal outside the normal page tree.
-    window.location.assign(href);
+    const url = new URL(href, window.location.origin);
+    const targetPath = url.pathname;
+    const targetHash = url.hash;
+    const currentHash = window.location.hash;
+
+    // A router navigation to the current route does not remount the page.
+    // Explicitly handle that case so Home always means "go to the top" and
+    // the current anchor can still be reselected.
+    if (location.pathname === targetPath && currentHash === targetHash) {
+      requestAnimationFrame(() => {
+        if (targetHash) {
+          document.getElementById(targetHash.slice(1))?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        } else {
+          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        }
+      });
+      return;
+    }
+
+    navigate(`${targetPath}${targetHash}`);
   };
 
   const menuOverlay = open ? (
@@ -35,6 +57,7 @@ export default function MobileMenu({ navLinks }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex flex-col"
         role="dialog"
         aria-modal="true"
@@ -61,7 +84,11 @@ export default function MobileMenu({ navLinks }) {
                 key={item.label}
                 initial={{ opacity: 0, x: 24 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.06 }}
+                transition={{
+                  delay: index * 0.05,
+                  duration: 0.4,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
               >
                 <button
                   type="button"
