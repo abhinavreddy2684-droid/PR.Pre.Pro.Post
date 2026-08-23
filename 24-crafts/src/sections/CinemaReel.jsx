@@ -10,25 +10,22 @@ export default function CinemaReel() {
   const navigate = useNavigate();
   const [activeCraft, setActiveCraft] = useState(crafts[1]);
   const [shouldScrollToCraft, setShouldScrollToCraft] = useState(false);
-  const detailCardRef = useRef(null);
+  const detailSectionRef = useRef(null);
 
   useEffect(() => {
     if (!shouldScrollToCraft) return;
 
     const scrollToDetailCard = () => {
-      const card = detailCardRef.current;
-      if (!card) return;
+      const detailSection = detailSectionRef.current;
+      if (!detailSection) return;
 
-      const cardTop = card.getBoundingClientRect().top + window.scrollY;
+      const sectionTop = detailSection.getBoundingClientRect().top + window.scrollY;
       const navbar = document.querySelector("nav");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
       const topGap = window.innerWidth < 1024 ? 12 : 16;
 
-      // Put the detail card directly below the navigation.
-      // Do not use the card center/height here: that can produce a
-      // smaller scroll target and send the page back toward the hero.
       const targetScroll = Math.max(
-        cardTop - navbarHeight - topGap,
+        sectionTop - navbarHeight - topGap,
         0,
       );
 
@@ -97,10 +94,17 @@ export default function CinemaReel() {
         </div>
       </section>
 
-      <section aria-live="polite" className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-16 md:pt-20 md:pb-20">
+      <section
+        ref={detailSectionRef}
+        aria-live="polite"
+        className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-16 md:pt-20 md:pb-20"
+      >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
-        <div ref={detailCardRef} key={`mobile-${activeCraft.id}`} className="relative z-10 lg:hidden overflow-hidden rounded-[1.75rem] border border-amber-500/15 bg-[#0b0b0b] shadow-[0_20px_70px_rgba(0,0,0,0.45)] animate-fade-in-up">
+        <div
+          key={`mobile-${activeCraft.id}`}
+          className="relative z-10 lg:hidden overflow-hidden rounded-[1.75rem] border border-amber-500/15 bg-[#0b0b0b] shadow-[0_20px_70px_rgba(0,0,0,0.45)] animate-fade-in-up"
+        >
           <div className="relative px-5 pt-6 pb-7 border-b border-white/10 bg-gradient-to-br from-amber-500/[0.12] via-transparent to-transparent">
             <div className="flex items-center justify-between gap-4">
               <p className="uppercase tracking-[0.28em] text-[10px] font-semibold text-amber-400">Cinema Craft</p>
