@@ -19,17 +19,16 @@ export default function CinemaReel() {
       const card = detailCardRef.current;
       if (!card) return;
 
-      const cardRect = card.getBoundingClientRect();
-      const cardTop = cardRect.top + window.scrollY;
-      const cardBottom = cardTop + cardRect.height;
+      const cardTop = card.getBoundingClientRect().top + window.scrollY;
       const navbar = document.querySelector("nav");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
       const topGap = window.innerWidth < 1024 ? 12 : 16;
 
-      // Keep the behavior that correctly positions the whole detail card
-      // in the viewport. The 160px adjustment is intentional here.
+      // Put the detail card directly below the navigation.
+      // Do not use the card center/height here: that can produce a
+      // smaller scroll target and send the page back toward the hero.
       const targetScroll = Math.max(
-        ((cardTop + cardBottom - 160) / 2) - navbarHeight - topGap,
+        cardTop - navbarHeight - topGap,
         0,
       );
 
@@ -69,7 +68,6 @@ export default function CinemaReel() {
       </header>
 
       <section className="w-full relative py-12">
-        {/* Film sprocket holes — subtle like the reference on every viewport. */}
         <div className="w-full h-4 bg-black border-y border-neutral-800 flex justify-around items-center px-4 overflow-hidden">
           {[...Array(50)].map((_, index) => (
             <div key={`top-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1 shrink-0" />
@@ -92,7 +90,6 @@ export default function CinemaReel() {
           ))}
         </div>
 
-        {/* Film sprocket holes — mirrored rail on the bottom edge. */}
         <div className="w-full h-4 bg-black border-y border-neutral-800 flex justify-around items-center px-4 overflow-hidden">
           {[...Array(50)].map((_, index) => (
             <div key={`bottom-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1 shrink-0" />
@@ -100,17 +97,10 @@ export default function CinemaReel() {
         </div>
       </section>
 
-      <section
-        aria-live="polite"
-        className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-16 md:pt-20 md:pb-20"
-      >
+      <section aria-live="polite" className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-16 md:pt-20 md:pb-20">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
-        <div
-          ref={detailCardRef}
-          key={`mobile-${activeCraft.id}`}
-          className="relative z-10 lg:hidden overflow-hidden rounded-[1.75rem] border border-amber-500/15 bg-[#0b0b0b] shadow-[0_20px_70px_rgba(0,0,0,0.45)] animate-fade-in-up"
-        >
+        <div ref={detailCardRef} key={`mobile-${activeCraft.id}`} className="relative z-10 lg:hidden overflow-hidden rounded-[1.75rem] border border-amber-500/15 bg-[#0b0b0b] shadow-[0_20px_70px_rgba(0,0,0,0.45)] animate-fade-in-up">
           <div className="relative px-5 pt-6 pb-7 border-b border-white/10 bg-gradient-to-br from-amber-500/[0.12] via-transparent to-transparent">
             <div className="flex items-center justify-between gap-4">
               <p className="uppercase tracking-[0.28em] text-[10px] font-semibold text-amber-400">Cinema Craft</p>
