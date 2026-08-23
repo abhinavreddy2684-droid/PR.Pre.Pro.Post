@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 
 export default function MobileMenu({ navLinks }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const iconButtonClass = "!p-0 w-12 h-12 flex items-center justify-center";
 
   useEffect(() => {
@@ -18,6 +19,11 @@ export default function MobileMenu({ navLinks }) {
       document.body.style.overflow = previousOverflow;
     };
   }, [open]);
+
+  const handleNavigation = (href) => {
+    setOpen(false);
+    navigate(href);
+  };
 
   const menuOverlay = open ? (
     <AnimatePresence>
@@ -53,13 +59,13 @@ export default function MobileMenu({ navLinks }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.06 }}
               >
-                <Link
-                  to={item.href}
-                  onClick={() => setOpen(false)}
-                  className="flex min-h-14 items-center rounded-2xl border border-white/10 bg-white/[0.03] px-5 text-lg sm:text-2xl font-bold uppercase tracking-[0.12em] text-neutral-200 active:bg-amber-500 active:text-black hover:border-amber-500/40 hover:text-amber-400 transition-all duration-300"
+                <button
+                  type="button"
+                  onClick={() => handleNavigation(item.href)}
+                  className="w-full flex min-h-14 items-center rounded-2xl border border-white/10 bg-white/[0.03] px-5 text-left text-lg sm:text-2xl font-bold uppercase tracking-[0.12em] text-neutral-200 active:bg-amber-500 active:text-black hover:border-amber-500/40 hover:text-amber-400 transition-all duration-300"
                 >
                   {item.label}
-                </Link>
+                </button>
               </motion.div>
             ))}
           </div>
