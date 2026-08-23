@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Button from "../ui/Button";
 import MobileMenu from "./MobileMenu";
@@ -19,6 +19,7 @@ const navEase = [0.22, 1, 0.36, 1];
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
@@ -26,6 +27,18 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleHomeClick = (event) => {
+    if (location.pathname !== "/") return;
+
+    event.preventDefault();
+
+    if (window.location.hash) {
+      navigate("/");
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  };
 
   const handleCraftsClick = (event) => {
     if (location.pathname !== "/") return;
@@ -58,7 +71,7 @@ export default function Navbar() {
           scrolled ? "py-2.5 sm:py-3.5 lg:py-4" : "py-3 sm:py-4 lg:py-5"
         }`}
       >
-        <Link to="/" className="flex min-w-0 items-center gap-2 sm:gap-3">
+        <Link to="/" onClick={handleHomeClick} className="flex min-w-0 items-center gap-2 sm:gap-3">
           <motion.div
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
@@ -77,7 +90,13 @@ export default function Navbar() {
             <Link
               key={item.label}
               to={item.href}
-              onClick={item.label === "Crafts" ? handleCraftsClick : undefined}
+              onClick={
+                item.label === "Home"
+                  ? handleHomeClick
+                  : item.label === "Crafts"
+                    ? handleCraftsClick
+                    : undefined
+              }
               className="relative py-2 text-sm uppercase tracking-[0.18em] text-neutral-300 hover:text-amber-400 transition-colors duration-300 ease-out after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-amber-400 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100"
             >
               {item.label}
