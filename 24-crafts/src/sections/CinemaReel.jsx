@@ -75,9 +75,7 @@ export default function CinemaReel() {
 
         <div className="relative w-full bg-black py-6 overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center px-8 space-x-6 snap-x snap-mandatory">
           {crafts.map((craft) => (
-            <div key={craft.id} className="relative shrink-0 snap-center lg:pr-3">
-              {/* Craft separators stay on desktop; the unwanted brown outer rails remain removed. */}
-              <span className="pointer-events-none absolute -right-0.5 top-0 bottom-0 hidden lg:block w-px bg-white/10" />
+            <div key={craft.id} className="relative shrink-0 snap-center">
               <CinemaReelCraftButton
                 craftId={craft.id}
                 active={activeCraft.id === craft.id}
