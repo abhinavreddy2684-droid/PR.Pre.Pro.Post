@@ -19,11 +19,15 @@ export default function CinemaReel() {
       const card = detailCardRef.current;
       if (!card) return;
 
+      const cardRect = card.getBoundingClientRect();
       const navbar = document.querySelector("header");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
       const topGap = 16;
-      const cardTop = card.getBoundingClientRect().top + window.scrollY;
-      const targetScroll = Math.max(cardTop - navbarHeight - topGap, 0);
+      const cardTop = cardRect.top + window.scrollY;
+      const cardCenter = cardTop + cardRect.height / 2;
+      const availableViewportHeight = window.innerHeight - navbarHeight - topGap;
+      const availableViewportCenter = navbarHeight + topGap + availableViewportHeight / 2;
+      const targetScroll = Math.max(cardCenter - availableViewportCenter, 0);
 
       window.scrollTo({
         top: targetScroll,
