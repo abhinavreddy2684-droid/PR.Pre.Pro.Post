@@ -66,10 +66,10 @@ export default function CinemaReel() {
       </header>
 
       <section className="w-full relative py-12">
-        {/* Film sprocket holes — part of the reel and visible on every viewport. */}
+        {/* Film sprocket holes — subtle like the reference on every viewport. */}
         <div className="w-full h-4 bg-black border-y border-neutral-800 flex justify-around items-center px-4 overflow-hidden">
           {[...Array(50)].map((_, index) => (
-            <div key={`top-${index}`} className="w-3 h-2 bg-neutral-800 rounded-sm mx-1 shrink-0" />
+            <div key={`top-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1 shrink-0" />
           ))}
         </div>
 
@@ -94,7 +94,7 @@ export default function CinemaReel() {
         {/* Film sprocket holes — mirrored rail on the bottom edge. */}
         <div className="w-full h-4 bg-black border-y border-neutral-800 flex justify-around items-center px-4 overflow-hidden">
           {[...Array(50)].map((_, index) => (
-            <div key={`bottom-${index}`} className="w-3 h-2 bg-neutral-800 rounded-sm mx-1 shrink-0" />
+            <div key={`bottom-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1 shrink-0" />
           ))}
         </div>
       </section>
