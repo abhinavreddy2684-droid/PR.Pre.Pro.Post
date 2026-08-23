@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
-import TalentCard from "../components/cards/TalentCard";
+import TalentMarketplaceCard from "../components/cards/TalentMarketplaceCard";
 import Input from "../components/ui/Input";
 import Select from "../components/ui/Select";
 import talents from "../data/talents";
@@ -112,7 +112,7 @@ export default function TalentDiscovery() {
 
           <div className="mt-7 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {filteredTalents.map((talent) => (
-              <TalentCard key={talent.id} talent={talent} />
+              <TalentMarketplaceCard key={talent.id} talent={talent} />
             ))}
           </div>
 
