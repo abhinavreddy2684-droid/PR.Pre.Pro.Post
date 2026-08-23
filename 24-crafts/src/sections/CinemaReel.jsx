@@ -21,14 +21,15 @@ export default function CinemaReel() {
 
       const cardRect = card.getBoundingClientRect();
       const cardTop = cardRect.top + window.scrollY;
-      const cardHeight = cardRect.height;
+      const cardBottom = cardTop + cardRect.height;
       const navbar = document.querySelector("nav");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
       const topGap = window.innerWidth < 1024 ? 12 : 16;
-      const availableHeight = Math.max(window.innerHeight - navbarHeight - topGap, 0);
-      const verticalSpace = Math.max((availableHeight - cardHeight) / 2, 16);
+
+      // Keep the behavior that correctly positions the whole detail card
+      // in the viewport. The 160px adjustment is intentional here.
       const targetScroll = Math.max(
-        cardTop - navbarHeight - topGap - verticalSpace,
+        ((cardTop + cardBottom - 160) / 2) - navbarHeight - topGap,
         0,
       );
 
