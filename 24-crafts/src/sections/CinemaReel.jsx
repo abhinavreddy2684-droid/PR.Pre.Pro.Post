@@ -20,12 +20,13 @@ export default function CinemaReel() {
       if (!card) return;
 
       const cardTop = card.getBoundingClientRect().top + window.scrollY;
-      const cardBottom = cardTop + card.getBoundingClientRect().height;
+      const cardHeight = card.getBoundingClientRect().height;
       const navbar = document.querySelector("header");
       const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
-      const topGap = 16;
+      const topGap = window.innerWidth < 1024 ? 12 : 16;
+      const visibleCardHeight = Math.min(cardHeight, window.innerHeight * 0.82);
       const targetScroll = Math.max(
-        ((cardTop + cardBottom - 160) / 2) - navbarHeight - topGap,
+        cardTop - navbarHeight - topGap - Math.max((window.innerHeight - visibleCardHeight) * 0.08, 0),
         0,
       );
 
@@ -69,18 +70,24 @@ export default function CinemaReel() {
           {[...Array(50)].map((_, index) => <div key={`top-${index}`} className="w-3 h-2 bg-neutral-900 rounded-sm mx-1" />)}
         </div>
 
-        <div className="w-full bg-black py-6 overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center px-8 space-x-6 snap-x snap-mandatory">
+        <div className="relative w-full bg-black py-6 overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center px-8 space-x-6 snap-x snap-mandatory">
+          {/* Continuous rails + frame dividers make the strip read as a film reel on every viewport. */}
+          <div className="pointer-events-none absolute inset-y-0 left-5 w-px bg-amber-500/20" />
+          <div className="pointer-events-none absolute inset-y-0 right-5 w-px bg-amber-500/20" />
+
           {crafts.map((craft) => (
-            <CinemaReelCraftButton
-              key={craft.id}
-              craftId={craft.id}
-              active={activeCraft.id === craft.id}
-              onClick={() => handleCraftSelect(craft)}
-              aria-label={`View details for ${craft.title}`}
-              aria-pressed={activeCraft.id === craft.id}
-            >
-              {craft.title}
-            </CinemaReelCraftButton>
+            <div key={craft.id} className="relative shrink-0 snap-center pr-3">
+              <span className="pointer-events-none absolute -right-0.5 top-0 bottom-0 w-px bg-white/10" />
+              <CinemaReelCraftButton
+                craftId={craft.id}
+                active={activeCraft.id === craft.id}
+                onClick={() => handleCraftSelect(craft)}
+                aria-label={`View details for ${craft.title}`}
+                aria-pressed={activeCraft.id === craft.id}
+              >
+                {craft.title}
+              </CinemaReelCraftButton>
+            </div>
           ))}
         </div>
 
@@ -91,15 +98,94 @@ export default function CinemaReel() {
 
       <section
         aria-live="polite"
-        className="relative max-w-6xl mx-auto px-6 pt-16 pb-20 md:pt-20"
+        className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-16 md:pt-20 md:pb-20"
       >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
+        {/* Mobile: purpose-built stacked craft card */}
         <div
           ref={detailCardRef}
-          key={activeCraft.id}
-          className="relative z-10 rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up"
+          key={`mobile-${activeCraft.id}`}
+          className="relative z-10 lg:hidden overflow-hidden rounded-[1.75rem] border border-amber-500/15 bg-[#0b0b0b] shadow-[0_20px_70px_rgba(0,0,0,0.45)] animate-fade-in-up"
         >
+          <div className="relative px-5 pt-6 pb-7 border-b border-white/10 bg-gradient-to-br from-amber-500/[0.12] via-transparent to-transparent">
+            <div className="flex items-center justify-between gap-4">
+              <p className="uppercase tracking-[0.28em] text-[10px] font-semibold text-amber-400">
+                Cinema Craft
+              </p>
+              <span className="font-mono text-xs text-amber-500/60">
+                {String(activeCraft.id).padStart(2, "0")}
+              </span>
+            </div>
+
+            <h3 className="mt-3 text-4xl sm:text-5xl font-black tracking-tight leading-[0.95]">
+              {activeCraft.title}
+            </h3>
+            <p className="mt-5 text-sm sm:text-base text-neutral-400 leading-7">
+              {activeCraft.description}
+            </p>
+          </div>
+
+          <div className="divide-y divide-white/10">
+            <div className="px-5 py-6">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                  <BriefcaseBusiness size={18} className="text-amber-400" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold">Find Talent</h4>
+                  <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-600">People behind the craft</p>
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm text-neutral-400 leading-6">
+                Explore professionals in this craft, review their work, and discover the right talent for your next project.
+              </p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {activeCraft.talentTypes.map((talentType) => (
+                  <span key={talentType} className="px-3 py-2 rounded-full border border-white/10 bg-white/[0.035] text-xs text-neutral-300">
+                    {talentType}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="px-5 py-6">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                  <Clapperboard size={18} className="text-amber-400" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold">Built for Production</h4>
+                  <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-600">A searchable talent marketplace</p>
+                </div>
+              </div>
+
+              <p className="mt-4 text-sm text-neutral-400 leading-6">
+                Browse structured, searchable talent profiles instead of relying on static resumes or scattered referrals.
+              </p>
+
+              <div className="mt-5 flex items-center gap-2">
+                <Layers3 className="text-amber-400" size={17} />
+                <span className="text-[10px] uppercase tracking-[0.18em] text-neutral-500">Discover · Evaluate · Hire</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-5 py-5 bg-black/40 border-t border-white/10">
+            <p className="text-xs text-neutral-500 mb-4">
+              Explore available talent in <span className="text-neutral-300">{activeCraft.title}</span>.
+            </p>
+            <Button onClick={exploreTalent} className="w-full flex items-center justify-center gap-3 !px-5 !py-3.5">
+              Explore Talent
+              <ArrowRight size={18} />
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop: existing wide editorial card */}
+        <div className="relative z-10 hidden lg:block rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up">
           <div className="relative p-8 md:p-14 border-b border-white/10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.13),transparent_45%)] pointer-events-none" />
             <div className="relative max-w-4xl">
