@@ -1,4 +1,3 @@
-
 import {
   useEffect,
   useRef,
@@ -48,55 +47,18 @@ const morphIcons = [
   Video,
 ];
 
-const floatingIcons = [
-  {
-    Icon: Camera,
-    position: "left-[3%] top-[12%]",
-    size: "w-16 h-16",
-    icon: 24,
-    duration: 18,
-  },
-
-  {
-    Icon: Music,
-    position: "left-[9%] top-[40%]",
-    size: "w-20 h-20",
-    icon: 30,
-    duration: 22,
-  },
-
-  {
-    Icon: Film,
-    position: "left-[18%] bottom-[14%]",
-    size: "w-14 h-14",
-    icon: 20,
-    duration: 20,
-  },
-
-  {
-    Icon: PenTool,
-    position: "left-[24%] top-[18%]",
-    size: "w-12 h-12",
-    icon: 18,
-    duration: 24,
-  },
-
-  {
-    Icon: Clapperboard,
-    position: "left-[28%] bottom-[8%]",
-    size: "w-18 h-18",
-    icon: 24,
-    duration: 26,
-  },
-
-  {
-    Icon: Palette,
-    position: "left-[34%] bottom-[30%]",
-    size: "w-12 h-12",
-    icon: 18,
-    duration: 21,
-  },
-];
+const sideCrafts = {
+  left: [
+    { Icon: Camera, code: "01", label: "Direction" },
+    { Icon: Theater, code: "04", label: "Acting" },
+    { Icon: Music, code: "07", label: "Music" },
+  ],
+  right: [
+    { Icon: Aperture, code: "02", label: "Cinematography" },
+    { Icon: Scissors, code: "09", label: "Editing" },
+    { Icon: Sparkles, code: "12", label: "VFX" },
+  ],
+};
 
 const orbitLabels = [
   "Direction",
@@ -283,62 +245,74 @@ export default function HeroSection() {
         ))}
       </div>
 
-      {/* LEFT ICON ECOSYSTEM */}
+      {/* SIDE CRAFT ECOSYSTEM */}
 
-      {/* <div className="absolute inset-0 hidden lg:block pointer-events-none">
-        {floatingIcons.map((item, index) => {
-          const Icon = item.Icon;
+      <div className="absolute inset-0 hidden xl:block pointer-events-none z-10">
+        {/* LEFT RAIL */}
+        <div className="absolute left-[5.5%] top-1/2 -translate-y-1/2 w-[190px]">
+          <div className="absolute left-[18px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-amber-500/20 to-transparent" />
 
-          return (
-            <motion.div
-              key={index}
-              animate={{
-                y: [0, -12, 0],
-                rotate: [0, 4, -4, 0],
-              }}
-              transition={{
-                duration: item.duration,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className={`
-                hero-parallax
-                absolute
-                ${item.position}
-              `}
-            >
-              <div
-                className="
-                  absolute inset-0
-                  rounded-full
-                  bg-amber-500/10
-                  blur-3xl
-                  scale-150
-                "
-              />
-
-              <div
-                className={`
-                  relative
-                  ${item.size}
-                  rounded-full
-                  border border-white/10
-                  bg-white/[0.03]
-                  backdrop-blur-xl
-                  flex items-center justify-center
-                  shadow-[0_0_60px_rgba(245,158,11,0.08)]
-                `}
+          <div className="relative flex flex-col gap-10">
+            {sideCrafts.left.map(({ Icon, code, label }, index) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, x: -24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.35 + index * 0.12, duration: 0.7 }}
+                className="hero-parallax group flex items-center gap-4"
               >
-                <Icon
-                  size={item.icon}
-                  strokeWidth={1.4}
-                  className="text-amber-300/28"
-                />
-              </div>
-            </motion.div>
-          );
-        })}
-      </div> */}
+                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-amber-500/20 bg-black/70 shadow-[0_0_30px_rgba(245,158,11,0.06)] backdrop-blur-xl">
+                  <span className="absolute inset-0 rounded-full bg-amber-500/5 blur-md" />
+                  <Icon size={16} strokeWidth={1.4} className="relative text-amber-300/70" />
+                </div>
+
+                <div className="min-w-0 border-l border-white/10 pl-3">
+                  <div className="mb-1 text-[8px] uppercase tracking-[0.28em] text-amber-400/45">
+                    Craft {code}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/45 transition-colors duration-300 group-hover:text-amber-200/80">
+                    {label}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT RAIL */}
+        <div className="absolute right-[5.5%] top-1/2 -translate-y-1/2 w-[190px]">
+          <div className="absolute right-[18px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-amber-500/20 to-transparent" />
+
+          <div className="relative flex flex-col gap-10 items-end">
+            {sideCrafts.right.map(({ Icon, code, label }, index) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 + index * 0.12, duration: 0.7 }}
+                className="hero-parallax group flex items-center justify-end gap-4 text-right"
+              >
+                <div className="min-w-0 border-r border-white/10 pr-3">
+                  <div className="mb-1 text-[8px] uppercase tracking-[0.28em] text-amber-400/45">
+                    Craft {code}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-white/45 transition-colors duration-300 group-hover:text-amber-200/80">
+                    {label}
+                  </div>
+                </div>
+
+                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-amber-500/20 bg-black/70 shadow-[0_0_30px_rgba(245,158,11,0.06)] backdrop-blur-xl">
+                  <span className="absolute inset-0 rounded-full bg-amber-500/5 blur-md" />
+                  <Icon size={16} strokeWidth={1.4} className="relative text-amber-300/70" />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* HORIZONTAL CONNECTORS */}
+        <div className="absolute left-[11%] right-[11%] top-1/2 h-px bg-gradient-to-r from-transparent via-amber-500/[0.06] to-transparent" />
+      </div>
 
       {/* MAIN LAYOUT */}
 
@@ -849,4 +823,3 @@ export default function HeroSection() {
     </section>
   );
 }
-
