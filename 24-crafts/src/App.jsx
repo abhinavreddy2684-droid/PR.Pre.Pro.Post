@@ -11,7 +11,6 @@ import Productions from "./pages/Productions";
 import Artists from "./pages/Artists";
 import TalentDiscovery from "./pages/TalentDiscovery";
 import TalentProfile from "./pages/TalentProfile";
-import TalentOnboarding from "./pages/TalentOnboarding";
 
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
@@ -47,7 +46,6 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/talent" element={<TalentDiscovery />} />
         <Route path="/talent/:talentId" element={<TalentProfile />} />
-        <Route path="/talent/onboarding" element={<TalentOnboarding />} />
         <Route path="/productions" element={<Productions />} />
         <Route path="/artists" element={<Artists />} />
       </Routes>
