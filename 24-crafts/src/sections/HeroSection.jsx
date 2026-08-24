@@ -1,4 +1,3 @@
-
 import {
   useEffect,
   useRef,
@@ -48,56 +47,6 @@ const morphIcons = [
   Video,
 ];
 
-const floatingIcons = [
-  {
-    Icon: Camera,
-    position: "left-[3%] top-[12%]",
-    size: "w-16 h-16",
-    icon: 24,
-    duration: 18,
-  },
-
-  {
-    Icon: Music,
-    position: "left-[9%] top-[40%]",
-    size: "w-20 h-20",
-    icon: 30,
-    duration: 22,
-  },
-
-  {
-    Icon: Film,
-    position: "left-[18%] bottom-[14%]",
-    size: "w-14 h-14",
-    icon: 20,
-    duration: 20,
-  },
-
-  {
-    Icon: PenTool,
-    position: "left-[24%] top-[18%]",
-    size: "w-12 h-12",
-    icon: 18,
-    duration: 24,
-  },
-
-  {
-    Icon: Clapperboard,
-    position: "left-[28%] bottom-[8%]",
-    size: "w-18 h-18",
-    icon: 24,
-    duration: 26,
-  },
-
-  {
-    Icon: Palette,
-    position: "left-[34%] bottom-[30%]",
-    size: "w-12 h-12",
-    icon: 18,
-    duration: 21,
-  },
-];
-
 const orbitLabels = [
   "Direction",
   "Screenplay",
@@ -110,41 +59,26 @@ const orbitLabels = [
 ];
 
 export default function HeroSection() {
-  const [activeIcon, setActiveIcon] =
-    useState(0);
-
+  const [activeIcon, setActiveIcon] = useState(0);
   const heroRef = useRef(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIcon((prev) =>
-        prev === morphIcons.length - 1
-          ? 0
-          : prev + 1
+        prev === morphIcons.length - 1 ? 0 : prev + 1
       );
     }, 3200);
 
     return () => clearInterval(interval);
   }, []);
 
-  // MOUSE MOVEMENT
-
   useEffect(() => {
     const hero = heroRef.current;
 
     const handleMouseMove = (e) => {
       const rect = hero.getBoundingClientRect();
-
-      const x =
-        ((e.clientX - rect.left) / rect.width -
-          0.5) *
-        50;
-
-      const y =
-        ((e.clientY - rect.top) /
-          rect.height -
-          0.5) *
-        50;
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 50;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 50;
 
       gsap.to(".hero-parallax", {
         x,
@@ -161,16 +95,10 @@ export default function HeroSection() {
       });
     };
 
-    hero.addEventListener(
-      "mousemove",
-      handleMouseMove
-    );
+    hero.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      hero.removeEventListener(
-        "mousemove",
-        handleMouseMove
-      );
+      hero.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -178,529 +106,145 @@ export default function HeroSection() {
     <section
       ref={heroRef}
       id="home"
-      className="
-        relative
-        min-h-screen
-        overflow-hidden
-        bg-[#040404]
-      "
+      className="relative min-h-screen overflow-hidden bg-[#040404]"
     >
       {/* BASE */}
-
       <div className="absolute inset-0 bg-black" />
 
       {/* AMBIENT GLOW */}
-
       <div
-        className="
-          absolute
-          left-1/2 top-1/2
-          -translate-x-1/2 -translate-y-1/2
-          w-[1200px] h-[1200px]
-          rounded-full
-          bg-amber-500/10
-          blur-[180px]
-        "
+        className="absolute left-1/2 top-1/2 h-[1400px] w-[1400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[200px]"
       />
 
       {/* LIGHT SHAFT */}
-
       <div
-        className="
-          absolute
-          top-[-20%]
-          left-[10%]
-          w-[520px]
-          h-[160%]
-          rotate-[22deg]
-          bg-gradient-to-b
-          from-amber-400/10
-          to-transparent
-          blur-3xl
-        "
+        className="absolute left-[10%] top-[-20%] h-[160%] w-[520px] rotate-[22deg] bg-gradient-to-b from-amber-400/10 to-transparent blur-3xl"
       />
 
       {/* FILM GRAIN */}
-
-      <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')]" />
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')] opacity-[0.03]" />
 
       {/* SCANLINES */}
-
-      <div
-        className="
-          absolute inset-0
-          opacity-10
-          bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,255,255,0.04)_50%)]
-          bg-[length:100%_4px]
-        "
-      />
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,255,255,0.04)_50%)] bg-[length:100%_4px] opacity-10" />
 
       {/* SIDE FILM STRIPS */}
-
-      <div
-        className="
-          absolute left-0 top-0 bottom-0
-          hidden lg:flex
-          w-12
-          border-r border-white/10
-          flex-col items-center
-          opacity-20
-        "
-      >
+      <div className="absolute bottom-0 left-0 top-0 hidden w-12 flex-col items-center border-r border-white/10 opacity-20 lg:flex">
         {[...Array(24)].map((_, i) => (
-          <div
-            key={i}
-            className="
-              mt-4
-              w-6 h-4
-              border border-white/30
-              rounded-sm
-            "
-          />
+          <div key={i} className="mt-4 h-4 w-6 rounded-sm border border-white/30" />
         ))}
       </div>
 
-      <div
-        className="
-          absolute right-0 top-0 bottom-0
-          hidden lg:flex
-          w-12
-          border-l border-white/10
-          flex-col items-center
-          opacity-20
-        "
-      >
+      <div className="absolute bottom-0 right-0 top-0 hidden w-12 flex-col items-center border-l border-white/10 opacity-20 lg:flex">
         {[...Array(24)].map((_, i) => (
-          <div
-            key={i}
-            className="
-              mt-4
-              w-6 h-4
-              border border-white/30
-              rounded-sm
-            "
-          />
+          <div key={i} className="mt-4 h-4 w-6 rounded-sm border border-white/30" />
         ))}
       </div>
-
-      {/* LEFT ICON ECOSYSTEM */}
-
-      {/* <div className="absolute inset-0 hidden lg:block pointer-events-none">
-        {floatingIcons.map((item, index) => {
-          const Icon = item.Icon;
-
-          return (
-            <motion.div
-              key={index}
-              animate={{
-                y: [0, -12, 0],
-                rotate: [0, 4, -4, 0],
-              }}
-              transition={{
-                duration: item.duration,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className={`
-                hero-parallax
-                absolute
-                ${item.position}
-              `}
-            >
-              <div
-                className="
-                  absolute inset-0
-                  rounded-full
-                  bg-amber-500/10
-                  blur-3xl
-                  scale-150
-                "
-              />
-
-              <div
-                className={`
-                  relative
-                  ${item.size}
-                  rounded-full
-                  border border-white/10
-                  bg-white/[0.03]
-                  backdrop-blur-xl
-                  flex items-center justify-center
-                  shadow-[0_0_60px_rgba(245,158,11,0.08)]
-                `}
-              >
-                <Icon
-                  size={item.icon}
-                  strokeWidth={1.4}
-                  className="text-amber-300/28"
-                />
-              </div>
-            </motion.div>
-          );
-        })}
-      </div> */}
 
       {/* MAIN LAYOUT */}
-
-      <div
-        className="
-          relative z-20
-          min-h-screen
-          max-w-7xl
-          mx-auto
-          grid lg:grid-cols-[1fr_1fr]
-          items-center
-          gap-10
-          px-6 lg:px-12
-          pt-32 pb-20
-        "
-      >
+      <div className="relative z-20 mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 items-center gap-4 px-8 pb-20 pt-32 lg:grid-cols-[1.05fr_0.95fr] lg:px-14 xl:px-16">
         {/* LEFT CONTENT */}
-
-        <div className="relative z-10 max-w-2xl">
-          {/* LABEL */}
-
+        <div className="relative z-10 max-w-3xl">
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.8,
-            }}
-            className="
-              inline-flex items-center gap-3
-              px-5 py-3
-              border border-white/10
-              bg-white/[0.03]
-              backdrop-blur-xl
-              mb-10
-            "
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-10 inline-flex items-center gap-3 border border-white/10 bg-white/[0.03] px-5 py-3 backdrop-blur-xl"
           >
-            <div
-              className="
-                w-2 h-2 rounded-full
-                bg-amber-400 animate-pulse
-              "
-            />
-
-            <span
-              className="
-                text-[10px]
-                uppercase
-                tracking-[0.35em]
-                text-amber-300
-              "
-            >
+            <div className="h-2 w-2 animate-pulse rounded-full bg-amber-400" />
+            <span className="text-[10px] uppercase tracking-[0.35em] text-amber-300">
               The Marketplace for Filmmakers
             </span>
           </motion.div>
 
-          {/* TITLE */}
-
           <motion.h1
-            initial={{
-              opacity: 0,
-              y: 60,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 1,
-            }}
-            className="leading-[0.85] tracking-tight"
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+            className="leading-[0.82] tracking-tight"
           >
-            <span
-              className="
-                block
-                text-6xl md:text-8xl lg:text-[9rem]
-                font-black
-                text-white
-              "
-            >
+            <span className="block text-7xl font-black text-white md:text-9xl lg:text-[10rem] xl:text-[11rem]">
               WE
             </span>
-
-            <span
-              className="
-                block
-                text-6xl md:text-8xl lg:text-[9rem]
-                font-black
-                bg-gradient-to-r
-                from-amber-300
-                via-amber-100
-                to-amber-500
-                text-transparent
-                bg-clip-text
-              "
-            >
+            <span className="block bg-gradient-to-r from-amber-300 via-amber-100 to-amber-500 bg-clip-text text-7xl font-black text-transparent md:text-9xl lg:text-[10rem] xl:text-[11rem]">
               BUILD
             </span>
-
-            <span
-              className="
-                block
-                text-6xl md:text-8xl lg:text-[9rem]
-                font-black
-                text-white
-              "
-            >
+            <span className="block text-7xl font-black text-white md:text-9xl lg:text-[10rem] xl:text-[11rem]">
               CINEMA.
             </span>
           </motion.h1>
 
-          {/* RULE */}
-
-          <div className="flex items-center gap-5 mt-10 mb-8">
-            <div
-              className="
-                w-24 h-px
-                bg-gradient-to-r
-                from-amber-500
-                to-transparent
-              "
-            />
-
-            <span
-              className="
-                text-[10px]
-                uppercase
-                tracking-[0.35em]
-                text-white/35
-              "
-            >
+          <div className="mb-8 mt-10 flex items-center gap-5">
+            <div className="h-px w-28 bg-gradient-to-r from-amber-500 to-transparent" />
+            <span className="text-[10px] uppercase tracking-[0.35em] text-white/35">
               Filmmakers • Artists • Producers
             </span>
           </div>
 
-          {/* SUBTEXT */}
-
           <motion.p
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            transition={{
-              delay: 0.3,
-            }}
-            className="
-              text-lg
-              leading-[2]
-              text-white/55
-              max-w-lg
-            "
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="max-w-2xl text-xl leading-[1.9] text-white/55 lg:text-[1.35rem]"
           >
             A premium cinematic ecosystem{" "}
-
-            <span
-              className="
-                text-white
-                font-medium
-              "
-            >
-              connecting directors,
-              writers, cinematographers,
-              editors, musicians,
+            <span className="font-medium text-white">
+              connecting directors, writers, cinematographers, editors, musicians,
             </span>{" "}
-
-            actors, VFX artists,
-            and production professionals
-            across all{" "}
-
-            <span
-              className="
-                text-amber-300
-                font-medium
-              "
-            >
+            actors, VFX artists, and production professionals across all{" "}
+            <span className="font-medium text-amber-300">
               24 crafts of cinema.
             </span>
           </motion.p>
 
-          {/* BUTTONS */}
-
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            transition={{
-              delay: 0.5,
-            }}
-            className="
-              mt-12
-              flex flex-col sm:flex-row
-              gap-5
-            "
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-12 flex flex-col gap-5 sm:flex-row"
           >
-            <Button>
-              Explore Crafts
-            </Button>
-
-            <Button variant="secondary">
-              Enter Talent Network
-            </Button>
+            <Button>Explore Crafts</Button>
+            <Button variant="secondary">Enter Talent Network</Button>
           </motion.div>
         </div>
 
         {/* RIGHT LENS */}
+        <div className="hero-lens relative hidden items-center justify-center lg:flex">
+          <div className="relative h-[640px] w-[640px]">
+            <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[130px]" />
 
-        <div
-          className="
-            hero-lens
-            relative
-            hidden lg:flex
-            items-center justify-center
-          "
-        >
-          <div className="relative w-[560px] h-[560px]">
-            {/* CINEMATIC LIGHT */}
-
-            <div
-              className="
-                absolute left-1/2 top-1/2
-                -translate-x-1/2 -translate-y-1/2
-                w-[420px] h-[420px]
-                rounded-full
-                bg-amber-500/10
-                blur-[120px]
-              "
-            />
-
-            {/* DECORATION LINES */}
-
-            <div
-              className="
-                absolute
-                left-[-80px]
-                right-[-80px]
-                top-1/2
-                h-px
-                bg-gradient-to-r
-                from-transparent
-                via-amber-500/20
-                to-transparent
-              "
-            />
-
-            <div
-              className="
-                absolute
-                top-[-80px]
-                bottom-[-80px]
-                left-1/2
-                w-px
-                bg-gradient-to-b
-                from-transparent
-                via-amber-500/20
-                to-transparent
-              "
-            />
-
-            {/* OUTER RING */}
+            <div className="absolute left-[-80px] right-[-80px] top-1/2 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
+            <div className="absolute bottom-[-80px] left-1/2 top-[-80px] w-px bg-gradient-to-b from-transparent via-amber-500/20 to-transparent" />
 
             <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 120,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="
-                absolute inset-0
-                rounded-full
-                border border-white/[0.04]
-              "
+              animate={{ rotate: 360 }}
+              transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 rounded-full border border-white/[0.04]"
             />
-
-            {/* MIDDLE RING */}
 
             <motion.div
-              animate={{
-                rotate: -360,
-              }}
-              transition={{
-                duration: 80,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="
-                absolute inset-[70px]
-                rounded-full
-                border border-amber-500/[0.08]
-              "
+              animate={{ rotate: -360 }}
+              transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[80px] rounded-full border border-amber-500/[0.08]"
             />
-
-            {/* INNER RING */}
 
             <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 55,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              className="
-                absolute inset-[150px]
-                rounded-full
-                border border-amber-500/[0.14]
-              "
+              animate={{ rotate: 360 }}
+              transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-[170px] rounded-full border border-amber-500/[0.14]"
             />
-
-            {/* ORBIT LABELS */}
 
             {orbitLabels.map((label, index) => {
-              const angle =
-                (index / orbitLabels.length) *
-                Math.PI *
-                2;
-
-              const radius = 235;
-
+              const angle = (index / orbitLabels.length) * Math.PI * 2;
+              const radius = 270;
               const x = Math.cos(angle) * radius;
-
               const y = Math.sin(angle) * radius;
 
               return (
                 <motion.div
                   key={label}
-                  animate={{
-                    y: [0, -8, 0],
-                  }}
-                  transition={{
-                    duration: 6 + index,
-                    repeat: Infinity,
-                  }}
-                  className="
-                    absolute
-                    -translate-x-1/2 -translate-y-1/2
-                    px-3 py-2
-                    border border-white/10
-                    bg-black/40
-                    backdrop-blur-xl
-                    text-[10px]
-                    uppercase
-                    tracking-[0.22em]
-                    text-amber-300/70
-                    whitespace-nowrap
-                    shadow-[0_0_30px_rgba(245,158,11,0.06)]
-                  "
+                  animate={{ y: [0, -8, 0] }}
+                  transition={{ duration: 6 + index, repeat: Infinity }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap border border-white/10 bg-black/40 px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-amber-300/70 shadow-[0_0_30px_rgba(245,158,11,0.06)] backdrop-blur-xl"
                   style={{
                     left: `calc(50% + ${x}px)`,
                     top: `calc(50% + ${y}px)`,
@@ -711,76 +255,25 @@ export default function HeroSection() {
               );
             })}
 
-            {/* CENTER CORE */}
-
-            <div
-              className="
-                absolute left-1/2 top-1/2
-                -translate-x-1/2 -translate-y-1/2
-                w-[240px] h-[240px]
-                rounded-full
-                border border-amber-500/20
-                bg-black/40
-                backdrop-blur-2xl
-                flex items-center justify-center
-                shadow-[0_0_120px_rgba(245,158,11,0.12)]
-              "
-            >
-              {/* GLOW */}
-
+            <div className="absolute left-1/2 top-1/2 flex h-[270px] w-[270px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-amber-500/20 bg-black/40 shadow-[0_0_140px_rgba(245,158,11,0.12)] backdrop-blur-2xl">
               <motion.div
-                animate={{
-                  opacity: [0.2, 0.55, 0.2],
-                  scale: [1, 1.08, 1],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                }}
-                className="
-                  absolute inset-0
-                  rounded-full
-                  bg-amber-500/10
-                  blur-3xl
-                "
+                animate={{ opacity: [0.2, 0.55, 0.2], scale: [1, 1.08, 1] }}
+                transition={{ duration: 6, repeat: Infinity }}
+                className="absolute inset-0 rounded-full bg-amber-500/10 blur-3xl"
               />
-
-              {/* MORPH ICON */}
 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIcon}
-                  initial={{
-                    opacity: 0,
-                    scale: 0.7,
-                    filter: "blur(12px)",
-                  }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                    filter: "blur(0px)",
-                  }}
-                  exit={{
-                    opacity: 0,
-                    scale: 1.4,
-                    filter: "blur(18px)",
-                  }}
-                  transition={{
-                    duration: 1.5,
-                    ease: "easeInOut",
-                  }}
+                  initial={{ opacity: 0, scale: 0.7, filter: "blur(12px)" }}
+                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, scale: 1.4, filter: "blur(18px)" }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
                   className="absolute text-amber-300"
                 >
                   {(() => {
                     const Icon = morphIcons[activeIcon];
-
-                    return (
-                      <Icon
-                        size={88}
-                        strokeWidth={1.4}
-                        className=""
-                      />
-                    );
+                    return <Icon size={100} strokeWidth={1.4} />;
                   })()}
                 </motion.div>
               </AnimatePresence>
@@ -790,27 +283,10 @@ export default function HeroSection() {
       </div>
 
       {/* BOTTOM CINEMATIC TICKER */}
-
-      <div
-        className="
-          absolute bottom-0 left-0 right-0
-          border-t border-white/5
-          bg-black/50
-          backdrop-blur-2xl
-          overflow-hidden
-          py-5
-          z-30
-        "
-      >
+      <div className="absolute bottom-0 left-0 right-0 z-30 overflow-hidden border-t border-white/5 bg-black/50 py-5 backdrop-blur-2xl">
         <motion.div
-          animate={{
-            x: ["0%", "-50%"],
-          }}
-          transition={{
-            duration: 28,
-            repeat: Infinity,
-            ease: "linear",
-          }}
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
           className="flex w-max"
         >
           {[
@@ -826,21 +302,9 @@ export default function HeroSection() {
           ].map((item, index) => (
             <div
               key={index}
-              className="
-                flex items-center gap-5
-                px-10
-                text-[11px]
-                uppercase
-                tracking-[0.35em]
-                text-white/45
-                whitespace-nowrap
-                border-r border-white/5
-              "
+              className="flex items-center gap-5 whitespace-nowrap border-r border-white/5 px-10 text-[11px] uppercase tracking-[0.35em] text-white/45"
             >
-              <span className="text-amber-400 text-xs">
-                ✦
-              </span>
-
+              <span className="text-xs text-amber-400">✦</span>
               {item}
             </div>
           ))}
@@ -849,4 +313,3 @@ export default function HeroSection() {
     </section>
   );
 }
-

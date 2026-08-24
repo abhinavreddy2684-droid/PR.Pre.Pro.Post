@@ -15,21 +15,18 @@ const steps = [
       "Explore all 24 cinematic disciplines and find the expertise your production needs.",
     icon: Film,
   },
-
   {
     title: "Submit Requirement",
     description:
       "Share your production vision, creative direction, and project goals.",
     icon: ClipboardList,
   },
-
   {
     title: "Talent Matching",
     description:
       "We connect you with verified filmmakers, artists, and cinema professionals.",
     icon: Users,
   },
-
   {
     title: "Production Begins",
     description:
@@ -40,9 +37,11 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-7xl mx-auto">
-        
+    <section
+      id="how-it-works"
+      className="min-h-[calc(100svh-5rem)] flex items-center py-10 sm:py-12 lg:py-14 px-6 scroll-mt-20"
+    >
+      <div className="max-w-7xl mx-auto w-full">
         <SectionHeading
           eyebrow="Workflow"
           title="How It Works"
@@ -50,13 +49,9 @@ export default function HowItWorks() {
           center
         />
 
-        <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="mt-8 sm:mt-10 lg:mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           {steps.map((step, index) => (
-            <WorkflowCard
-              key={step.title}
-              step={step}
-              index={index}
-            />
+            <WorkflowCard key={step.title} step={step} index={index} />
           ))}
         </div>
       </div>

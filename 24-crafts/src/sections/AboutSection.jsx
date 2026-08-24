@@ -1,15 +1,10 @@
 import SectionHeading from "../components/ui/SectionHeading";
+import EcosystemStory from "../components/about/EcosystemStory";
 
 export default function AboutSection() {
   return (
-    <section
-      id="about"
-      className="relative py-32 px-6"
-    >
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
-        
-        {/* Left */}
-
+    <section id="about" className="relative py-20 sm:py-24 lg:py-28 px-6">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
         <div>
           <SectionHeading
             eyebrow="About The Ecosystem"
@@ -24,8 +19,7 @@ export default function AboutSection() {
             }
           />
 
-          <div className="mt-10 space-y-7 text-neutral-400 text-lg leading-relaxed">
-            
+          <div className="mt-8 space-y-6 text-neutral-400 text-lg leading-relaxed">
             <p>
               24 Crafts of Cinema is more than a portfolio platform.
               It is a creative ecosystem designed to bridge filmmakers
@@ -40,30 +34,14 @@ export default function AboutSection() {
             </p>
 
             <p>
-              Built with a storytelling-first philosophy,
-              the platform empowers collaboration,
-              production partnerships, and artistic discovery.
+              Built with a storytelling-first philosophy, the platform
+              empowers collaboration, production partnerships, and artistic discovery.
             </p>
           </div>
         </div>
 
-        {/* Right */}
-
         <div className="relative">
-          
-          <div
-            className="
-              aspect-[4/5]
-              rounded-[2rem]
-              overflow-hidden
-              border border-white/10
-              bg-gradient-to-br
-              from-neutral-900
-              to-black
-            "
-          >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.18),transparent_55%)]" />
-          </div>
+          <EcosystemStory />
         </div>
       </div>
     </section>

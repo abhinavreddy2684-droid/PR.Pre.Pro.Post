@@ -10,18 +10,36 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  min-width: 320px;
   background: #050505;
   color: white;
   font-family: "Inter", sans-serif;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 * {
   box-sizing: border-box;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
 }
 
 ::selection {
@@ -42,6 +60,12 @@ body {
 ::-webkit-scrollbar-thumb {
   background: rgba(245, 158, 11, 0.35);
   border-radius: 999px;
+}
+
+/* Mobile safe-area support */
+
+.safe-area-bottom {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
 }
 
 /* Grain Overlay */
@@ -71,8 +95,8 @@ body {
   top: -20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 900px;
-  height: 900px;
+  width: min(900px, 160vw);
+  height: min(900px, 160vw);
   border-radius: 9999px;
   background: rgba(245, 158, 11, 0.08);
   filter: blur(140px);
@@ -90,7 +114,6 @@ body {
     rgba(255, 255, 255, 0.1),
     transparent
   );
-
   animation: scratches 8s linear infinite;
 }
 
@@ -98,8 +121,13 @@ body {
   from {
     transform: translateY(-100%);
   }
-
   to {
     transform: translateY(100%);
+  }
+}
+
+@media (max-width: 640px) {
+  ::-webkit-scrollbar {
+    width: 4px;
   }
 }
