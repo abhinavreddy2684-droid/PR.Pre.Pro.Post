@@ -28,6 +28,8 @@ import {
   Video,
 } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
+
 import Button from "../components/ui/Button";
 
 const morphIcons = [
@@ -58,7 +60,9 @@ const orbitLabels = [
   "Production",
 ];
 
-export default function HeroSection() {
+export default function HeroSection({ variant = "home", onPrimaryAction }) {
+  const navigate = useNavigate();
+  const isOnboarding = variant === "onboarding";
   const [activeIcon, setActiveIcon] = useState(0);
   const heroRef = useRef(null);
 
@@ -101,6 +105,44 @@ export default function HeroSection() {
       hero.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
+
+  const content = isOnboarding
+    ? {
+        badge: "The Talent Network",
+        lines: ["BUILD", "YOUR PLACE", "IN CINEMA."],
+        description: (
+          <>
+            Join the Talent Network and define{" "}
+            <span className="font-medium text-white">who you are, what you do, and where you create.</span>{" "}
+            Build the rest of your professional profile as your work grows.
+          </>
+        ),
+        action: "Begin Your Journey",
+      }
+    : {
+        badge: "The Marketplace for Filmmakers",
+        lines: ["WE", "BUILD", "CINEMA."],
+        description: (
+          <>
+            A premium cinematic ecosystem{" "}
+            <span className="font-medium text-white">
+              connecting directors, writers, cinematographers, editors, musicians,
+            </span>{" "}
+            actors, VFX artists, and production professionals across all{" "}
+            <span className="font-medium text-amber-300">24 crafts of cinema.</span>
+          </>
+        ),
+        action: "Explore Talent",
+      };
+
+  const handlePrimaryAction = () => {
+    if (isOnboarding) {
+      onPrimaryAction?.();
+      return;
+    }
+
+    navigate("/talent");
+  };
 
   return (
     <section
@@ -152,7 +194,7 @@ export default function HeroSection() {
           >
             <div className="h-2 w-2 animate-pulse rounded-full bg-amber-400" />
             <span className="text-[10px] uppercase tracking-[0.35em] text-amber-300">
-              The Marketplace for Filmmakers
+              {content.badge}
             </span>
           </motion.div>
 
@@ -163,20 +205,20 @@ export default function HeroSection() {
             className="leading-[0.82] tracking-tight"
           >
             <span className="block text-7xl font-black text-white md:text-9xl lg:text-[10rem] xl:text-[11rem]">
-              WE
+              {content.lines[0]}
             </span>
             <span className="block bg-gradient-to-r from-amber-300 via-amber-100 to-amber-500 bg-clip-text text-7xl font-black text-transparent md:text-9xl lg:text-[10rem] xl:text-[11rem]">
-              BUILD
+              {content.lines[1]}
             </span>
             <span className="block text-7xl font-black text-white md:text-9xl lg:text-[10rem] xl:text-[11rem]">
-              CINEMA.
+              {content.lines[2]}
             </span>
           </motion.h1>
 
           <div className="mb-8 mt-10 flex items-center gap-5">
             <div className="h-px w-28 bg-gradient-to-r from-amber-500 to-transparent" />
             <span className="text-[10px] uppercase tracking-[0.35em] text-white/35">
-              Filmmakers • Artists • Producers
+              {isOnboarding ? "Filmmakers • Artists • Creators" : "Filmmakers • Artists • Producers"}
             </span>
           </div>
 
@@ -186,14 +228,7 @@ export default function HeroSection() {
             transition={{ delay: 0.3 }}
             className="max-w-2xl text-xl leading-[1.9] text-white/55 lg:text-[1.35rem]"
           >
-            A premium cinematic ecosystem{" "}
-            <span className="font-medium text-white">
-              connecting directors, writers, cinematographers, editors, musicians,
-            </span>{" "}
-            actors, VFX artists, and production professionals across all{" "}
-            <span className="font-medium text-amber-300">
-              24 crafts of cinema.
-            </span>
+            {content.description}
           </motion.p>
 
           <motion.div
@@ -202,8 +237,12 @@ export default function HeroSection() {
             transition={{ delay: 0.5 }}
             className="mt-12 flex flex-col gap-5 sm:flex-row"
           >
-            <Button>Explore Crafts</Button>
-            <Button variant="secondary">Enter Talent Network</Button>
+            <Button onClick={handlePrimaryAction}>{content.action}</Button>
+            {!isOnboarding && (
+              <Button variant="secondary" onClick={() => navigate("/talent/onboarding")}>
+                Join Talent Network
+              </Button>
+            )}
           </motion.div>
         </div>
 
