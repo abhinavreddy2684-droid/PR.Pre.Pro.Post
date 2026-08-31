@@ -26,22 +26,18 @@ const portfolioItems = [
 
 function WorkReel({ talent }) {
   const [active, setActive] = useState(0);
-  const [offset, setOffset] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
   const drag = useRef(null);
-  const frameHeight = 235;
-  const cycleHeight = portfolioItems.length * frameHeight;
+  const frameWidth = 330;
+  const stripItems = [...portfolioItems, ...portfolioItems, ...portfolioItems];
 
-  const updatePull = (clientY) => {
+  const moveFilm = (clientX) => {
     if (!drag.current) return;
-    const delta = clientY - drag.current.y;
-    const nextOffset = drag.current.offset + delta;
+    const delta = clientX - drag.current.x;
+    setDragOffset(drag.current.offset + delta);
 
-    setOffset(nextOffset);
-
-    // Every frame-height of film pulled through the gate reveals the next work.
-    const travelled = Math.floor(Math.abs(delta) / frameHeight);
-    const direction = delta >= 0 ? -1 : 1;
-    const next = ((drag.current.index + direction * travelled) % portfolioItems.length + portfolioItems.length) % portfolioItems.length;
+    const travelled = Math.round(delta / frameWidth);
+    const next = ((drag.current.index - travelled) % portfolioItems.length + portfolioItems.length) % portfolioItems.length;
     setActive(next);
   };
 
@@ -50,98 +46,89 @@ function WorkReel({ talent }) {
       <div className="flex flex-col gap-6 border-b border-white/[0.08] pb-8 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">01 / Work reel</p>
-          <h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">Pull the film.<br />Reveal the work.</h2>
+          <h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">Run the reel.<br />Find the frame.</h2>
         </div>
-        <p className="max-w-xs text-sm leading-6 text-white/40">A physical film-strip interaction. Pull downward and let each frame pass through the viewing gate.</p>
+        <p className="max-w-xs text-sm leading-6 text-white/40">One continuous strip of film. Drag it naturally and bring each piece of work into the projector frame.</p>
       </div>
 
-      <div className="relative mt-10 min-h-[760px] overflow-hidden border-y border-white/[0.08] bg-[radial-gradient(circle_at_50%_18%,rgba(245,158,11,0.09),transparent_30%)]">
-        {/* The reel head: decorative, but clearly establishes the cinema language. */}
-        <div className="pointer-events-none absolute left-1/2 top-[-155px] h-[330px] w-[330px] -translate-x-1/2 rounded-full border-[14px] border-white/[0.09] bg-[#0c0c0c] shadow-[0_0_90px_rgba(245,158,11,0.08)]">
-          <div className="absolute inset-8 rounded-full border border-amber-300/20" />
-          <div className="absolute inset-16 rounded-full border border-white/[0.08]" />
-          <div className="absolute inset-[115px] rounded-full border border-amber-300/35 bg-[#090909]" />
-          {[0, 60, 120, 180, 240, 300].map((angle) => (
-            <span
-              key={angle}
-              className="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.08] bg-[#090909]"
-              style={{ transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-96px)` }}
-            />
-          ))}
-        </div>
-
-        <div className="pointer-events-none absolute left-1/2 top-[125px] h-12 w-[210px] -translate-x-1/2 border-x border-white/[0.1] bg-[#090909]" />
-
-        {/* Pull handle and film strip */}
+      <div className="relative mt-10 overflow-hidden border-y border-white/[0.08] py-16 sm:py-20">
+        {/* A real film strip: one continuous material, with perforations and frames cut into it. */}
         <div
-          className="absolute inset-x-0 bottom-0 top-[125px] cursor-grab select-none touch-none active:cursor-grabbing"
+          className="relative cursor-grab select-none touch-none active:cursor-grabbing"
           onPointerDown={(event) => {
             event.currentTarget.setPointerCapture(event.pointerId);
-            drag.current = { y: event.clientY, offset, index: active };
+            drag.current = { x: event.clientX, offset: dragOffset, index: active };
           }}
-          onPointerMove={(event) => updatePull(event.clientY)}
+          onPointerMove={(event) => moveFilm(event.clientX)}
           onPointerUp={() => { drag.current = null; }}
           onPointerCancel={() => { drag.current = null; }}
         >
-          <div className="absolute left-1/2 top-0 h-full w-[290px] -translate-x-1/2 overflow-hidden">
-            <div className="pointer-events-none absolute inset-y-0 left-0 z-30 w-6 bg-[#080808]" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 z-30 w-6 bg-[#080808]" />
-
+          <div className="film-strip-shell relative mx-auto h-[300px] w-[max-content] min-w-[2200px] bg-[#060606] py-7 shadow-[0_18px_60px_rgba(0,0,0,0.65)]">
             <div
-              className="absolute left-1/2 w-[270px] -translate-x-1/2 transition-transform duration-75 ease-linear"
-              style={{ transform: `translateX(-50%) translateY(${((offset % cycleHeight) + cycleHeight) % cycleHeight - cycleHeight}px)` }}
+              className="absolute left-1/2 top-0 flex h-full gap-3 transition-transform duration-100 ease-linear"
+              style={{ transform: `translateX(calc(-50% + ${dragOffset}px))` }}
             >
-              {[...portfolioItems, ...portfolioItems].map((item, index) => {
+              {stripItems.map((item, index) => {
                 const originalIndex = index % portfolioItems.length;
                 const isActive = originalIndex === active;
                 return (
-                  <div key={`${index}-${item.title}`} className="relative h-[235px] border-b border-black bg-[#111] px-6 py-4">
-                    {/* sprocket holes */}
-                    <div className="absolute inset-y-0 left-1 flex flex-col justify-around py-2">
-                      {Array.from({ length: 6 }).map((_, hole) => <span key={hole} className="h-5 w-3 rounded-[2px] bg-[#090909] ring-1 ring-white/[0.04]" />)}
+                  <button
+                    key={`${index}-${item.title}`}
+                    onClick={() => setActive(originalIndex)}
+                    className={`film-frame relative h-full w-[310px] shrink-0 overflow-hidden border-[6px] bg-[#101010] text-left transition-all duration-300 sm:w-[330px] ${isActive ? "z-10 border-amber-400 shadow-[0_0_0_2px_rgba(245,158,11,0.18),0_0_40px_rgba(245,158,11,0.16)]" : "border-[#050505] opacity-65 hover:opacity-90"}`}
+                  >
+                    <img src={talent.image} alt="" draggable={false} className={`h-full w-full object-cover transition duration-500 ${isActive ? "scale-100" : "scale-105 grayscale-[0.25]"}`} />
+                    <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/10" />
+                    <span className="absolute left-4 top-4 font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">Frame {String(originalIndex + 1).padStart(2, "0")}</span>
+                    <div className="absolute inset-x-5 bottom-5">
+                      <p className="text-[9px] uppercase tracking-[0.22em] text-amber-200/80">{item.year} / {item.type}</p>
+                      <p className="mt-2 text-xl font-semibold tracking-tight">{item.title}</p>
                     </div>
-                    <div className="absolute inset-y-0 right-1 flex flex-col justify-around py-2">
-                      {Array.from({ length: 6 }).map((_, hole) => <span key={hole} className="h-5 w-3 rounded-[2px] bg-[#090909] ring-1 ring-white/[0.04]" />)}
-                    </div>
-
-                    <div className={`relative h-full overflow-hidden border transition-all duration-300 ${isActive ? "border-amber-300/80 shadow-[0_0_35px_rgba(245,158,11,0.16)]" : "border-white/[0.12]"}`}>
-                      <img src={talent.image} alt="" draggable={false} className={`h-full w-full object-cover transition-all duration-500 ${isActive ? "scale-100 opacity-100" : "scale-95 opacity-55 grayscale-[0.25]"}`} />
-                      <span className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/15" />
-                      <span className="absolute left-3 top-3 font-mono text-[9px] tracking-[0.18em] text-white/45">FRAME {String(originalIndex + 1).padStart(2, "0")}</span>
-                      <div className="absolute inset-x-4 bottom-4">
-                        <p className="text-[9px] uppercase tracking-[0.2em] text-amber-200/80">{item.year} / {item.type}</p>
-                        <p className="mt-1 text-lg font-medium">{item.title}</p>
-                      </div>
-                    </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
 
-            {/* Viewing gate: the one frame currently being revealed. */}
-            <div className="pointer-events-none absolute inset-x-3 top-1/2 z-40 h-[235px] -translate-y-1/2 border border-amber-300/70 shadow-[0_0_0_2px_rgba(9,9,9,0.9),0_0_45px_rgba(245,158,11,0.12)]" />
-            <div className="pointer-events-none absolute left-1/2 top-1/2 z-40 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-[#090909] px-4 py-2 text-[9px] uppercase tracking-[0.22em] text-amber-200">Viewing gate</div>
+            {/* top sprocket holes */}
+            <div className="pointer-events-none absolute inset-x-0 top-[6px] z-30 flex justify-around">
+              {Array.from({ length: 45 }).map((_, i) => <span key={i} className="h-3 w-5 rounded-[2px] bg-[#151515] ring-1 ring-white/[0.04]" />)}
+            </div>
+            {/* bottom sprocket holes */}
+            <div className="pointer-events-none absolute inset-x-0 bottom-[6px] z-30 flex justify-around">
+              {Array.from({ length: 45 }).map((_, i) => <span key={i} className="h-3 w-5 rounded-[2px] bg-[#151515] ring-1 ring-white/[0.04]" />)}
+            </div>
           </div>
 
-          <div className="absolute bottom-8 left-1/2 z-50 flex -translate-x-1/2 flex-col items-center gap-3">
-            <span className="h-10 w-16 rounded-b-full border border-amber-300/45 border-t-0 bg-[#111] shadow-[0_10px_25px_rgba(0,0,0,0.4)]" />
-            <span className="text-[9px] uppercase tracking-[0.28em] text-white/40">Pull down to advance</span>
-            <span className="text-lg text-amber-300">↓</span>
+          {/* fixed projector gate: the film moves behind this */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-40 h-[270px] w-[350px] -translate-x-1/2 -translate-y-1/2 border border-amber-300/55 shadow-[0_0_0_10px_rgba(9,9,9,0.55),0_0_55px_rgba(245,158,11,0.1)] sm:w-[370px]">
+            <span className="absolute left-1/2 top-[-34px] -translate-x-1/2 whitespace-nowrap bg-[#090909] px-4 py-2 text-[9px] uppercase tracking-[0.28em] text-amber-300/80">Projector frame</span>
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 bg-gradient-to-t from-[#090909] to-transparent" />
-
-        <div className="pointer-events-none absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 lg:block">
-          <p className="text-[9px] uppercase tracking-[0.28em] text-white/25">Now showing</p>
-          <p className="mt-3 text-2xl font-medium">{portfolioItems[active].title}</p>
-          <p className="mt-1 text-sm text-white/40">{portfolioItems[active].role}</p>
+        <div className="mt-10 flex flex-col gap-6 border-t border-white/[0.08] pt-7 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.26em] text-white/30">Now projected</p>
+            <h3 className="mt-3 text-3xl font-medium">{portfolioItems[active].title}</h3>
+            <p className="mt-2 text-sm text-white/40">{portfolioItems[active].role}</p>
+          </div>
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => setActive((current) => (current - 1 + portfolioItems.length) % portfolioItems.length)}
+              className="h-10 border border-white/10 px-4 text-[10px] uppercase tracking-[0.18em] text-white/50 transition hover:border-amber-400/50 hover:text-amber-200"
+            >
+              ← Previous
+            </button>
+            <span className="font-mono text-[11px] text-amber-300/75">{String(active + 1).padStart(2, "0")} / {String(portfolioItems.length).padStart(2, "0")}</span>
+            <button
+              onClick={() => setActive((current) => (current + 1) % portfolioItems.length)}
+              className="h-10 border border-white/10 px-4 text-[10px] uppercase tracking-[0.18em] text-white/50 transition hover:border-amber-400/50 hover:text-amber-200"
+            >
+              Next →
+            </button>
+          </div>
         </div>
 
-        <div className="pointer-events-none absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 text-right lg:block">
-          <p className="font-mono text-[11px] text-amber-300/70">{String(active + 1).padStart(2, "0")} / {String(portfolioItems.length).padStart(2, "0")}</p>
-          <p className="mt-3 max-w-[170px] text-xs leading-6 text-white/30">Pull the physical strip, not a carousel.</p>
-        </div>
+        <p className="mt-5 text-center text-[9px] uppercase tracking-[0.3em] text-white/25">Drag the film strip to pull through the reel</p>
       </div>
     </section>
   );
