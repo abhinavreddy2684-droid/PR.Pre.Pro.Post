@@ -358,7 +358,7 @@ export default function TalentProfile() {
                 <div className="mt-9 space-y-0">
                   {milestones.map((milestone, index) => (
                     <article key={milestone.year} className="relative grid gap-4 border-l border-amber-400/20 py-6 pl-7 first:pt-0 last:pb-0 sm:grid-cols-[100px_1fr]">
-                      <span className="absolute -left-[5px] top-7 h-2.5 w-2.5 rounded-full bg-amber-300 shadow-[0_0_16px_rgba(252,211,77,0.45)] first:top-1" />
+                      <span className={`absolute -left-[5px] h-2.5 w-2.5 rounded-full bg-amber-300 shadow-[0_0_16px_rgba(252,211,77,0.45)] ${index === 0 ? "top-1" : "top-7"}`} />
                       <p className="text-sm font-medium text-amber-200/80">{milestone.year}</p>
                       <div>
                         <h3 className="text-lg font-medium">{milestone.title}</h3>
