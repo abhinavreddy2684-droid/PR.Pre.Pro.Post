@@ -54,7 +54,7 @@ export default function TalentOnboarding() {
     <OnboardingShell
       step={step}
       profile={profile}
-      onBack={() => setStep((current) => Math.max(1, current - 1))}
+      onBack={() => setStep((current) => (current === 1 ? 0 : current - 1))}
     >
       <AnimatePresence mode="wait">
         {step === 1 && (
