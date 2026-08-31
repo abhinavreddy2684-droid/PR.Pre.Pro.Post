@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, MapPin, Upload, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ChevronDown, MapPin, Search, Upload, UserRound } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -270,83 +270,142 @@ function IdentityStep({ profile, updateProfile, onContinue }) {
 }
 
 function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }) {
+  const [query, setQuery] = useState("");
   const canContinue = Boolean(profile.primaryCraft);
-  const supportingCraftOptions = crafts.filter((craft) => craft.title !== profile.primaryCraft);
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredCrafts = normalizedQuery
+    ? crafts.filter((craft) => craft.title.toLowerCase().includes(normalizedQuery))
+    : crafts;
+
+  const primaryOptions = filteredCrafts;
+  const supportingCraftOptions = filteredCrafts.filter((craft) => craft.title !== profile.primaryCraft);
 
   return (
     <StepFrame
       eyebrow="02 — Craft"
       title={<>WHAT DO YOU<br />BRING TO CINEMA?</>}
-      description="Choose one primary craft that defines your professional identity. You can also select multiple supporting crafts that strengthen your profile."
+      description="Choose the craft that leads your professional identity. Then add any supporting crafts that complete the picture."
     >
-      <div className="grid gap-10 lg:grid-cols-2">
-        <CraftGroup
-          label="Primary craft"
-          hint="Choose one"
-          selected={profile.primaryCraft}
-          options={crafts}
-          onSelect={(title) => {
-            updateProfile("primaryCraft", title);
-            if (profile.supportingCrafts.includes(title)) {
-              updateProfile(
-                "supportingCrafts",
-                profile.supportingCrafts.filter((item) => item !== title),
-              );
-            }
-          }}
-        />
+      <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-white/[0.02] p-5 sm:p-7">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/70 to-transparent" />
+        <div className="pointer-events-none absolute -right-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full border border-amber-400/[0.07]" />
+        <div className="pointer-events-none absolute -right-12 top-1/2 h-52 w-52 -translate-y-1/2 rounded-full border border-amber-400/[0.09]" />
 
-        <CraftGroup
-          label="Supporting crafts"
-          hint="Choose all that apply"
-          options={supportingCraftOptions}
-          selected={profile.supportingCrafts}
-          multiple
-          onSelect={toggleSupportingCraft}
-        />
-      </div>
+        <div className="relative z-10 flex flex-col gap-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-amber-300">Find your frame</p>
+              <p className="mt-2 text-sm leading-6 text-white/40">Search across the crafts of cinema, then build your combination.</p>
+            </div>
 
-      <div className="mt-8 flex justify-end">
-        <Button disabled={!canContinue} onClick={onContinue} className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35">
-          Continue
-          <ArrowRight size={17} />
-        </Button>
+            <label className="group flex w-full max-w-md items-center gap-3 rounded-full border border-white/10 bg-black/30 px-4 py-3 transition-colors focus-within:border-amber-400/45 lg:w-[360px]">
+              <Search size={17} className="text-white/30 transition-colors group-focus-within:text-amber-300" />
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search a craft..."
+                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/25"
+              />
+            </label>
+          </div>
+
+          <div className="grid gap-7 lg:grid-cols-[1fr_1.15fr]">
+            <section className="rounded-[1.6rem] border border-amber-400/15 bg-gradient-to-br from-amber-500/[0.07] to-transparent p-5 sm:p-6">
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">Primary craft</p>
+                  <p className="mt-2 text-xs text-amber-300/70">Choose exactly one</p>
+                </div>
+                <span className="grid h-9 w-9 place-items-center rounded-full border border-amber-400/20 bg-amber-500/[0.08] text-[10px] text-amber-300">01</span>
+              </div>
+
+              <div className="mb-5 min-h-[56px] rounded-2xl border border-white/[0.07] bg-black/25 px-4 py-3">
+                <p className="text-[9px] uppercase tracking-[0.22em] text-white/25">Your lead frame</p>
+                <p className="mt-1 text-lg font-semibold text-white">
+                  {profile.primaryCraft || "Choose your primary craft"}
+                </p>
+              </div>
+
+              <CraftGroup
+                options={primaryOptions}
+                selected={profile.primaryCraft}
+                onSelect={(title) => {
+                  updateProfile("primaryCraft", title);
+                  if (profile.supportingCrafts.includes(title)) {
+                    updateProfile("supportingCrafts", profile.supportingCrafts.filter((item) => item !== title));
+                  }
+                }}
+              />
+            </section>
+
+            <section className="relative overflow-hidden rounded-[1.6rem] border border-white/[0.08] bg-black/20 p-5 sm:p-6">
+              <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-amber-400/70 via-amber-400/15 to-transparent" />
+              <div className="mb-5 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">Supporting crafts</p>
+                  <p className="mt-2 text-xs text-white/35">Choose as many as genuinely support your work</p>
+                </div>
+                <span className="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-[10px] text-white/45">
+                  {String(profile.supportingCrafts.length).padStart(2, "0")}
+                </span>
+              </div>
+
+              <CraftGroup
+                options={supportingCraftOptions}
+                selected={profile.supportingCrafts}
+                multiple
+                onSelect={toggleSupportingCraft}
+              />
+            </section>
+          </div>
+
+          {filteredCrafts.length === 0 && (
+            <p className="py-4 text-center text-sm text-white/35">No crafts match “{query}”.</p>
+          )}
+
+          <div className="flex items-center justify-between gap-5 border-t border-white/[0.07] pt-5">
+            <p className="text-xs text-white/30">
+              {profile.primaryCraft
+                ? `Primary: ${profile.primaryCraft}`
+                : "Select one primary craft to continue"}
+            </p>
+            <Button disabled={!canContinue} onClick={onContinue} className="inline-flex shrink-0 items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35">
+              Continue
+              <ArrowRight size={17} />
+            </Button>
+          </div>
+        </div>
       </div>
     </StepFrame>
   );
 }
 
-function CraftGroup({ label, hint, options, selected, multiple = false, onSelect }) {
+function CraftGroup({ options, selected, multiple = false, onSelect }) {
   return (
-    <section>
-      <div className="mb-4 flex items-baseline justify-between gap-4">
-        <p className="text-sm font-semibold text-white/80">{label}</p>
-        <p className="text-[10px] uppercase tracking-[0.18em] text-amber-300/60">{hint}</p>
-      </div>
-      <div className="flex flex-wrap gap-2.5">
-        {options.map((craft) => {
-          const isSelected = multiple
-            ? selected.includes(craft.title)
-            : selected === craft.title;
+    <div className="flex flex-wrap gap-2.5">
+      {options.map((craft, index) => {
+        const isSelected = multiple ? selected.includes(craft.title) : selected === craft.title;
 
-          return (
-            <button
-              key={craft.id}
-              type="button"
-              onClick={() => onSelect(craft.title)}
-              aria-pressed={isSelected}
-              className={`rounded-full border px-4 py-2.5 text-sm transition-all duration-200 ${
-                isSelected
-                  ? "border-amber-400 bg-amber-400 text-black shadow-[0_0_28px_rgba(245,158,11,0.16)]"
-                  : "border-white/10 bg-white/[0.025] text-white/50 hover:border-amber-400/35 hover:text-white/80"
-              }`}
-            >
-              {craft.title}
-            </button>
-          );
-        })}
-      </div>
-    </section>
+        return (
+          <motion.button
+            key={craft.id}
+            type="button"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: Math.min(index * 0.015, 0.18) }}
+            onClick={() => onSelect(craft.title)}
+            aria-pressed={isSelected}
+            className={`rounded-full border px-4 py-2.5 text-sm transition-all duration-200 ${
+              isSelected
+                ? "border-amber-400 bg-amber-400 text-black shadow-[0_0_28px_rgba(245,158,11,0.16)]"
+                : "border-white/10 bg-white/[0.025] text-white/55 hover:border-amber-400/35 hover:text-white/85"
+            }`}
+          >
+            {craft.title}
+          </motion.button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -363,41 +422,33 @@ function LocationStep({ profile, updateProfile, onContinue }) {
   return (
     <StepFrame
       eyebrow="03 — Location"
-      title={<>WHERE DO YOU<br />CREATE?</>}
+      title={<>WHERE ARE YOU<br />LOCATED?</>}
       description="Your location is structured to keep the Talent Network consistent and searchable. India is currently the first supported country."
     >
       <div className="grid gap-4 lg:grid-cols-3">
-        <LocationSelect
+        <CustomSelect
           label="Country"
           value="India"
           disabled
-          icon={<MapPin size={17} />}
-        >
-          <option>India</option>
-        </LocationSelect>
+          options={["India"]}
+        />
 
-        <LocationSelect
+        <CustomSelect
           label="State / Union Territory"
           value={profile.state}
-          onChange={(event) => selectState(event.target.value)}
-        >
-          <option value="">Select state</option>
-          {states.map((state) => (
-            <option key={state} value={state}>{state}</option>
-          ))}
-        </LocationSelect>
+          placeholder="Select state"
+          options={states}
+          onChange={selectState}
+        />
 
-        <LocationSelect
+        <CustomSelect
           label="City"
           value={profile.city}
+          placeholder={profile.state ? "Select city" : "Select state first"}
+          options={cities}
           disabled={!profile.state}
-          onChange={(event) => updateProfile("city", event.target.value)}
-        >
-          <option value="">{profile.state ? "Select city" : "Select state first"}</option>
-          {cities.map((city) => (
-            <option key={city} value={city}>{city}</option>
-          ))}
-        </LocationSelect>
+          onChange={(value) => updateProfile("city", value)}
+        />
       </div>
 
       <div className="mt-8 flex justify-end">
@@ -410,17 +461,69 @@ function LocationStep({ profile, updateProfile, onContinue }) {
   );
 }
 
-function LocationSelect({ label, children, className = "", ...props }) {
+function CustomSelect({ label, value, options, placeholder = "Select an option", disabled = false, onChange }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    const close = (event) => {
+      if (!rootRef.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+
   return (
-    <label className={`block rounded-[1.4rem] border border-white/10 bg-white/[0.025] p-5 transition-colors focus-within:border-amber-400/45 ${className}`}>
-      <span className="mb-4 block text-[10px] uppercase tracking-[0.22em] text-white/35">{label}</span>
-      <select
-        className="w-full appearance-none bg-transparent text-lg font-medium text-white outline-none disabled:cursor-not-allowed disabled:text-white/35"
-        {...props}
+    <div ref={rootRef} className="relative">
+      <p className="mb-3 text-[10px] uppercase tracking-[0.22em] text-white/35">{label}</p>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen((current) => !current)}
+        className={`flex min-h-[76px] w-full items-center justify-between rounded-[1.35rem] border px-5 text-left transition-all ${
+          open
+            ? "border-amber-400/55 bg-amber-500/[0.05] shadow-[0_0_30px_rgba(245,158,11,0.06)]"
+            : "border-white/10 bg-white/[0.025] hover:border-white/20"
+        } ${disabled ? "cursor-not-allowed opacity-45" : ""}`}
       >
-        {children}
-      </select>
-    </label>
+        <span className={value ? "text-base font-medium text-white" : "text-sm text-white/30"}>{value || placeholder}</span>
+        <ChevronDown size={18} className={`text-amber-300 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      <AnimatePresence>
+        {open && !disabled && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 8, scale: 0.98 }}
+            transition={{ duration: 0.18 }}
+            className="absolute left-0 right-0 z-30 mt-2 max-h-72 overflow-y-auto rounded-[1.35rem] border border-amber-400/20 bg-[#0b0a08]/95 p-2 shadow-2xl backdrop-blur-2xl"
+          >
+            {options.map((option) => {
+              const active = option === value;
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => {
+                    onChange?.(option);
+                    setOpen(false);
+                  }}
+                  className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm transition-colors ${
+                    active
+                      ? "bg-amber-400 text-black"
+                      : "text-white/65 hover:bg-white/[0.06] hover:text-white"
+                  }`}
+                >
+                  {option}
+                  {active && <Check size={15} />}
+                </button>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
