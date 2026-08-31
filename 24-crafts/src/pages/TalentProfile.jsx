@@ -10,7 +10,7 @@ import {
   Star,
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
@@ -23,6 +23,165 @@ const portfolioItems = [
   { title: "Live performance", role: "Live performer", type: "Performance", year: "2025" },
   { title: "Recent production", role: "Featured talent", type: "Production", year: "2024" },
 ];
+
+function WorkReel({ talent }) {
+  const [active, setActive] = useState(0);
+  const [rotation, setRotation] = useState(0);
+  const drag = useRef(null);
+
+  const pull = (clientX) => {
+    if (!drag.current) return;
+    const delta = clientX - drag.current.x;
+    setRotation(drag.current.rotation + delta * 0.16);
+    const step = Math.round(-delta / 105);
+    const next = ((drag.current.index + step) % portfolioItems.length + portfolioItems.length) % portfolioItems.length;
+    setActive(next);
+  };
+
+  return (
+    <section id="work" className="relative mt-32 scroll-mt-24">
+      <div className="flex flex-col gap-6 border-b border-white/[0.08] pb-8 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">01 / Work reel</p>
+          <h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">Pull the reel.<br />Reveal the work.</h2>
+        </div>
+        <p className="max-w-xs text-sm leading-6 text-white/40">Drag the frames. Each pull brings another piece of the talent's work into focus.</p>
+      </div>
+
+      <div className="relative mt-10 min-h-[620px] overflow-hidden border-y border-white/[0.08] bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08),transparent_32%)]">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[620px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/[0.08]" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-400/[0.12]" />
+        <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-amber-300/40 bg-[#090909] shadow-[0_0_80px_rgba(245,158,11,0.12)]" />
+
+        <div
+          className="absolute inset-0 cursor-grab select-none touch-none active:cursor-grabbing"
+          onPointerDown={(event) => {
+            event.currentTarget.setPointerCapture(event.pointerId);
+            drag.current = { x: event.clientX, rotation, index: active };
+          }}
+          onPointerMove={(event) => pull(event.clientX)}
+          onPointerUp={() => { drag.current = null; }}
+          onPointerCancel={() => { drag.current = null; }}
+        >
+          {portfolioItems.map((item, index) => {
+            const angle = (index * 360) / portfolioItems.length + rotation;
+            const radius = 235;
+            const x = Math.cos((angle - 90) * Math.PI / 180) * radius;
+            const y = Math.sin((angle - 90) * Math.PI / 180) * radius;
+            const isActive = index === active;
+
+            return (
+              <button
+                key={item.title}
+                onClick={() => setActive(index)}
+                className={`absolute left-1/2 top-1/2 h-36 w-28 -translate-x-1/2 -translate-y-1/2 overflow-hidden border text-left transition-all duration-300 sm:h-48 sm:w-36 ${isActive ? "z-20 scale-110 border-amber-300 shadow-[0_0_45px_rgba(245,158,11,0.2)]" : "z-10 border-white/15 opacity-70 hover:opacity-100"}`}
+                style={{ transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${angle}deg)` }}
+              >
+                <img src={talent.image} alt="" className="h-full w-full object-cover opacity-70" draggable={false} />
+                <span className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
+                <span className="absolute bottom-3 left-3 text-[8px] uppercase tracking-[0.16em] text-white/80">{item.type}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="absolute inset-x-0 bottom-0 z-30 border-t border-white/[0.08] bg-[#090909]/85 px-6 py-6 backdrop-blur-md sm:px-10">
+          <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[9px] uppercase tracking-[0.24em] text-amber-300/70">{portfolioItems[active].year} / {portfolioItems[active].type}</p>
+              <h3 className="mt-2 text-2xl font-medium sm:text-3xl">{portfolioItems[active].title}</h3>
+              <p className="mt-1 text-sm text-white/40">{portfolioItems[active].role}</p>
+            </div>
+            <span className="inline-flex items-center gap-3 text-xs text-white/40"><span className="h-px w-8 bg-amber-400/60" /> Drag to unwind the reel</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CreditRoll({ credits }) {
+  const repeated = [...credits, ...credits, ...credits];
+  return (
+    <section className="mt-28 border-y border-white/[0.08] py-16 sm:py-24">
+      <div className="grid gap-12 lg:grid-cols-[0.65fr_1.35fr]">
+        <div>
+          <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">02 / Credit roll</p>
+          <h2 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">Selected<br /><span className="text-white/30">Credits</span></h2>
+          <p className="mt-7 max-w-xs text-sm leading-6 text-white/40">A living credit roll that keeps moving while the work behind it stays in view.</p>
+        </div>
+        <div className="relative h-[430px] overflow-hidden border-y border-white/[0.08] [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
+          <div className="credit-roll">
+            {repeated.map((credit, index) => (
+              <article key={`${index}-${credit.year}-${credit.title}`} className="grid gap-3 border-b border-white/[0.08] py-7 sm:grid-cols-[90px_1fr_auto] sm:items-center">
+                <p className="font-mono text-sm text-amber-300/80">{credit.year}</p>
+                <div>
+                  <h3 className="text-xl font-medium">{credit.title}</h3>
+                  <p className="mt-1 text-sm text-white/35">{credit.role}</p>
+                </div>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-white/30">{credit.format}</p>
+              </article>
+            ))}
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 h-px bg-amber-300/70 shadow-[0_0_18px_rgba(252,211,77,0.35)]" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ExperienceTimeline({ milestones }) {
+  const [visible, setVisible] = useState([]);
+  const refs = useRef([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = Number(entry.target.dataset.index);
+          setVisible((current) => current.includes(index) ? current : [...current, index]);
+        }
+      });
+    }, { threshold: 0.35 });
+
+    refs.current.forEach((node) => node && observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section className="relative mt-28">
+      <div className="absolute left-0 top-0 h-px w-28 bg-amber-400/70" />
+      <div className="pt-10">
+        <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">04 / The journey</p>
+        <h2 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">Moments fall into place and become a career.</h2>
+      </div>
+
+      <div className="relative mt-16">
+        <div className="absolute bottom-0 left-[18px] top-0 w-px bg-gradient-to-b from-amber-400/60 via-white/15 to-transparent md:left-1/2" />
+        {milestones.map((milestone, index) => {
+          const show = visible.includes(index);
+          return (
+            <article
+              key={milestone.year}
+              ref={(node) => { refs.current[index] = node; }}
+              data-index={index}
+              className={`relative grid gap-5 py-16 transition-all duration-1000 md:grid-cols-[1fr_80px_1fr] md:items-center ${show ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0"}`}
+            >
+              <div className={index % 2 === 0 ? "md:text-right md:pr-12" : "md:order-3 md:pl-12"}>
+                <h3 className="text-2xl font-medium">{milestone.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-white/40">{milestone.copy}</p>
+              </div>
+              <div className="relative z-10 flex h-10 items-center justify-center md:order-2">
+                <span className={`h-4 w-4 rounded-full border border-amber-300 bg-[#090909] transition-all duration-700 ${show ? "scale-100 shadow-[0_0_28px_rgba(252,211,77,0.55)]" : "scale-0"}`} />
+              </div>
+              <p className={`font-mono text-lg text-amber-300/80 ${index % 2 === 0 ? "md:pl-12" : "md:order-1 md:pr-12 md:text-right"}`}>{milestone.year}</p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
 
 function getProfileContent(talent) {
   const years = Number.parseInt(talent.experience, 10) || 6;
@@ -154,7 +313,7 @@ export default function TalentProfile() {
     <div className="min-h-screen overflow-hidden bg-[#090909] text-white">
       <Navbar />
 
-      <main className="px-6 pb-24 pt-32">
+      <style>{`\n        @keyframes creditRoll { from { transform: translateY(0); } to { transform: translateY(-33.333%); } }\n        .credit-roll { animation: creditRoll 18s linear infinite; }\n        .credit-roll:hover { animation-play-state: paused; }\n      `}</style>\n\n      <main className="px-6 pb-24 pt-32">
         <div className="mx-auto max-w-7xl">
           <Link to={`/talent?craft=${encodeURIComponent(talent.craft)}`} className="inline-flex items-center gap-2 text-sm text-neutral-500 transition-colors hover:text-amber-400">
             <ArrowLeft size={16} /> Back to {talent.craft}
@@ -187,67 +346,7 @@ export default function TalentProfile() {
             </div>
           </section>
 
-          {/* Work sequence — projects behave as frames in an edit, not a card grid. */}
-          <section id="work" className="relative mt-32 scroll-mt-24">
-            <div className="absolute left-0 top-0 hidden h-full w-px bg-gradient-to-b from-amber-400/60 via-white/[0.08] to-transparent lg:block" />
-            <div className="pl-0 lg:pl-10">
-              <div className="flex flex-col justify-between gap-6 border-b border-white/[0.08] pb-8 md:flex-row md:items-end">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">01 / Opening sequence</p>
-                  <h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">The work speaks<br />before the words.</h2>
-                </div>
-                <p className="max-w-xs text-sm leading-6 text-white/40">A sequence of frames from the work that gives this profile its real voice.</p>
-              </div>
-
-              <div className="mt-10">
-                {portfolioItems.map((item, index) => (
-                  <article key={item.title} className="group relative grid gap-0 border-b border-white/[0.08] py-7 lg:grid-cols-[90px_1fr_0.9fr] lg:items-center lg:py-10">
-                    <div className="flex items-center gap-4 lg:block">
-                      <span className="font-mono text-sm text-amber-300/80">0{index + 1}</span>
-                      <span className="lg:mt-3 block text-[9px] uppercase tracking-[0.18em] text-white/25">{item.year}</span>
-                    </div>
-                    <div className="relative min-h-[230px] overflow-hidden border border-white/[0.09] bg-neutral-950 sm:min-h-[300px]">
-                      <img src={talent.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60 transition duration-700 group-hover:scale-[1.04] group-hover:opacity-85" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-                      <span className="absolute left-5 top-5 border border-white/10 bg-black/35 px-3 py-2 text-[9px] uppercase tracking-[0.2em] text-white/70 backdrop-blur-sm">{item.type}</span>
-                      <button aria-label={`Play ${item.title}`} className="absolute bottom-5 left-5 grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-white text-black transition-transform group-hover:scale-110"><Play size={15} fill="currentColor" /></button>
-                    </div>
-                    <div className="flex flex-col justify-center py-6 lg:px-10">
-                      <p className="text-[10px] uppercase tracking-[0.25em] text-amber-300/65">{item.role}</p>
-                      <h3 className="mt-3 text-2xl font-medium transition-colors group-hover:text-amber-100 sm:text-3xl">{item.title}</h3>
-                      <div className="mt-6 flex items-center gap-3 text-xs text-white/35">
-                        <span className="h-px w-8 bg-amber-400/50" /> View frame
-                      </div>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Credit roll — continuous editorial metadata. */}
-          <section className="mt-28 border-y border-white/[0.08] py-16 sm:py-24">
-            <div className="grid gap-12 lg:grid-cols-[0.65fr_1.35fr]">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">02 / Credit roll</p>
-                <h2 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">Selected<br /><span className="text-white/30">Credits</span></h2>
-              </div>
-              <div className="border-t border-white/[0.08]">
-                {credits.map((credit) => (
-                  <article key={`${credit.year}-${credit.title}`} className="group grid gap-4 border-b border-white/[0.08] py-7 transition-colors hover:border-amber-400/35 sm:grid-cols-[90px_1fr_auto] sm:items-center">
-                    <p className="font-mono text-sm text-amber-300/80">{credit.year}</p>
-                    <div>
-                      <h3 className="text-xl font-medium transition-colors group-hover:text-amber-100">{credit.title}</h3>
-                      <p className="mt-1 text-sm text-white/35">{credit.role}</p>
-                    </div>
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-white/30">{credit.format}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Dossier — production-document language instead of a profile card. */}
+          <WorkReel talent={talent} />\n\n          <CreditRoll credits={credits} />\n\n          {/* Dossier — production-document language instead of a profile card. */}
           <section className="mt-28">
             <div className="flex items-end justify-between gap-8 border-b border-white/[0.08] pb-6">
               <div>
@@ -274,28 +373,7 @@ export default function TalentProfile() {
             </div>
           </section>
 
-          {/* Journey — scroll-like progression without enclosing UI. */}
-          <section className="relative mt-28">
-            <div className="absolute left-0 top-0 h-px w-28 bg-amber-400/70" />
-            <div className="pt-10">
-              <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">04 / The journey</p>
-              <h2 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">Every body of work has a beginning, a build and what comes next.</h2>
-            </div>
-
-            <div className="mt-16">
-              {milestones.map((milestone, index) => (
-                <article key={milestone.year} className="group relative grid gap-5 border-t border-white/[0.08] py-10 md:grid-cols-[0.55fr_0.45fr_1fr] md:items-start">
-                  <span className="absolute left-0 top-0 h-px w-14 bg-amber-300 opacity-0 transition-opacity group-hover:opacity-100" />
-                  <p className="font-mono text-lg text-amber-300/80">{milestone.year}</p>
-                  <h3 className="text-2xl font-medium">{milestone.title}</h3>
-                  <p className="max-w-xl text-sm leading-7 text-white/40">{milestone.copy}</p>
-                  <span className="absolute right-0 top-10 hidden text-[10px] text-white/15 md:block">0{index + 1}</span>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <ProductionSchedule talent={talent} />
+          <ExperienceTimeline milestones={milestones} />\n\n          <ProductionSchedule talent={talent} />
 
           {/* Final frame — deliberately minimal, not another CTA card. */}
           <section className="relative mt-28 min-h-[440px] overflow-hidden border-y border-white/[0.08]">
