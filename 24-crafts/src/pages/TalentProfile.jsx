@@ -46,36 +46,53 @@ function MediaCard({ item, talent }) {
   const Icon = mediaIcon[item.type];
 
   return (
-    <article className="group overflow-hidden border border-white/[0.08] bg-white/[0.018] transition duration-300 hover:border-white/[0.16] hover:bg-white/[0.028]">
-      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900">
+    <article className="group relative overflow-hidden rounded-[28px] border border-white/[0.09] bg-[#111111] shadow-[0_18px_60px_rgba(0,0,0,0.22)] transition duration-500 hover:-translate-y-1 hover:border-amber-300/25 hover:shadow-[0_24px_80px_rgba(0,0,0,0.4)]">
+      <div className="relative aspect-[16/11] overflow-hidden bg-neutral-900">
         <img
-          src={talent.image}
+          src={item.image || talent.image}
           alt=""
-          className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]"
+          className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent" />
-        <div className="absolute left-4 top-4 flex items-center gap-2 border border-white/10 bg-black/55 px-3 py-1.5 backdrop-blur-sm">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/35 to-transparent" />
+
+        <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3.5 py-2 backdrop-blur-xl">
           <Icon size={12} className="text-amber-300" />
-          <span className="text-[9px] uppercase tracking-[0.2em] text-white/70">{item.type}</span>
+          <span className="text-[9px] font-medium uppercase tracking-[0.2em] text-white/75">{item.type}</span>
         </div>
+
+        <span className="absolute right-4 top-4 rounded-full border border-white/10 bg-black/35 px-3 py-2 font-mono text-[9px] text-white/50 backdrop-blur-xl">
+          {item.year}
+        </span>
+
         {item.type === "Video" && (
-          <span className="absolute bottom-4 right-4 grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/45 backdrop-blur-sm">
-            <Play size={13} fill="currentColor" className="ml-0.5 text-white" />
+          <span className="absolute bottom-5 left-5 grid h-12 w-12 place-items-center rounded-full border border-white/25 bg-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.25)] backdrop-blur-xl transition duration-300 group-hover:scale-105 group-hover:bg-amber-300 group-hover:text-black">
+            <Play size={15} fill="currentColor" className="ml-0.5" />
           </span>
         )}
+
+        <div className="absolute inset-x-5 bottom-5 flex items-end justify-end">
+          <span className="rounded-full border border-white/15 bg-black/35 px-3 py-1.5 text-[9px] uppercase tracking-[0.15em] text-white/55 backdrop-blur-xl">
+            View work
+          </span>
+        </div>
       </div>
 
       <div className="p-5 sm:p-6">
-        <div className="flex items-start justify-between gap-5">
-          <div>
-            <h3 className="text-lg font-medium tracking-tight text-white">{item.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-white/40">{item.description}</p>
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h3 className="truncate text-[19px] font-medium tracking-tight text-white">{item.title}</h3>
+            <p className="mt-2 line-clamp-2 text-sm leading-6 text-white/40">{item.description}</p>
           </div>
-          <span className="shrink-0 pt-1 font-mono text-[10px] text-white/25">{item.year}</span>
+          <span className="mt-1 shrink-0 font-mono text-[10px] text-white/25">#{String(item.id).padStart(2, "0")}</span>
         </div>
-        <div className="mt-5 flex items-center gap-2 border-t border-white/[0.07] pt-4 text-xs text-white/40">
-          <Heart size={14} />
-          <span>{item.likes} likes</span>
+
+        <div className="mt-6 flex items-center justify-between">
+          <span className="text-[9px] uppercase tracking-[0.18em] text-white/25">{talent.craft}</span>
+          <span className="inline-flex items-center gap-1.5 text-xs text-white/35 transition-colors group-hover:text-white/55">
+            <Heart size={13} />
+            {item.likes}
+          </span>
         </div>
       </div>
     </article>
@@ -89,21 +106,43 @@ function Gallery({ talent }) {
   const [visibleCount, setVisibleCount] = useState(6);
   const [uploadName, setUploadName] = useState("");
 
+  // The fallback seed keeps the prototype populated. Once the API exposes
+  // talent.media, that collection becomes the source of truth automatically.
+  const media = Array.isArray(talent.media) ? talent.media : mediaSeed;
+  const hasUploadedMedia = media.length > 0;
+
   const filteredMedia = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return [...mediaSeed]
+    return [...media]
       .filter((item) => type === "All" || item.type === type)
       .filter((item) => !normalizedQuery || `${item.title} ${item.description}`.toLowerCase().includes(normalizedQuery))
       .sort((a, b) => sort === "Latest" ? b.year - a.year || b.id - a.id : a.year - b.year || a.id - b.id);
-  }, [query, type, sort]);
+  }, [media, query, type, sort]);
 
   const visibleMedia = filteredMedia.slice(0, visibleCount);
   const hasMore = visibleCount < filteredMedia.length;
 
+  const handleUpload = (event) => {
+    const file = event.target.files?.[0];
+    setUploadName(file?.name || "");
+  };
+
+  const UploadControl = ({ prominent = false }) => (
+    <label className={`group inline-flex cursor-pointer items-center justify-center gap-3 rounded-full transition duration-300 ${
+      prominent
+        ? "min-h-14 bg-amber-300 px-7 text-sm font-semibold text-black shadow-[0_12px_40px_rgba(252,211,77,0.12)] hover:-translate-y-0.5 hover:bg-amber-200 hover:shadow-[0_18px_50px_rgba(252,211,77,0.18)]"
+        : "border border-white/12 bg-white/[0.035] px-5 py-3 text-[10px] uppercase tracking-[0.2em] text-white/70 hover:border-amber-300/35 hover:bg-white/[0.06] hover:text-amber-200"
+    }`}>
+      <Upload size={prominent ? 17 : 14} />
+      <span>{prominent ? "Upload Your Work" : "Upload media"}</span>
+      <input type="file" accept="image/*,video/*,audio/*" className="sr-only" onChange={handleUpload} />
+    </label>
+  );
+
   return (
     <section id="work" className="mt-32 scroll-mt-24">
       <div className="border-b border-white/[0.08] pb-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">01 / My gallery</p>
             <h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">The work speaks first.</h2>
@@ -111,78 +150,95 @@ function Gallery({ talent }) {
               Performances, recordings and moments from {talent.name}&apos;s professional work.
             </p>
           </div>
-          <label className="group flex w-full max-w-sm items-center gap-3 border-b border-white/15 py-3 transition-colors focus-within:border-amber-400/60">
-            <Search size={16} className="shrink-0 text-white/30 transition-colors group-focus-within:text-amber-300" />
-            <input
-              value={query}
-              onChange={(event) => { setQuery(event.target.value); setVisibleCount(6); }}
-              placeholder="Search media"
-              className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/25"
-            />
-          </label>
+
+          {hasUploadedMedia && <UploadControl prominent />}
         </div>
 
-        <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-2">
-            {["All", "Video", "Audio", "Image"].map((option) => (
-              <button
-                key={option}
-                onClick={() => { setType(option); setVisibleCount(6); }}
-                className={`px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition ${type === option ? "bg-amber-400 text-black" : "border border-white/10 text-white/45 hover:border-white/20 hover:text-white/75"}`}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
+        {hasUploadedMedia && (
+          <div className="mt-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-2">
+              {["All", "Video", "Audio", "Image"].map((option) => (
+                <button
+                  key={option}
+                  onClick={() => { setType(option); setVisibleCount(6); }}
+                  className={`rounded-full px-4 py-2.5 text-[10px] uppercase tracking-[0.18em] transition ${type === option ? "bg-amber-300 text-black" : "border border-white/10 bg-white/[0.015] text-white/45 hover:border-white/20 hover:text-white/75"}`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
 
-          <div className="flex items-center gap-3 text-xs text-white/35">
-            <span className="uppercase tracking-[0.16em]">Sort</span>
-            <div className="relative">
-              <select
-                value={sort}
-                onChange={(event) => { setSort(event.target.value); setVisibleCount(6); }}
-                className="appearance-none border border-white/10 bg-[#0c0c0c] py-2 pl-3 pr-9 text-xs text-white/70 outline-none transition hover:border-white/20"
-              >
-                <option>Latest</option>
-                <option>Oldest</option>
-              </select>
-              <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/35" />
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <label className="group flex w-full max-w-sm items-center gap-3 border-b border-white/15 py-2.5 transition-colors focus-within:border-amber-400/60 sm:w-64">
+                <Search size={16} className="shrink-0 text-white/30 transition-colors group-focus-within:text-amber-300" />
+                <input
+                  value={query}
+                  onChange={(event) => { setQuery(event.target.value); setVisibleCount(6); }}
+                  placeholder="Search media"
+                  className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/25"
+                />
+              </label>
+
+              <div className="flex items-center gap-3 text-xs text-white/35">
+                <span className="uppercase tracking-[0.16em]">Sort</span>
+                <div className="relative">
+                  <select
+                    value={sort}
+                    onChange={(event) => { setSort(event.target.value); setVisibleCount(6); }}
+                    className="appearance-none rounded-full border border-white/10 bg-[#0c0c0c] py-2.5 pl-4 pr-9 text-xs text-white/70 outline-none transition hover:border-white/20"
+                  >
+                    <option>Latest</option>
+                    <option>Oldest</option>
+                  </select>
+                  <ChevronDown size={13} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-white/35" />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
-      <div className="mt-10 grid gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-        {visibleMedia.map((item) => <MediaCard key={item.id} item={item} talent={talent} />)}
-      </div>
+      {hasUploadedMedia ? (
+        <>
+          <div className="mt-10 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+            {visibleMedia.map((item) => <MediaCard key={item.id} item={item} talent={talent} />)}
+          </div>
 
-      {visibleMedia.length === 0 && (
-        <div className="border-y border-white/[0.08] py-20 text-center">
-          <p className="text-sm text-white/40">No media matches your search.</p>
+          {visibleMedia.length === 0 && (
+            <div className="mt-10 rounded-[28px] border border-white/[0.08] bg-white/[0.018] py-20 text-center">
+              <p className="text-sm text-white/40">No media matches your search.</p>
+            </div>
+          )}
+
+          <div className="mt-12 flex flex-col items-center gap-4">
+            {hasMore && (
+              <button
+                onClick={() => setVisibleCount((count) => count + 6)}
+                className="rounded-full border border-white/15 px-7 py-3 text-[10px] uppercase tracking-[0.22em] text-white/60 transition hover:border-amber-400/50 hover:text-amber-200"
+              >
+                More
+              </button>
+            )}
+            <UploadControl />
+            {uploadName && <p className="text-xs text-white/30">Selected: {uploadName}</p>}
+          </div>
+        </>
+      ) : (
+        <div className="mt-10 rounded-[32px] border border-dashed border-amber-300/25 bg-gradient-to-br from-amber-300/[0.06] via-white/[0.018] to-transparent px-6 py-20 text-center shadow-[0_24px_100px_rgba(0,0,0,0.2)] sm:px-10 sm:py-28">
+          <div className="mx-auto grid h-20 w-20 place-items-center rounded-full border border-amber-300/25 bg-amber-300/[0.08] shadow-[0_0_60px_rgba(252,211,77,0.08)]">
+            <Upload size={28} className="text-amber-300" />
+          </div>
+          <p className="mt-7 text-[10px] uppercase tracking-[0.34em] text-amber-300/75">Your gallery is waiting</p>
+          <h3 className="mx-auto mt-4 max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Put your work in the frame.</h3>
+          <p className="mx-auto mt-5 max-w-lg text-sm leading-7 text-white/40">
+            Add performances, images, recordings or behind-the-scenes moments so producers can experience your work before they reach out.
+          </p>
+          <div className="mt-9 flex flex-col items-center gap-4">
+            <UploadControl prominent />
+            {uploadName && <p className="text-xs text-white/35">Selected: {uploadName}</p>}
+          </div>
         </div>
       )}
-
-      <div className="mt-12 flex flex-col items-center gap-4">
-        {hasMore && (
-          <button
-            onClick={() => setVisibleCount((count) => count + 6)}
-            className="border border-white/15 px-7 py-3 text-[10px] uppercase tracking-[0.22em] text-white/60 transition hover:border-amber-400/50 hover:text-amber-200"
-          >
-            More
-          </button>
-        )}
-        <label className="group inline-flex cursor-pointer items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/35 transition hover:text-amber-300">
-          <Upload size={14} />
-          Upload media
-          <input
-            type="file"
-            accept="image/*,video/*,audio/*"
-            className="sr-only"
-            onChange={(event) => setUploadName(event.target.files?.[0]?.name || "")}
-          />
-        </label>
-        {uploadName && <p className="text-xs text-white/30">Selected: {uploadName}</p>}
-      </div>
     </section>
   );
 }
