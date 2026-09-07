@@ -164,19 +164,106 @@ function Experience({ talent }) {
   );
 }
 
-function Availability() {
+function getAvailabilityStatus(date) {
+  const today = new Date();
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  if (date < startOfToday) return "unavailable";
+
+  const score = (date.getDate() * 7 + date.getDay() * 3 + date.getMonth() * 5) % 11;
+  if (score >= 8) return "available";
+  if (score >= 5) return "limited";
+  return "unavailable";
+}
+
+function AvailabilityCalendar() {
   const [cursor, setCursor] = useState(() => new Date());
-  const monthLabel = useMemo(() => new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(cursor), [cursor]);
-  const days = useMemo(() => { const year = cursor.getFullYear(); const month = cursor.getMonth(); const daysInMonth = new Date(year, month + 1, 0).getDate(); return Array.from({ length: daysInMonth }, (_, index) => { const day = index + 1; const date = new Date(year, month, day); const score = (day * 7 + date.getDay() * 3) % 11; return { day, score }; }); }, [cursor]);
-  const statusLabel = (score) => score >= 8 ? "Available" : score >= 5 ? "Limited" : "Booked";
-  const statusClass = (score) => score >= 8 ? "bg-amber-300/90" : score >= 5 ? "bg-amber-300/35" : "bg-white/[0.08]";
-  const shiftMonth = (offset) => setCursor((date) => new Date(date.getFullYear(), date.getMonth() + offset, 1));
-  return <section id="availability" className="mt-32 border-y border-white/[0.08] py-16 scroll-mt-24 sm:py-20"><div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between"><div><p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">03 / Availability</p><h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">Find an open window.</h2><p className="mt-5 max-w-xl text-sm leading-7 text-white/40">A quick visual read of when this talent is available for projects.</p></div><div className="flex items-center gap-2"><button onClick={() => shiftMonth(-1)} aria-label="Previous month" className="grid h-10 w-10 place-items-center border border-white/10 text-white/45 transition hover:border-amber-400/40 hover:text-amber-200"><ChevronLeft size={16} /></button><span className="min-w-32 text-center text-sm font-medium">{monthLabel}</span><button onClick={() => shiftMonth(1)} aria-label="Next month" className="grid h-10 w-10 place-items-center border border-white/10 text-white/45 transition hover:border-amber-400/40 hover:text-amber-200"><ChevronRight size={16} /></button></div></div><div className="mt-12 overflow-x-auto pb-2"><div className="min-w-[680px]"><div className="mb-3 grid grid-cols-7 gap-2 text-[9px] uppercase tracking-[0.16em] text-white/20">{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => <span key={day}>{day}</span>)}</div><div className="grid grid-cols-7 gap-2">{Array.from({ length: new Date(cursor.getFullYear(), cursor.getMonth(), 1).getDay() }).map((_, index) => <span key={`blank-${index}`} />)}{days.map(({ day, score }) => <button key={day} title={`${monthLabel} ${day} — ${statusLabel(score)}`} className="group relative h-16 border border-white/[0.06] bg-white/[0.012] p-2 text-left transition hover:-translate-y-0.5 hover:border-amber-300/40"><span className="font-mono text-[10px] text-white/35">{day}</span><span className={`absolute bottom-2 left-2 right-2 h-1 ${statusClass(score)}`} /></button>)}</div></div></div><div className="mt-7 flex flex-wrap items-center gap-6 text-[9px] uppercase tracking-[0.16em] text-white/30"><span className="inline-flex items-center gap-2"><i className="h-2 w-2 rounded-sm bg-amber-300/90" /> Available</span><span className="inline-flex items-center gap-2"><i className="h-2 w-2 rounded-sm bg-amber-300/35" /> Limited</span><span className="inline-flex items-center gap-2"><i className="h-2 w-2 rounded-sm bg-white/[0.08]" /> Booked</span></div></section>;
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const monthLabel = useMemo(
+    () => new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(cursor),
+    [cursor]
+  );
+
+  const firstDay = new Date(cursor.getFullYear(), cursor.getMonth(), 1).getDay();
+  const daysInMonth = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate();
+  const days = Array.from({ length: daysInMonth }, (_, index) => {
+    const day = index + 1;
+    const date = new Date(cursor.getFullYear(), cursor.getMonth(), day);
+    return { day, date, status: getAvailabilityStatus(date) };
+  });
+
+  const selectedLabel = selectedDate
+    ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(selectedDate)
+    : "Choose an open day";
+
+  const shiftMonth = (offset) => {
+    setCursor((date) => new Date(date.getFullYear(), date.getMonth() + offset, 1));
+    setSelectedDate(null);
+  };
+
+  const statusStyles = {
+    available: "bg-amber-300 text-black border-amber-300 shadow-[0_6px_18px_rgba(252,211,77,0.14)] hover:bg-amber-200",
+    limited: "border-emerald-400/45 bg-emerald-400/[0.10] text-emerald-200 hover:border-emerald-300/70 hover:bg-emerald-400/[0.16]",
+    unavailable: "cursor-not-allowed border-white/[0.035] bg-white/[0.018] text-white/20",
+  };
+
+  return (
+    <div className="w-full max-w-[350px] rounded-[24px] border border-white/[0.08] bg-white/[0.035] p-4 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[9px] uppercase tracking-[0.24em] text-amber-300/75">Availability</p>
+          <p className="mt-1 text-xs text-white/45">Pick a day to start the conversation.</p>
+        </div>
+        <div className="flex items-center gap-1">
+          <button onClick={() => shiftMonth(-1)} aria-label="Previous month" className="grid h-8 w-8 place-items-center rounded-full border border-white/10 text-white/35 transition hover:border-white/20 hover:text-white/75"><ChevronLeft size={14} /></button>
+          <button onClick={() => shiftMonth(1)} aria-label="Next month" className="grid h-8 w-8 place-items-center rounded-full border border-white/10 text-white/35 transition hover:border-white/20 hover:text-white/75"><ChevronRight size={14} /></button>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center justify-between">
+        <span className="text-sm font-medium text-white">{monthLabel}</span>
+        <span className="rounded-full border border-white/10 bg-black/15 px-2.5 py-1 text-[9px] text-white/30">{selectedDate ? selectedLabel : "Flexible dates"}</span>
+      </div>
+
+      <div className="mt-4 grid grid-cols-7 gap-1 text-center text-[8px] uppercase tracking-[0.12em] text-white/20">
+        {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}
+      </div>
+
+      <div className="mt-2 grid grid-cols-7 gap-1">
+        {Array.from({ length: firstDay }).map((_, index) => <span key={`blank-${index}`} className="h-8" />)}
+        {days.map(({ day, date, status }) => {
+          const selected = selectedDate?.getTime() === date.getTime();
+          const disabled = status === "unavailable";
+          return (
+            <button
+              key={day}
+              type="button"
+              disabled={disabled}
+              onClick={() => setSelectedDate(date)}
+              aria-label={`${monthLabel} ${day} — ${status === "limited" ? "Tentative availability" : status}`}
+              className={`relative h-8 rounded-full border font-mono text-[10px] transition duration-200 ${statusStyles[status]} ${selected ? "ring-2 ring-emerald-300/80 ring-offset-1 ring-offset-[#151515]" : ""}`}
+              title={disabled ? "Unavailable — already booked" : status === "limited" ? "Tentative — confirm before booking" : "Available"}
+            >
+              {day}
+              {status === "limited" && <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-emerald-300" />}
+              {disabled && <span className="pointer-events-none absolute inset-0 grid place-items-center text-[11px] text-white/15">×</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/[0.07] pt-3 text-[8px] uppercase tracking-[0.12em] text-white/30">
+        <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-amber-300" /> Open</span>
+        <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full border border-emerald-300 bg-emerald-300/30" /> Tentative</span>
+        <span className="inline-flex items-center gap-1.5"><i className="h-2 w-2 rounded-full bg-white/10" /> Unavailable</span>
+      </div>
+    </div>
+  );
 }
 
 export default function TalentProfile() {
   const { talentId } = useParams();
   const talent = talents.find((item) => String(item.id) === talentId);
   if (!talent) return <div className="min-h-screen bg-[#090909] text-white"><Navbar /><main className="px-6 pb-24 pt-40"><div className="mx-auto max-w-4xl text-center"><p className="text-xs uppercase tracking-[0.3em] text-amber-400">Talent profile</p><h1 className="mt-4 text-4xl font-bold">Profile not found</h1><Link to="/talent" className="mt-8 inline-flex items-center gap-2 text-amber-400"><ArrowLeft size={16} /> Back to talent</Link></div></main><Footer /></div>;
-  return <div className="min-h-screen overflow-hidden bg-[#090909] text-white"><Navbar /><main className="px-6 pb-24 pt-32"><div className="mx-auto max-w-7xl"><Link to={`/talent?craft=${encodeURIComponent(talent.craft)}`} className="inline-flex items-center gap-2 text-sm text-neutral-500 transition-colors hover:text-amber-400"><ArrowLeft size={16} /> Back to {talent.craft}</Link><section className="mt-10 grid items-stretch gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16"><div className="relative min-h-[560px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-neutral-900"><img src={talent.image} alt={talent.name} className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" /><span className="absolute bottom-6 left-6 rounded-full bg-amber-400 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black">{talent.availability}</span></div><div className="flex flex-col justify-center py-4 lg:py-10"><p className="text-xs uppercase tracking-[0.35em] text-amber-400">{talent.craft}</p><h1 className="mt-5 text-5xl font-black tracking-tight md:text-7xl">{talent.name}</h1><div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"><span className="inline-flex items-center gap-2"><MapPin size={16} /> {talent.location}</span><span className="inline-flex items-center gap-2"><Star size={16} className="text-amber-400" /> 4.9 rating</span><span className="inline-flex items-center gap-2"><BriefcaseBusiness size={16} /> {talent.experience}</span></div><p className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-400">{talent.bio}</p><div className="mt-8 flex flex-wrap gap-2">{talent.genres.map((genre) => <span key={genre} className="rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">{genre}</span>)}</div><div className="mt-10 flex flex-wrap gap-4"><Button className="inline-flex items-center gap-3">Hire Talent <ArrowRight size={18} /></Button><Button variant="secondary" onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth", block: "start" })}>View Portfolio</Button></div></div></section><Gallery talent={talent} /><Experience talent={talent} /><Availability /></div></main><Footer /></div>;
+  return <div className="min-h-screen overflow-hidden bg-[#090909] text-white"><Navbar /><main className="px-6 pb-24 pt-32"><div className="mx-auto max-w-7xl"><Link to={`/talent?craft=${encodeURIComponent(talent.craft)}`} className="inline-flex items-center gap-2 text-sm text-neutral-500 transition-colors hover:text-amber-400"><ArrowLeft size={16} /> Back to {talent.craft}</Link><section className="mt-10 grid items-stretch gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16"><div className="relative min-h-[560px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-neutral-900"><img src={talent.image} alt={talent.name} className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" /><span className="absolute bottom-6 left-6 rounded-full bg-amber-400 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-black">{talent.availability}</span></div><div className="flex flex-col justify-center py-4 lg:py-10"><p className="text-xs uppercase tracking-[0.35em] text-amber-400">{talent.craft}</p><h1 className="mt-5 text-5xl font-black tracking-tight md:text-7xl">{talent.name}</h1><div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-neutral-400"><span className="inline-flex items-center gap-2"><MapPin size={16} /> {talent.location}</span><span className="inline-flex items-center gap-2"><Star size={16} className="text-amber-400" /> 4.9 rating</span><span className="inline-flex items-center gap-2"><BriefcaseBusiness size={16} /> {talent.experience}</span></div><p className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-400">{talent.bio}</p><div className="mt-8 flex flex-wrap gap-2">{talent.genres.map((genre) => <span key={genre} className="rounded-full border border-amber-500/20 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">{genre}</span>)}</div><div className="mt-10 grid gap-6 xl:grid-cols-[1fr_350px] xl:items-end"><div className="flex flex-wrap gap-4"><Button className="inline-flex items-center gap-3">Hire Talent <ArrowRight size={18} /></Button><Button variant="secondary" onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth", block: "start" })}>View Portfolio</Button></div><AvailabilityCalendar /></div></div></section><Gallery talent={talent} /><Experience talent={talent} /></div></main><Footer /></div>;
 }
