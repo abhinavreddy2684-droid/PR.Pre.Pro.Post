@@ -104,14 +104,14 @@ function Experience({ talent }) {
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return undefined;
-    const observer = new IntersectionObserver((entriesObserved) => {
-      entriesObserved.forEach((entry) => {
+    const observer = new IntersectionObserver((observedEntries) => {
+      observedEntries.forEach((entry) => {
         if (entry.isIntersecting) {
           const index = Number(entry.target.dataset.index);
           setActiveIndex((current) => Math.max(current, index));
         }
       });
-    }, { threshold: 0.18, rootMargin: "0px 0px -8% 0px" });
+    }, { threshold: 0.2, rootMargin: "0px 0px -10% 0px" });
     const cards = section.querySelectorAll("[data-experience-card]");
     cards.forEach((card) => observer.observe(card));
     return () => observer.disconnect();
@@ -119,21 +119,44 @@ function Experience({ talent }) {
 
   return (
     <section ref={sectionRef} className="mt-32 scroll-mt-24" id="experience">
-      <div className="border-b border-white/[0.08] pb-8"><p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">02 / Experience</p><h2 className="mt-5 text-4xl font-semibold tracking-tight sm:text-6xl">Professional experience.</h2><p className="mt-5 max-w-xl text-sm leading-7 text-white/40">A concise look at the work, environments and productions that shaped the craft.</p></div>
+      <div className="border-b border-white/[0.08] pb-8">
+        <p className="text-[10px] uppercase tracking-[0.32em] text-amber-400">02 / Experience</p>
+        <div className="mt-5 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div><h2 className="text-4xl font-semibold tracking-tight sm:text-6xl">The career behind the craft.</h2><p className="mt-5 max-w-xl text-sm leading-7 text-white/40">A visual snapshot of the chapters, environments and productions that shaped {talent.name}&apos;s work.</p></div>
+          <div className="shrink-0 rounded-[24px] border border-amber-300/15 bg-amber-300/[0.055] px-6 py-4 backdrop-blur-xl"><p className="font-mono text-3xl font-semibold tracking-tight text-amber-200">{String(experienceYears).padStart(2, "0")}+</p><p className="mt-1 text-[9px] uppercase tracking-[0.22em] text-white/35">Years in the craft</p></div>
+        </div>
+      </div>
+
       <div className="relative mt-12 pl-5 sm:pl-8">
-        <div className="absolute bottom-0 left-[7px] top-0 w-px bg-gradient-to-b from-amber-300/50 via-white/10 to-transparent sm:left-[15px]" />
-        <div className="space-y-5 sm:space-y-7">
+        <div className="absolute bottom-0 left-[7px] top-0 w-px bg-gradient-to-b from-amber-300/60 via-amber-300/15 to-transparent sm:left-[15px]" />
+        <div className="space-y-6 sm:space-y-8">
           {entries.map((entry, index) => {
             const visible = activeIndex >= index;
-            return <article key={`${entry.period}-${entry.title}`} data-experience-card data-index={index} className={`group relative rounded-[28px] border border-white/[0.09] bg-white/[0.035] p-6 shadow-[0_20px_70px_rgba(0,0,0,0.18)] backdrop-blur-2xl transition-all duration-700 ease-out sm:p-8 lg:p-9 ${visible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"} hover:-translate-y-1 hover:border-amber-300/25 hover:bg-white/[0.055]`}>
-              <span className={`absolute -left-[25px] top-9 h-3 w-3 rounded-full border-2 border-[#090909] bg-white/20 transition-all duration-500 sm:-left-[25px] ${visible ? "scale-100 bg-amber-300 shadow-[0_0_0_6px_rgba(252,211,77,0.08),0_0_24px_rgba(252,211,77,0.35)]" : "scale-75"}`} />
-              <div className="flex flex-col gap-7 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
-                <div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-3"><span className="rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-3 py-1.5 font-mono text-[10px] text-amber-200/80">{entry.period}</span><span className="font-mono text-[9px] text-white/20">0{index + 1}</span></div><h3 className="mt-5 text-2xl font-medium tracking-tight text-white sm:text-3xl">{entry.title}</h3><p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-white/30">{entry.company}</p></div>
-                <p className="max-w-xl text-sm leading-7 text-white/45 lg:pt-1">{entry.description}</p>
-              </div>
-              <div className="mt-8 h-px bg-gradient-to-r from-amber-300/20 via-white/[0.07] to-transparent transition-all duration-700 group-hover:from-amber-300/45" />
-              <div className="mt-5 flex items-center justify-between text-[9px] uppercase tracking-[0.18em] text-white/20"><span>Professional chapter</span><span className="transition-colors group-hover:text-amber-300/60">{talent.craft}</span></div>
-            </article>;
+            const current = index === 0;
+            return (
+              <article key={`${entry.period}-${entry.title}`} data-experience-card data-index={index} className={`group relative overflow-hidden rounded-[30px] border border-white/[0.09] bg-white/[0.035] shadow-[0_24px_80px_rgba(0,0,0,0.2)] backdrop-blur-2xl transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-14 opacity-0"} ${current ? "min-h-[300px]" : "min-h-[250px]"} hover:-translate-y-1 hover:border-amber-300/35`}>
+                <div className="pointer-events-none absolute -inset-px rounded-[30px] bg-gradient-to-r from-amber-300/0 via-amber-300/0 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-amber-300/0 blur-3xl transition-all duration-700 group-hover:bg-amber-300/[0.09]" />
+                <div className="relative grid h-full lg:grid-cols-[180px_1fr]">
+                  <div className="border-b border-white/[0.07] bg-black/10 p-6 sm:p-8 lg:border-b-0 lg:border-r lg:border-white/[0.07]">
+                    <span className={`inline-flex rounded-full border px-3 py-1.5 font-mono text-[10px] transition-colors ${current ? "border-amber-300/35 bg-amber-300/10 text-amber-200" : "border-white/10 bg-white/[0.03] text-white/40"}`}>{entry.period}</span>
+                    <div className="mt-8 flex items-end gap-2"><span className="font-mono text-5xl font-semibold tracking-[-0.06em] text-white/10 transition-colors duration-500 group-hover:text-amber-300/25">0{index + 1}</span><span className="mb-2 text-[9px] uppercase tracking-[0.18em] text-white/25">chapter</span></div>
+                  </div>
+                  <div className="relative p-6 sm:p-8 lg:p-10">
+                    <div className="flex flex-wrap items-center gap-3"><span className="text-[9px] uppercase tracking-[0.24em] text-amber-300/75">{current ? "Current chapter" : "Professional chapter"}</span><span className="h-px w-10 bg-amber-300/30" /></div>
+                    <h3 className="mt-5 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">{entry.title}</h3>
+                    <p className="mt-3 text-[10px] font-medium uppercase tracking-[0.22em] text-white/35">{entry.company}</p>
+                    <p className="mt-7 max-w-2xl text-sm leading-7 text-white/45">{entry.description}</p>
+                    <div className="mt-8 flex flex-wrap items-center gap-3">
+                      <span className="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 text-[9px] uppercase tracking-[0.18em] text-white/40">{talent.craft}</span>
+                      {current && <span className="rounded-full border border-amber-300/20 bg-amber-300/[0.07] px-4 py-2 text-[9px] uppercase tracking-[0.18em] text-amber-200/75">Active</span>}
+                    </div>
+                    <div className="mt-9 h-px bg-gradient-to-r from-amber-300/15 via-white/[0.07] to-transparent transition-all duration-700 group-hover:from-amber-300/55" />
+                    <div className="mt-4 flex items-center justify-between"><span className="text-[9px] uppercase tracking-[0.18em] text-white/15">Experience / {String(index + 1).padStart(2, "0")}</span><span className="text-[9px] uppercase tracking-[0.18em] text-white/15 transition-colors group-hover:text-amber-300/60">View the chapter</span></div>
+                  </div>
+                </div>
+              </article>
+            );
           })}
         </div>
       </div>
