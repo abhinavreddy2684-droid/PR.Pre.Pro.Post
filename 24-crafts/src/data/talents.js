@@ -229,4 +229,32 @@ const generatedTalents = crafts
     }),
   );
 
-export default [...playbackSingers, ...generatedTalents];
+const profileStorageKey = "pre-pro-post:talent-settings";
+
+const readProfileOverrides = () => {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(profileStorageKey);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const ownerTalent = new Proxy(playbackSingers[0], {
+  get(target, property) {
+    const stored = readProfileOverrides();
+    if (!stored) return target[property];
+    if (property === "name") return stored.professional?.name ?? target.name;
+    if (property === "location") return stored.professional?.location ?? target.location;
+    if (property === "experience") return stored.professional?.experience ?? target.experience;
+    if (property === "bio") return stored.professional?.bio ?? target.bio;
+    if (property === "craft") return stored.crafts?.primary ?? target.craft;
+    if (property === "genres") return stored.crafts?.genres ?? target.genres;
+    if (property === "media") return stored.media ?? target.media;
+    if (property === "experiences") return stored.experiences ?? target.experiences;
+    return target[property];
+  },
+});
+
+export default [ownerTalent, ...playbackSingers.slice(1), ...generatedTalents];
