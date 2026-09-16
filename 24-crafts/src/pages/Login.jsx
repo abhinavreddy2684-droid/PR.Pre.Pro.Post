@@ -78,7 +78,7 @@ export default function Login() {
           </div>
         </label>
 
-        <button disabled={loading} className="group relative mt-2 flex w-full items-center justify-center gap-3 overflow-hidden rounded-lg bg-amber-400 px-5 py-3.5 text-sm font-semibold text-black shadow-[0_12px_35px_rgba(245,158,11,0.13)] transition duration-300 hover:-translate-y-px hover:bg-amber-300 hover:shadow-[0_16px_42px_rgba(245,158,11,0.20)] disabled:cursor-not-allowed disabled:opacity-50">
+        <button disabled={loading} className="group relative mt-2 flex w-full items-center justify-center gap-3 overflow-hidden rounded-lg bg-amber-500 px-5 py-3.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(245,158,11,0.25)] transition duration-300 hover:-translate-y-px hover:bg-amber-400 hover:shadow-[0_0_45px_rgba(245,158,11,0.30)] disabled:cursor-not-allowed disabled:opacity-50">
           <span className="absolute inset-y-0 left-0 w-1/3 -translate-x-full skew-x-[-20deg] bg-white/20 transition duration-700 group-hover:translate-x-[380%]" />
           <span className="relative">{loading ? "Signing in…" : "Sign in"}</span>
           <ArrowRight size={16} className="relative transition group-hover:translate-x-1" />
