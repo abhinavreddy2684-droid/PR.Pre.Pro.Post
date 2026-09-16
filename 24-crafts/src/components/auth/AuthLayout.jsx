@@ -9,7 +9,6 @@ export default function AuthLayout({ eyebrow, title, description, children, foot
       <div className="absolute left-1/2 top-1/2 h-[1400px] w-[1400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[200px]" />
       <div className="absolute left-[10%] top-[-20%] h-[160%] w-[520px] rotate-[22deg] bg-gradient-to-b from-amber-400/10 to-transparent blur-3xl" />
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')] opacity-[0.03]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,255,255,0.04)_50%)] bg-[length:100%_4px] opacity-10" />
 
       <div className="absolute bottom-0 left-0 top-0 hidden w-10 flex-col items-center border-r border-white/10 opacity-10 lg:flex">
         {[...Array(24)].map((_, i) => <div key={i} className="mt-4 h-4 w-6 rounded-sm border border-white/30" />)}
