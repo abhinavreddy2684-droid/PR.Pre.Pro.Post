@@ -48,7 +48,7 @@ export default function Login() {
 
       {error && <div role="alert" className="mb-7 rounded-full border border-red-400/20 bg-red-400/[0.06] px-5 py-3 text-sm text-red-200">{error}</div>}
 
-      <button type="button" onClick={handleGoogle} className="group flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.10] bg-transparent px-5 py-3 text-sm font-medium text-white transition duration-300 hover:border-white/20 hover:bg-white/[0.025]">
+      <button type="button" onClick={handleGoogle} className="group flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.10] bg-transparent px-5 py-3 text-sm font-medium text-white backdrop-blur-2xl backdrop-saturate-0 backdrop-brightness-75 transition duration-300 hover:border-white/20 hover:bg-white/[0.025]">
         <span className="grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-black text-black transition group-hover:scale-105">G</span>
         Continue with Google
       </button>
