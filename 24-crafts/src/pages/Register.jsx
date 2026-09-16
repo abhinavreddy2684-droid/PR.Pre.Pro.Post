@@ -4,7 +4,7 @@ import { ArrowRight, Check } from "lucide-react";
 import AuthLayout from "../components/auth/AuthLayout";
 
 const inputClass = "w-full rounded-full border border-white/[0.10] bg-black/45 px-5 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-white/20 focus:border-amber-400/45 focus:bg-white/[0.035] focus:shadow-[0_0_0_1px_rgba(245,158,11,0.06)]";
-const secondaryButtonClass = "flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.10] bg-transparent px-5 py-3 text-sm font-medium text-white transition duration-300 hover:border-white/20 hover:bg-white/[0.025]";
+const secondaryButtonClass = "flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.10] bg-transparent px-5 py-3 text-sm font-medium text-white backdrop-blur-2xl backdrop-saturate-0 backdrop-brightness-75 transition duration-300 hover:border-white/20 hover:bg-white/[0.025]";
 const primaryButtonClass = "group relative mt-3 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-amber-500 px-5 py-3.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(245,158,11,0.25)] transition duration-300 hover:-translate-y-px hover:bg-amber-400 hover:shadow-[0_0_45px_rgba(245,158,11,0.30)] disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function Register() {
