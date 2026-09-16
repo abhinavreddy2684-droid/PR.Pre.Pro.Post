@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Film } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function AuthLayout({ eyebrow, title, description, children, footer }) {
@@ -20,11 +19,11 @@ export default function AuthLayout({ eyebrow, title, description, children, foot
       <div className="grain-overlay" />
 
       <header className="relative z-10 mx-auto flex max-w-[1600px] items-center justify-between px-8 py-7 lg:px-14 xl:px-16">
-        <Link to="/" className="group flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-[14px] border border-amber-500/40 bg-amber-500/[0.08] text-amber-300 transition duration-300 group-hover:border-amber-400/70 group-hover:bg-amber-400/[0.12]">
-            <Film size={18} strokeWidth={1.5} />
-          </span>
-          <span className="font-['Bebas_Neue'] text-2xl tracking-[0.22em] text-white sm:text-[1.7rem]">PRE PRO POST</span>
+        <Link to="/" className="group flex min-w-0 items-center gap-2 sm:gap-3">
+          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ duration: 0.25 }} className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-amber-500/30 bg-amber-500/10 sm:h-12 sm:w-12">
+            <span className="text-sm text-amber-400 sm:text-base">PR</span>
+          </motion.div>
+          <span className="truncate text-[11px] font-black uppercase tracking-[0.18em] text-amber-400 sm:text-sm sm:tracking-[0.3em] lg:text-base">PRE PRO POST</span>
         </Link>
         <Link to="/" className="rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-white/75 transition hover:bg-white/[0.04] hover:text-white">
           Back to home
