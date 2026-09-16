@@ -4,16 +4,15 @@ import { motion } from "framer-motion";
 
 export default function AuthLayout({ eyebrow, title, description, children, footer }) {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#050505] text-white selection:bg-amber-400/20">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(245,158,11,0.08),transparent_48%),linear-gradient(180deg,#080706_0%,#050505_55%,#030303_100%)]" />
-      <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] [background-size:72px_72px]" />
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/40 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/60 to-transparent" />
+    <main className="relative min-h-screen overflow-hidden bg-[#040404] text-white selection:bg-amber-400/20">
+      <div className="absolute inset-0 bg-black" />
+      <div className="absolute left-1/2 top-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/[0.07] blur-[180px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,255,255,0.025)_50%)] bg-[length:100%_4px] opacity-30" />
       <div className="grain-overlay" />
 
       <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
         <Link to="/" className="group flex items-center gap-3">
-          <span className="grid h-11 w-11 place-items-center rounded-xl border border-amber-500/30 bg-amber-500/[0.08] text-amber-300 transition duration-300 group-hover:border-amber-400/60 group-hover:bg-amber-400/[0.12]">
+          <span className="grid h-11 w-11 place-items-center rounded-xl border border-amber-500/30 bg-amber-500/[0.08] text-amber-300 transition group-hover:border-amber-400/60">
             <Film size={18} strokeWidth={1.5} />
           </span>
           <span className="font-['Bebas_Neue'] text-2xl tracking-[0.22em] text-white">PRE PRO POST</span>
