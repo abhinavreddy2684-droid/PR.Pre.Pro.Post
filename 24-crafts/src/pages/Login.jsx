@@ -33,17 +33,17 @@ export default function Login() {
   return (
     <AuthLayout
       eyebrow="Talent Network / Authentication"
-      title={<>WELCOME<br />BACK.</>}
+      title={<>WELCOME<br /><span className="text-amber-400">BACK.</span></>}
       description="Your work, your craft, your place in cinema. Sign in to continue building your professional presence."
-      footer={<div className="flex items-center justify-between gap-4"><span className="text-[10px] uppercase tracking-[0.18em] text-white/25">New to Pre Pro Post?</span><Link to={`/register?next=${encodeURIComponent(next)}`} className="group flex items-center gap-2 text-xs font-medium text-amber-300 transition hover:text-amber-200">Create an account <ArrowRight size={13} className="transition group-hover:translate-x-1" /></Link></div>}
+      footer={<div className="flex items-center justify-between gap-4"><span className="text-[10px] uppercase tracking-[0.18em] text-white/65">New to Pre Pro Post?</span><Link to={`/register?next=${encodeURIComponent(next)}`} className="group flex items-center gap-2 text-xs font-medium text-amber-300 transition hover:text-amber-200">Create an account <ArrowRight size={13} className="transition group-hover:translate-x-1" /></Link></div>}
     >
       <div className="mb-11 flex items-start justify-between gap-5">
         <div>
-          <p className="mb-2 text-[9px] uppercase tracking-[0.32em] text-amber-300/55">Scene 01 / Access</p>
+          <p className="mb-2 text-[9px] uppercase tracking-[0.32em] text-amber-300/65">Scene 01 / Access</p>
           <h2 className="font-sans text-4xl font-black leading-none tracking-[-0.035em] text-white">SIGN IN</h2>
-          <p className="mt-3 text-sm text-white/35">Continue to your talent profile.</p>
+          <p className="mt-3 text-sm text-white/60">Continue to your talent profile.</p>
         </div>
-        <div className="hidden h-10 w-10 place-items-center rounded-full border border-white/[0.08] bg-white/[0.025] text-white/25 sm:grid" aria-hidden="true">
+        <div className="hidden h-10 w-10 place-items-center rounded-full border border-white/[0.08] bg-white/[0.025] text-white/40 sm:grid" aria-hidden="true">
           <Clapperboard size={17} strokeWidth={1.3} />
         </div>
       </div>
@@ -57,24 +57,24 @@ export default function Login() {
 
       <div className="my-9 flex items-center gap-4" aria-hidden="true">
         <span className="h-px flex-1 bg-gradient-to-r from-transparent to-white/[0.10]" />
-        <span className="flex items-center gap-2 text-[8px] uppercase tracking-[0.3em] text-white/20"><span className="h-1 w-1 rounded-full bg-amber-400/30" /> or email <span className="h-1 w-1 rounded-full bg-amber-400/30" /></span>
+        <span className="flex items-center gap-2 text-[8px] uppercase tracking-[0.3em] text-white/35"><span className="h-1 w-1 rounded-full bg-amber-400/45" /> or email <span className="h-1 w-1 rounded-full bg-amber-400/45" /></span>
         <span className="h-px flex-1 bg-gradient-to-l from-transparent to-white/[0.10]" />
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-7">
         <label className="block">
-          <span className="mb-3 block text-[9px] uppercase tracking-[0.25em] text-white/40">Email address</span>
+          <span className="mb-3 block text-[9px] uppercase tracking-[0.25em] text-white/70">Email address</span>
           <input className={inputClass} type="email" value={form.email} onChange={update("email")} autoComplete="email" placeholder="you@example.com" required />
         </label>
 
         <label className="block">
           <div className="mb-3 flex items-center justify-between">
-            <span className="text-[9px] uppercase tracking-[0.25em] text-white/40">Password</span>
-            <Link to="/reset-password" className="rounded-full px-2 py-1 text-[10px] text-amber-300/65 transition hover:bg-amber-400/[0.05] hover:text-amber-300">Forgot password?</Link>
+            <span className="text-[9px] uppercase tracking-[0.25em] text-white/70">Password</span>
+            <Link to="/reset-password" className="rounded-full px-2 py-1 text-[10px] text-white/70 transition hover:bg-white/[0.05] hover:text-amber-300">Forgot password?</Link>
           </div>
           <div className="relative">
             <input className={`${inputClass} pr-14`} type={showPassword ? "text" : "password"} value={form.password} onChange={update("password")} autoComplete="current-password" placeholder="Enter your password" required />
-            <button type="button" onClick={() => setShowPassword((value) => !value)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-white/25 transition hover:bg-white/[0.05] hover:text-white/60" aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button>
+            <button type="button" onClick={() => setShowPassword((value) => !value)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-white/45 transition hover:bg-white/[0.05] hover:text-white/80" aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button>
           </div>
         </label>
 
@@ -85,7 +85,7 @@ export default function Login() {
         </button>
       </form>
 
-      <div className="mt-10 flex items-center justify-between text-[8px] uppercase tracking-[0.22em] text-white/15">
+      <div className="mt-10 flex items-center justify-between text-[8px] uppercase tracking-[0.22em] text-white/40">
         <span>PPP / Talent Network</span>
         <span>Auth 01</span>
       </div>
