@@ -32,14 +32,14 @@ export default function AuthLayout({ eyebrow, title, description, children, foot
           </motion.div>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.05 }} className="w-full">
-            <div className="rounded-2xl border border-white/[0.09] bg-[#11100e]/90 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.55)] backdrop-blur-2xl sm:p-9 lg:p-10">
+            <div className="w-full p-0 sm:p-2 lg:p-4">
               <div className="mb-8 lg:hidden">
                 <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-amber-300/70">{eyebrow}</p>
                 <h1 className="font-['Bebas_Neue'] text-6xl leading-none tracking-wide text-white">{title}</h1>
                 <p className="mt-4 text-sm leading-6 text-white/40">{description}</p>
               </div>
               {children}
-              {footer && <div className="mt-8 border-t border-white/[0.08] pt-6">{footer}</div>}
+              {footer && <div className="mt-8 pt-2">{footer}</div>}
             </div>
           </motion.div>
         </div>
