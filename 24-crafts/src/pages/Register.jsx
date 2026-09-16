@@ -4,7 +4,7 @@ import { ArrowRight, Check } from "lucide-react";
 import AuthLayout from "../components/auth/AuthLayout";
 
 const inputClass = "w-full rounded-full border border-white/[0.10] bg-black/45 px-5 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-white/20 focus:border-amber-400/45 focus:bg-white/[0.035] focus:shadow-[0_0_0_1px_rgba(245,158,11,0.06)]";
-const googleButtonClass = "flex w-full items-center justify-center gap-3 rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-black shadow-[0_0_40px_rgba(245,158,11,0.18)] transition duration-300 hover:-translate-y-px hover:bg-amber-400 hover:shadow-[0_0_45px_rgba(245,158,11,0.24)]";
+const googleButtonClass = "flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.10] bg-transparent px-5 py-3 text-sm font-medium text-white transition-[border-color] duration-300 hover:border-white/20";
 const primaryButtonClass = "group relative mt-3 flex w-full items-center justify-center gap-3 overflow-hidden rounded-full bg-amber-500 px-5 py-3.5 text-sm font-semibold text-black shadow-[0_0_40px_rgba(245,158,11,0.25)] transition duration-300 hover:-translate-y-px hover:bg-amber-400 hover:shadow-[0_0_45px_rgba(245,158,11,0.30)] disabled:cursor-not-allowed disabled:opacity-50";
 
 export default function Register() {
@@ -34,7 +34,7 @@ export default function Register() {
       <div className="mb-10"><p className="mb-2 text-[9px] uppercase tracking-[0.32em] text-amber-300/75">Scene 02 / Create</p><h2 className="font-sans text-4xl font-black leading-none tracking-[-0.035em] text-white">CREATE ACCOUNT</h2><p className="mt-3 text-sm text-white/65">Join the Talent Network.</p></div>
       {error && <div role="alert" className="mb-7 rounded-full border border-red-400/20 bg-red-400/[0.06] px-5 py-3 text-sm text-red-200">{error}</div>}
       <button type="button" onClick={handleGoogle} className={googleButtonClass}>
-        <span className="grid h-5 w-5 place-items-center rounded-full bg-black text-[11px] font-black text-white">G</span>
+        <span className="grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-black text-black">G</span>
         Continue with Google
       </button>
       <div className="my-8 flex items-center gap-4" aria-hidden="true"><span className="h-px flex-1 bg-gradient-to-r from-transparent to-white/[0.10]" /><span className="flex items-center gap-2 text-[8px] uppercase tracking-[0.3em] text-white/50"><span className="h-1 w-1 rounded-full bg-amber-400/60" />or email<span className="h-1 w-1 rounded-full bg-amber-400/60" /></span><span className="h-px flex-1 bg-gradient-to-l from-transparent to-white/[0.10]" /></div>
