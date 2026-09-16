@@ -4,7 +4,7 @@ import { Eye, EyeOff, ArrowRight, Clapperboard } from "lucide-react";
 import AuthLayout from "../components/auth/AuthLayout";
 
 const inputClass = "w-full rounded-full border border-white/[0.10] bg-black/45 px-5 py-3 text-sm text-white outline-none transition duration-300 placeholder:text-white/20 focus:border-amber-400/45 focus:bg-white/[0.035] focus:shadow-[0_0_0_1px_rgba(245,158,11,0.06)]";
-const googleButtonClass = "flex w-full items-center justify-center gap-3 rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-black shadow-[0_0_40px_rgba(245,158,11,0.18)] transition duration-300 hover:-translate-y-px hover:bg-amber-400 hover:shadow-[0_0_45px_rgba(245,158,11,0.24)]";
+const googleButtonClass = "flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.10] bg-transparent px-5 py-3 text-sm font-medium text-white transition-[border-color] duration-300 hover:border-white/20";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ export default function Login() {
       {error && <div role="alert" className="mb-7 rounded-full border border-red-400/20 bg-red-400/[0.06] px-5 py-3 text-sm text-red-200">{error}</div>}
 
       <button type="button" onClick={handleGoogle} className={googleButtonClass}>
-        <span className="grid h-5 w-5 place-items-center rounded-full bg-black text-[11px] font-black text-white">G</span>
+        <span className="grid h-5 w-5 place-items-center rounded-full bg-white text-[11px] font-black text-black">G</span>
         Continue with Google
       </button>
 
