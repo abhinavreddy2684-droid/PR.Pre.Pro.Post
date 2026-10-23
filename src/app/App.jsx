@@ -4,10 +4,10 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "@/pages/Home";
 import Productions from "@/features/productions/pages/ProductionsPage";
 import Artists from "@/features/artists/pages/ArtistsPage";
-import TalentDiscovery from "@/pages/TalentDiscovery";
-import TalentProfile from "@/pages/TalentProfile";
-import TalentOnboarding from "@/pages/TalentOnboarding";
-import TalentProfileOwner from "@/pages/TalentProfileOwner";
+import TalentDiscovery from "@/features/talent/pages/TalentDiscoveryPage";
+import TalentProfile from "@/features/talent/pages/TalentProfilePage";
+import TalentOnboarding from "@/features/talent/pages/TalentOnboardingPage";
+import TalentProfileOwner from "@/features/talent/pages/TalentOwnerProfilePage";
 
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();

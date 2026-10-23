@@ -23,7 +23,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
-import talents from "@/data/talents";
+import talents from "@/features/talent/data/talents";
 
 const mediaSeed = [
   {

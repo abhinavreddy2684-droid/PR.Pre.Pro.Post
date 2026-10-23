@@ -27,8 +27,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
-import TalentSettingsPanel from "@/components/talent/TalentSettingsPanel";
-import talents from "@/data/talents";
+import TalentSettingsPanel from "@/features/talent/components/settings/TalentSettingsPanel";
+import talents from "@/features/talent/data/talents";
 
 const mediaSeed = [
   {

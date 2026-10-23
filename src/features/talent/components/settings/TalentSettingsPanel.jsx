@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import talents from "@/data/talents";
+import talents from "@/features/talent/data/talents";
 import crafts from "@/catalog/crafts";
 
 const STORAGE_KEY = "pre-pro-post:talent-settings";

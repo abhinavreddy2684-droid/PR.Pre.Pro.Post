@@ -4,10 +4,10 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import TalentMarketplaceCard from "@/components/cards/TalentMarketplaceCard";
+import TalentMarketplaceCard from "@/features/talent/components/discovery/TalentMarketplaceCard";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import talents from "@/data/talents";
+import talents from "@/features/talent/data/talents";
 
 const formatCraft = (craft) => {
   if (!craft) return "Talent Network";
