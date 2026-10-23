@@ -6,7 +6,7 @@ import productions from "@/features/productions/data/productions";
 import ProductionCard from "@/features/productions/components/ProductionCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 
-export default function Productions() {
+export default function ProductionsPage() {
   return (
     <>
       <Navbar />

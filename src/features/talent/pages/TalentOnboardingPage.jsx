@@ -24,7 +24,7 @@ const initialProfile = {
   city: "",
 };
 
-export default function TalentOnboarding() {
+export default function TalentOnboardingPage() {
   const [step, setStep] = useState(0);
   const [profile, setProfile] = useState(initialProfile);
   const navigate = useNavigate();

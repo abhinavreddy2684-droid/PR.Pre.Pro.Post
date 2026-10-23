@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import crafts from "@/catalog/crafts";
 import Button from "@/components/ui/Button";
-import CinemaReelCraftButton from "@/features/home/components/CraftReelButton";
+import CraftReelButton from "@/features/home/components/CraftReelButton";
 
 export default function CinemaReel() {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ export default function CinemaReel() {
         <div className="relative w-full bg-black py-6 overflow-x-auto whitespace-nowrap scrollbar-hide flex items-center px-8 space-x-6 snap-x snap-mandatory">
           {crafts.map((craft) => (
             <div key={craft.id} className="relative shrink-0 snap-center">
-              <CinemaReelCraftButton
+              <CraftReelButton
                 craftId={craft.id}
                 active={activeCraft.id === craft.id}
                 onClick={() => handleCraftSelect(craft)}
@@ -85,7 +85,7 @@ export default function CinemaReel() {
                 aria-pressed={activeCraft.id === craft.id}
               >
                 {craft.title}
-              </CinemaReelCraftButton>
+              </CraftReelButton>
             </div>
           ))}
         </div>

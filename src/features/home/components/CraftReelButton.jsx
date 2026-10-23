@@ -1,12 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function CinemaReelCraftButton({
-  children,
-  active = false,
-  onClick,
-  craftId,
-  ...props
-}) {
+export default function CraftReelButton({ children, active = false, onClick, craftId, ...props }) {
   return (
     <motion.button
       type="button"

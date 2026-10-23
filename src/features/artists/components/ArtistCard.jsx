@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, Briefcase, Sparkles } from "lucide-react";
 
-export default function TalentCard({ artist }) {
+export default function ArtistCard({ artist }) {
   return (
     <motion.div
       whileHover={{ y: -8 }}

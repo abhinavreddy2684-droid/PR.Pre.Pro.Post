@@ -646,7 +646,7 @@ function SettingsHint({ onOpen }) {
   );
 }
 
-export default function TalentProfileOwner() {
+export default function TalentOwnerProfilePage() {
   const talent = talents[0];
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState("professional");

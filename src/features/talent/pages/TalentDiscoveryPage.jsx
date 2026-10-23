@@ -15,7 +15,7 @@ const formatCraft = (craft) => {
   return craft;
 };
 
-export default function TalentDiscovery() {
+export default function TalentDiscoveryPage() {
   const [searchParams] = useSearchParams();
   const craft = searchParams.get("craft");
   const [search, setSearch] = useState("");

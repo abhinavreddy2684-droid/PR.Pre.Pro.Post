@@ -1,13 +1,13 @@
 import { useLayoutEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
-import Home from "@/features/home/pages/HomePage";
-import Productions from "@/features/productions/pages/ProductionsPage";
-import Artists from "@/features/artists/pages/ArtistsPage";
-import TalentDiscovery from "@/features/talent/pages/TalentDiscoveryPage";
-import TalentProfile from "@/features/talent/pages/TalentProfilePage";
-import TalentOnboarding from "@/features/talent/pages/TalentOnboardingPage";
-import TalentProfileOwner from "@/features/talent/pages/TalentOwnerProfilePage";
+import HomePage from "@/features/home/pages/HomePage";
+import ProductionsPage from "@/features/productions/pages/ProductionsPage";
+import ArtistsPage from "@/features/artists/pages/ArtistsPage";
+import TalentDiscoveryPage from "@/features/talent/pages/TalentDiscoveryPage";
+import TalentProfilePage from "@/features/talent/pages/TalentProfilePage";
+import TalentOnboardingPage from "@/features/talent/pages/TalentOnboardingPage";
+import TalentOwnerProfilePage from "@/features/talent/pages/TalentOwnerProfilePage";
 
 function RouteScrollManager() {
   const { pathname, hash } = useLocation();
@@ -40,13 +40,13 @@ export default function App() {
     <BrowserRouter>
       <RouteScrollManager />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/talent" element={<TalentDiscovery />} />
-        <Route path="/talent/onboarding" element={<TalentOnboarding />} />
-        <Route path="/talent/me" element={<TalentProfileOwner />} />
-        <Route path="/talent/:talentId" element={<TalentProfile />} />
-        <Route path="/productions" element={<Productions />} />
-        <Route path="/artists" element={<Artists />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/talent" element={<TalentDiscoveryPage />} />
+        <Route path="/talent/onboarding" element={<TalentOnboardingPage />} />
+        <Route path="/talent/me" element={<TalentOwnerProfilePage />} />
+        <Route path="/talent/:talentId" element={<TalentProfilePage />} />
+        <Route path="/productions" element={<ProductionsPage />} />
+        <Route path="/artists" element={<ArtistsPage />} />
       </Routes>
     </BrowserRouter>
   );

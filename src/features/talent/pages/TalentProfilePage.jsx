@@ -519,7 +519,7 @@ function Availability() {
   );
 }
 
-export default function TalentProfile() {
+export default function TalentProfilePage() {
   const { talentId } = useParams();
   const talent = talents.find((item) => String(item.id) === talentId);
   if (!talent)
