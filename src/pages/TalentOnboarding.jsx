@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 import HeroSection from "@/components/sections/hero/HeroSection";
 import Button from "@/components/ui/Button";
-import crafts from "@/data/crafts";
-import indiaLocations from "@/data/indiaLocations";
+import crafts from "@/catalog/crafts";
+import indiaLocations from "@/catalog/indiaLocations";
 
 const steps = [
   { number: "01", label: "Identity" },

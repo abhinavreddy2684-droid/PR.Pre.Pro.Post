@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, BriefcaseBusiness, Clapperboard, Layers3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import crafts from "@/data/crafts";
+import crafts from "@/catalog/crafts";
 import Button from "@/components/ui/Button";
 import CinemaReelCraftButton from "@/components/ui/CinemaReelCraftButton";
 
