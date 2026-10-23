@@ -1,9 +1,9 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-import productions from "@/data/productions";
+import productions from "@/features/productions/data/productions";
 
-import ProductionCard from "@/components/cards/ProductionCard";
+import ProductionCard from "@/features/productions/components/ProductionCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function Productions() {
