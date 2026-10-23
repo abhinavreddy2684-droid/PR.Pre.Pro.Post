@@ -2,7 +2,6 @@ import {
   ArrowLeft,
   ArrowRight,
   BriefcaseBusiness,
-  CalendarDays,
   ChevronLeft,
   ChevronRight,
   ChevronDown,

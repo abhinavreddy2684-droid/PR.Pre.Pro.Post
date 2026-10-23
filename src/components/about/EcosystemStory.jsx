@@ -7,8 +7,6 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Clapperboard,
-  FileText,
   MapPin,
   Play,
   Search,

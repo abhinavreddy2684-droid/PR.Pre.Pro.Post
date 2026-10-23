@@ -89,7 +89,7 @@ export default function TalentOnboarding() {
   );
 }
 
-function OnboardingShell({ step, profile, onBack, children }) {
+function OnboardingShell({ step, onBack, children }) {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#040404] text-white">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,rgba(245,158,11,0.13),transparent_32%)]" />
