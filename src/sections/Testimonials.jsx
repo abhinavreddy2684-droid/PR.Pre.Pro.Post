@@ -1,7 +1,7 @@
-import TestimonialCard from "../components/cards/TestimonialCard";
-import SectionHeading from "../components/ui/SectionHeading";
+import TestimonialCard from "@/components/cards/TestimonialCard";
+import SectionHeading from "@/components/ui/SectionHeading";
 
-import testimonials from "../data/testimonials";
+import testimonials from "@/data/testimonials";
 
 export default function Testimonials() {
   return (

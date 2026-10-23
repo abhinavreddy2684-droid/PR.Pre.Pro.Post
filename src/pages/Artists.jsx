@@ -1,10 +1,10 @@
-import Navbar from "../components/navbar/Navbar";
-import Footer from "../components/footer/Footer";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
 
-import artists from "../data/artists";
+import artists from "@/data/artists";
 
-import TalentCard from "../components/cards/TalentCard";
-import SectionHeading from "../components/ui/SectionHeading";
+import TalentCard from "@/components/cards/TalentCard";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function Artists() {
   return (

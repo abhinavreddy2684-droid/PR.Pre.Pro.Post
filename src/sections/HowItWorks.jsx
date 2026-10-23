@@ -1,7 +1,7 @@
 import { Film, ClipboardList, Users, Clapperboard } from "lucide-react";
 
-import WorkflowCard from "../components/cards/WorkflowCard";
-import SectionHeading from "../components/ui/SectionHeading";
+import WorkflowCard from "@/components/cards/WorkflowCard";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 const steps = [
   {

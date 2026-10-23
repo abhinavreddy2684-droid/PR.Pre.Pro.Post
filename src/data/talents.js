@@ -1,4 +1,4 @@
-import crafts from "./crafts";
+import crafts from "@/data/crafts";
 
 const playbackSingers = [
   {

@@ -2,12 +2,12 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, MapPin, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import Navbar from "../components/navbar/Navbar";
-import Footer from "../components/footer/Footer";
-import TalentMarketplaceCard from "../components/cards/TalentMarketplaceCard";
-import Input from "../components/ui/Input";
-import Select from "../components/ui/Select";
-import talents from "../data/talents";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
+import TalentMarketplaceCard from "@/components/cards/TalentMarketplaceCard";
+import Input from "@/components/ui/Input";
+import Select from "@/components/ui/Select";
+import talents from "@/data/talents";
 
 const formatCraft = (craft) => {
   if (!craft) return "Talent Network";

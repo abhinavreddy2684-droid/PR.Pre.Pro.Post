@@ -3,10 +3,10 @@ import { ArrowLeft, ArrowRight, Check, ChevronDown, Search, Upload, UserRound } 
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-import HeroSection from "../sections/HeroSection";
-import Button from "../components/ui/Button";
-import crafts from "../data/crafts";
-import indiaLocations from "../data/indiaLocations";
+import HeroSection from "@/sections/HeroSection";
+import Button from "@/components/ui/Button";
+import crafts from "@/data/crafts";
+import indiaLocations from "@/data/indiaLocations";
 
 const steps = [
   { number: "01", label: "Identity" },

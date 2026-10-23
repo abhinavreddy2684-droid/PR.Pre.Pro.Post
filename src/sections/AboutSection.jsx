@@ -1,5 +1,5 @@
-import SectionHeading from "../components/ui/SectionHeading";
-import EcosystemStory from "../components/about/EcosystemStory";
+import SectionHeading from "@/components/ui/SectionHeading";
+import EcosystemStory from "@/components/about/EcosystemStory";
 
 export default function AboutSection() {
   return (

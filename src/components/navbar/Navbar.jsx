@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import Button from "../ui/Button";
-import MobileMenu from "./MobileMenu";
+import Button from "@/components/ui/Button";
+import MobileMenu from "@/components/navbar/MobileMenu";
 
 const navLinks = [
   { label: "Home", href: "/" },

@@ -1,7 +1,7 @@
-import TalentCard from "../components/cards/TalentCard";
-import SectionHeading from "../components/ui/SectionHeading";
+import TalentCard from "@/components/cards/TalentCard";
+import SectionHeading from "@/components/ui/SectionHeading";
 
-import artists from "../data/artists";
+import artists from "@/data/artists";
 
 export default function TalentNetwork() {
   return (

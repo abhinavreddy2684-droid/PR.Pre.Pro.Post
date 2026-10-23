@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import Button from "../ui/Button";
+import Button from "@/components/ui/Button";
 
 export default function MobileMenu({ navLinks }) {
   const [open, setOpen] = useState(false);

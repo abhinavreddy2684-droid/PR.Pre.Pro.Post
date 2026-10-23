@@ -1,10 +1,10 @@
-import Navbar from "../components/navbar/Navbar";
-import Footer from "../components/footer/Footer";
+import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/footer/Footer";
 
-import productions from "../data/productions";
+import productions from "@/data/productions";
 
-import ProductionCard from "../components/cards/ProductionCard";
-import SectionHeading from "../components/ui/SectionHeading";
+import ProductionCard from "@/components/cards/ProductionCard";
+import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function Productions() {
   return (

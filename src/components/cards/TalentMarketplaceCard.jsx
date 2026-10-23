@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Briefcase, MapPin, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import Button from "../ui/Button";
+import Button from "@/components/ui/Button";
 
 export default function TalentMarketplaceCard({ talent }) {
   const navigate = useNavigate();
