@@ -19,8 +19,8 @@ import { motion } from "framer-motion";
 import { Link, useParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 
-import Navbar from "@/components/navbar/Navbar";
-import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
 import talents from "@/data/talents";

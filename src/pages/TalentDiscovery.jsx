@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, MapPin, Search, SlidersHorizontal, Sparkles } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 
-import Navbar from "@/components/navbar/Navbar";
-import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import TalentMarketplaceCard from "@/components/cards/TalentMarketplaceCard";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";

@@ -1,5 +1,5 @@
-import Navbar from "@/components/navbar/Navbar";
-import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 import HeroSection from "@/sections/HeroSection";
 import CinemaReel from "@/sections/CinemaReel";
