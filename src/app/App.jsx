@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
-import Home from "@/pages/Home";
+import Home from "@/features/home/pages/HomePage";
 import Productions from "@/features/productions/pages/ProductionsPage";
 import Artists from "@/features/artists/pages/ArtistsPage";
 import TalentDiscovery from "@/features/talent/pages/TalentDiscoveryPage";

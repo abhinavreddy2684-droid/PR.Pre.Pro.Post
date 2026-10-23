@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import crafts from "@/catalog/crafts";
 import Button from "@/components/ui/Button";
-import CinemaReelCraftButton from "@/components/ui/CinemaReelCraftButton";
+import CinemaReelCraftButton from "@/features/home/components/CraftReelButton";
 
 export default function CinemaReel() {
   const navigate = useNavigate();
