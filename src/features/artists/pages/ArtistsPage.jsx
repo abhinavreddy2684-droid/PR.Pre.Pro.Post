@@ -1,9 +1,9 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-import artists from "@/data/artists";
+import artists from "@/features/artists/data/artists";
 
-import TalentCard from "@/components/cards/TalentCard";
+import TalentCard from "@/features/artists/components/ArtistCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function Artists() {

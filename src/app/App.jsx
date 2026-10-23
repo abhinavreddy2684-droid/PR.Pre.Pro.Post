@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import Home from "@/pages/Home";
 import Productions from "@/pages/Productions";
-import Artists from "@/pages/Artists";
+import Artists from "@/features/artists/pages/ArtistsPage";
 import TalentDiscovery from "@/pages/TalentDiscovery";
 import TalentProfile from "@/pages/TalentProfile";
 import TalentOnboarding from "@/pages/TalentOnboarding";
