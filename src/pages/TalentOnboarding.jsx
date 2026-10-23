@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Check, ChevronDown, Search, Upload, UserRound } 
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-import HeroSection from "@/sections/HeroSection";
+import HeroSection from "@/components/sections/hero/HeroSection";
 import Button from "@/components/ui/Button";
 import crafts from "@/data/crafts";
 import indiaLocations from "@/data/indiaLocations";
