@@ -1,13 +1,6 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
-import {
-  AnimatePresence,
-  motion,
-} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import gsap from "gsap";
 
@@ -68,9 +61,7 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIcon((prev) =>
-        prev === morphIcons.length - 1 ? 0 : prev + 1
-      );
+      setActiveIcon((prev) => (prev === morphIcons.length - 1 ? 0 : prev + 1));
     }, 3200);
 
     return () => clearInterval(interval);
@@ -113,7 +104,9 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
         description: (
           <>
             Join the Talent Network and define{" "}
-            <span className="font-medium text-white">who you are, what you do, and where you create.</span>{" "}
+            <span className="font-medium text-white">
+              who you are, what you do, and where you create.
+            </span>{" "}
             Build the rest of your professional profile as your work grows.
           </>
         ),
@@ -145,23 +138,15 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
   };
 
   return (
-    <section
-      ref={heroRef}
-      id="home"
-      className="relative min-h-screen overflow-hidden bg-[#040404]"
-    >
+    <section ref={heroRef} id="home" className="relative min-h-screen overflow-hidden bg-[#040404]">
       {/* BASE */}
       <div className="absolute inset-0 bg-black" />
 
       {/* AMBIENT GLOW */}
-      <div
-        className="absolute left-1/2 top-1/2 h-[1400px] w-[1400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[200px]"
-      />
+      <div className="absolute left-1/2 top-1/2 h-[1400px] w-[1400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[200px]" />
 
       {/* LIGHT SHAFT */}
-      <div
-        className="absolute left-[10%] top-[-20%] h-[160%] w-[520px] rotate-[22deg] bg-gradient-to-b from-amber-400/10 to-transparent blur-3xl"
-      />
+      <div className="absolute left-[10%] top-[-20%] h-[160%] w-[520px] rotate-[22deg] bg-gradient-to-b from-amber-400/10 to-transparent blur-3xl" />
 
       {/* FILM GRAIN */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')] opacity-[0.03]" />
@@ -185,18 +170,28 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
       {isOnboarding && (
         <header className="absolute left-0 right-0 top-0 z-40 mx-auto flex max-w-[1600px] items-center justify-between px-8 py-7 lg:px-14 xl:px-16">
           <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-full border border-amber-400/30 bg-amber-500/[0.07] text-sm tracking-wide text-amber-300">PR</div>
+            <div className="grid h-11 w-11 place-items-center rounded-full border border-amber-400/30 bg-amber-500/[0.07] text-sm tracking-wide text-amber-300">
+              PR
+            </div>
             <div>
-              <p className="font-['Bebas_Neue'] text-2xl tracking-[0.24em] text-white sm:text-3xl">PRE PRO POST</p>
-              <p className="mt-0.5 text-[9px] uppercase tracking-[0.34em] text-amber-300/55">Talent onboarding</p>
+              <p className="font-['Bebas_Neue'] text-2xl tracking-[0.24em] text-white sm:text-3xl">
+                PRE PRO POST
+              </p>
+              <p className="mt-0.5 text-[9px] uppercase tracking-[0.34em] text-amber-300/55">
+                Talent onboarding
+              </p>
             </div>
           </div>
-          <p className="hidden text-[10px] uppercase tracking-[0.3em] text-white/30 sm:block">Build your place in cinema</p>
+          <p className="hidden text-[10px] uppercase tracking-[0.3em] text-white/30 sm:block">
+            Build your place in cinema
+          </p>
         </header>
       )}
 
       {/* MAIN LAYOUT */}
-      <div className={`relative z-20 mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 items-center gap-4 px-8 pb-20 ${isOnboarding ? "pt-28 lg:pt-24" : "pt-32"} lg:grid-cols-[1.05fr_0.95fr] lg:px-14 xl:px-16`}>
+      <div
+        className={`relative z-20 mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 items-center gap-4 px-8 pb-20 ${isOnboarding ? "pt-28 lg:pt-24" : "pt-32"} lg:grid-cols-[1.05fr_0.95fr] lg:px-14 xl:px-16`}
+      >
         {/* LEFT CONTENT */}
         <div className="relative z-10 max-w-3xl">
           <motion.div
@@ -217,13 +212,19 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
             transition={{ duration: 1 }}
             className="leading-[0.82] tracking-tight"
           >
-            <span className={`block font-black text-white ${isOnboarding ? "text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem]" : "text-7xl md:text-9xl lg:text-[10rem] xl:text-[11rem]"}`}>
+            <span
+              className={`block font-black text-white ${isOnboarding ? "text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem]" : "text-7xl md:text-9xl lg:text-[10rem] xl:text-[11rem]"}`}
+            >
               {content.lines[0]}
             </span>
-            <span className={`block bg-gradient-to-r from-amber-300 via-amber-100 to-amber-500 bg-clip-text font-black text-transparent ${isOnboarding ? "text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem]" : "text-7xl md:text-9xl lg:text-[10rem] xl:text-[11rem]"}`}>
+            <span
+              className={`block bg-gradient-to-r from-amber-300 via-amber-100 to-amber-500 bg-clip-text font-black text-transparent ${isOnboarding ? "text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem]" : "text-7xl md:text-9xl lg:text-[10rem] xl:text-[11rem]"}`}
+            >
               {content.lines[1]}
             </span>
-            <span className={`block font-black text-white ${isOnboarding ? "text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem]" : "text-7xl md:text-9xl lg:text-[10rem] xl:text-[11rem]"}`}>
+            <span
+              className={`block font-black text-white ${isOnboarding ? "text-6xl md:text-8xl lg:text-[7rem] xl:text-[8rem]" : "text-7xl md:text-9xl lg:text-[10rem] xl:text-[11rem]"}`}
+            >
               {content.lines[2]}
             </span>
           </motion.h1>
@@ -231,7 +232,9 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
           <div className="mb-8 mt-10 flex items-center gap-5">
             <div className="h-px w-28 bg-gradient-to-r from-amber-500 to-transparent" />
             <span className="text-[10px] uppercase tracking-[0.35em] text-white/35">
-              {isOnboarding ? "Filmmakers • Artists • Creators" : "Filmmakers • Artists • Producers"}
+              {isOnboarding
+                ? "Filmmakers • Artists • Creators"
+                : "Filmmakers • Artists • Producers"}
             </span>
           </div>
 

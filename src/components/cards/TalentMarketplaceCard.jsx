@@ -31,9 +31,7 @@ export default function TalentMarketplaceCard({ talent }) {
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.18em] text-amber-300">
             {talent.craft || talent.specialty}
           </p>
-          <h3 className="mt-1.5 sm:mt-2 text-xl sm:text-2xl font-bold truncate">
-            {talent.name}
-          </h3>
+          <h3 className="mt-1.5 sm:mt-2 text-xl sm:text-2xl font-bold truncate">{talent.name}</h3>
         </div>
       </div>
 

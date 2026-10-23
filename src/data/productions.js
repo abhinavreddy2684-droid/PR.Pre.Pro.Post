@@ -7,11 +7,7 @@ const productions = [
     description:
       "A dystopian cinematic journey through memory, identity, and artificial consciousness.",
 
-    credits: [
-      "VFX",
-      "Cinematography",
-      "Original Score",
-    ],
+    credits: ["VFX", "Cinematography", "Original Score"],
   },
 
   {
@@ -19,14 +15,9 @@ const productions = [
 
     genre: "Mystery / Noir",
 
-    description:
-      "An atmospheric noir thriller exploring truth, obsession, and fractured reality.",
+    description: "An atmospheric noir thriller exploring truth, obsession, and fractured reality.",
 
-    credits: [
-      "Direction",
-      "Editing",
-      "Color Grading",
-    ],
+    credits: ["Direction", "Editing", "Color Grading"],
   },
 
   {
@@ -34,14 +25,9 @@ const productions = [
 
     genre: "Psychological Thriller",
 
-    description:
-      "A haunting exploration of fame, performance, and cinematic illusion.",
+    description: "A haunting exploration of fame, performance, and cinematic illusion.",
 
-    credits: [
-      "Screenplay",
-      "Music",
-      "Production Design",
-    ],
+    credits: ["Screenplay", "Music", "Production Design"],
   },
 ];
 

@@ -1,9 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function WorkflowCard({
-  step,
-  index,
-}) {
+export default function WorkflowCard({ step, index }) {
   const Icon = step.icon;
 
   return (
@@ -31,9 +28,7 @@ export default function WorkflowCard({
 
       {/* Number */}
 
-      <div className="absolute top-6 right-6 text-5xl font-black text-white/5">
-        0{index + 1}
-      </div>
+      <div className="absolute top-6 right-6 text-5xl font-black text-white/5">0{index + 1}</div>
 
       {/* Icon */}
 
@@ -45,23 +40,15 @@ export default function WorkflowCard({
           flex items-center justify-center
         "
       >
-        <Icon
-          size={34}
-          className="text-amber-400"
-        />
+        <Icon size={34} className="text-amber-400" />
       </div>
 
       {/* Content */}
 
       <div className="relative mt-10">
-        
-        <h3 className="text-3xl font-bold tracking-tight">
-          {step.title}
-        </h3>
+        <h3 className="text-3xl font-bold tracking-tight">{step.title}</h3>
 
-        <p className="mt-5 text-neutral-400 leading-relaxed">
-          {step.description}
-        </p>
+        <p className="mt-5 text-neutral-400 leading-relaxed">{step.description}</p>
       </div>
     </motion.div>
   );

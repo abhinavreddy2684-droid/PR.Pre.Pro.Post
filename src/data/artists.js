@@ -6,11 +6,7 @@ const artists = [
 
     experience: 12,
 
-    genres: [
-      "Thriller",
-      "Neo-Noir",
-      "Drama",
-    ],
+    genres: ["Thriller", "Neo-Noir", "Drama"],
   },
 
   {
@@ -20,11 +16,7 @@ const artists = [
 
     experience: 9,
 
-    genres: [
-      "Psychological",
-      "Epic",
-      "Fantasy",
-    ],
+    genres: ["Psychological", "Epic", "Fantasy"],
   },
 
   {
@@ -34,11 +26,7 @@ const artists = [
 
     experience: 11,
 
-    genres: [
-      "Action",
-      "Crime",
-      "Thriller",
-    ],
+    genres: ["Action", "Crime", "Thriller"],
   },
 
   {
@@ -48,11 +36,7 @@ const artists = [
 
     experience: 7,
 
-    genres: [
-      "Romance",
-      "Drama",
-      "Indie",
-    ],
+    genres: ["Romance", "Drama", "Indie"],
   },
 
   {
@@ -62,11 +46,7 @@ const artists = [
 
     experience: 10,
 
-    genres: [
-      "Sci-Fi",
-      "Experimental",
-      "Action",
-    ],
+    genres: ["Sci-Fi", "Experimental", "Action"],
   },
 
   {
@@ -76,11 +56,7 @@ const artists = [
 
     experience: 6,
 
-    genres: [
-      "Drama",
-      "Mystery",
-      "Thriller",
-    ],
+    genres: ["Drama", "Mystery", "Thriller"],
   },
 ];
 

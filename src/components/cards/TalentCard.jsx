@@ -1,9 +1,5 @@
 import { motion } from "framer-motion";
-import {
-  Star,
-  Briefcase,
-  Sparkles,
-} from "lucide-react";
+import { Star, Briefcase, Sparkles } from "lucide-react";
 
 export default function TalentCard({ artist }) {
   return (
@@ -25,24 +21,18 @@ export default function TalentCard({ artist }) {
       {/* Image */}
 
       <div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-neutral-800 to-black">
-        
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(245,158,11,0.15),transparent_55%)]" />
 
         <div className="absolute bottom-4 left-4 px-4 py-2 rounded-full bg-black/50 backdrop-blur-xl border border-white/10">
-          <span className="text-xs uppercase tracking-[0.2em] text-amber-400">
-            Featured Artist
-          </span>
+          <span className="text-xs uppercase tracking-[0.2em] text-amber-400">Featured Artist</span>
         </div>
       </div>
 
       {/* Content */}
 
       <div className="relative p-8">
-        
         <div className="flex items-center justify-between">
-          <h3 className="text-3xl font-bold tracking-tight">
-            {artist.name}
-          </h3>
+          <h3 className="text-3xl font-bold tracking-tight">{artist.name}</h3>
 
           <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
             <Star size={18} className="text-amber-400" />
@@ -54,7 +44,6 @@ export default function TalentCard({ artist }) {
         </p>
 
         <div className="mt-8 space-y-4">
-          
           <div className="flex items-center gap-3 text-neutral-400">
             <Briefcase size={16} />
             <span>{artist.experience} Years Experience</span>

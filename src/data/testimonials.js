@@ -4,8 +4,7 @@ const testimonials = [
 
     role: "Independent Producer",
 
-    quote:
-      "This platform feels like the future of collaborative filmmaking.",
+    quote: "This platform feels like the future of collaborative filmmaking.",
   },
 
   {
@@ -13,8 +12,7 @@ const testimonials = [
 
     role: "Film Director",
 
-    quote:
-      "We discovered exceptional cinematographers and editors within days.",
+    quote: "We discovered exceptional cinematographers and editors within days.",
   },
 
   {
@@ -22,8 +20,7 @@ const testimonials = [
 
     role: "OTT Creator",
 
-    quote:
-      "A beautifully crafted ecosystem built specifically for storytellers.",
+    quote: "A beautifully crafted ecosystem built specifically for storytellers.",
   },
 ];
 

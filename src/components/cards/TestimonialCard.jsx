@@ -26,20 +26,14 @@ export default function TestimonialCard({ item }) {
 
       {/* Quote */}
 
-      <p className="mt-8 text-xl leading-relaxed text-neutral-300 italic">
-        “{item.quote}”
-      </p>
+      <p className="mt-8 text-xl leading-relaxed text-neutral-300 italic">“{item.quote}”</p>
 
       {/* Author */}
 
       <div className="mt-10">
-        <h4 className="text-lg font-semibold">
-          {item.name}
-        </h4>
+        <h4 className="text-lg font-semibold">{item.name}</h4>
 
-        <p className="mt-2 text-sm uppercase tracking-[0.2em] text-amber-400">
-          {item.role}
-        </p>
+        <p className="mt-2 text-sm uppercase tracking-[0.2em] text-amber-400">{item.role}</p>
       </div>
     </motion.div>
   );

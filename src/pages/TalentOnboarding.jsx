@@ -124,18 +124,22 @@ function OnboardingShell({ step, onBack, children }) {
             return (
               <div key={item.number} className="min-w-0">
                 <div className="mb-2 flex items-center gap-2">
-                  <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border text-[9px] font-semibold ${
-                    isComplete
-                      ? "border-amber-400 bg-amber-400 text-black"
-                      : isActive
-                        ? "border-amber-400/70 text-amber-300"
-                        : "border-white/10 text-white/25"
-                  }`}>
+                  <span
+                    className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border text-[9px] font-semibold ${
+                      isComplete
+                        ? "border-amber-400 bg-amber-400 text-black"
+                        : isActive
+                          ? "border-amber-400/70 text-amber-300"
+                          : "border-white/10 text-white/25"
+                    }`}
+                  >
                     {isComplete ? <Check size={12} /> : item.number}
                   </span>
-                  <span className={`truncate text-[9px] uppercase tracking-[0.22em] sm:text-[10px] ${
-                    isActive ? "text-white/80" : "text-white/25"
-                  }`}>
+                  <span
+                    className={`truncate text-[9px] uppercase tracking-[0.22em] sm:text-[10px] ${
+                      isActive ? "text-white/80" : "text-white/25"
+                    }`}
+                  >
                     {item.label}
                   </span>
                 </div>
@@ -151,9 +155,7 @@ function OnboardingShell({ step, onBack, children }) {
           })}
         </div>
 
-        <div className="flex flex-1 flex-col">
-          {children}
-        </div>
+        <div className="flex flex-1 flex-col">{children}</div>
 
         <div className="mt-8 flex items-center justify-between border-t border-white/[0.07] pt-5">
           <button
@@ -184,15 +186,11 @@ function StepFrame({ eyebrow, title, description, children }) {
       className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center py-6"
     >
       <div className="max-w-3xl">
-        <p className="text-[10px] uppercase tracking-[0.35em] text-amber-300">
-          {eyebrow}
-        </p>
+        <p className="text-[10px] uppercase tracking-[0.35em] text-amber-300">{eyebrow}</p>
         <h1 className="mt-4 text-5xl font-black leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
           {title}
         </h1>
-        <p className="mt-5 max-w-2xl text-sm leading-7 text-white/45 sm:text-base">
-          {description}
-        </p>
+        <p className="mt-5 max-w-2xl text-sm leading-7 text-white/45 sm:text-base">{description}</p>
       </div>
 
       <div className="mt-10">{children}</div>
@@ -213,7 +211,13 @@ function IdentityStep({ profile, updateProfile, onContinue }) {
   return (
     <StepFrame
       eyebrow="01 — Identity"
-      title={<>WHO ARE<br />YOU?</>}
+      title={
+        <>
+          WHO ARE
+          <br />
+          YOU?
+        </>
+      }
       description="Start with the name you want the cinema world to know you by. Your profile photo is optional — you can add or change it later."
     >
       <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
@@ -223,7 +227,11 @@ function IdentityStep({ profile, updateProfile, onContinue }) {
           className="group relative mx-auto flex aspect-[4/5] w-full max-w-[290px] flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-dashed border-white/15 bg-white/[0.025] text-center transition-all hover:border-amber-400/50 hover:bg-amber-500/[0.04]"
         >
           {profile.photo ? (
-            <img src={profile.photo} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            <img
+              src={profile.photo}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+            />
           ) : (
             <>
               <span className="grid h-16 w-16 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-amber-300">
@@ -237,7 +245,13 @@ function IdentityStep({ profile, updateProfile, onContinue }) {
             <Upload size={13} />
             {profile.photo ? "Change photo" : "Choose photo"}
           </span>
-          <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handlePhoto}
+          />
         </button>
 
         <div className="space-y-5">
@@ -258,7 +272,11 @@ function IdentityStep({ profile, updateProfile, onContinue }) {
           />
 
           <div className="pt-3">
-            <Button disabled={!canContinue} onClick={onContinue} className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35">
+            <Button
+              disabled={!canContinue}
+              onClick={onContinue}
+              className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35"
+            >
               Continue
               <ArrowRight size={17} />
             </Button>
@@ -278,12 +296,20 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
     : crafts;
 
   const primaryOptions = filteredCrafts;
-  const supportingCraftOptions = filteredCrafts.filter((craft) => craft.title !== profile.primaryCraft);
+  const supportingCraftOptions = filteredCrafts.filter(
+    (craft) => craft.title !== profile.primaryCraft,
+  );
 
   return (
     <StepFrame
       eyebrow="02 — Craft"
-      title={<>WHAT DO YOU<br />BRING TO CINEMA?</>}
+      title={
+        <>
+          WHAT DO YOU
+          <br />
+          BRING TO CINEMA?
+        </>
+      }
       description="Choose the craft that leads your professional identity. Then add any supporting crafts that complete the picture."
     >
       <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-white/[0.02] p-5 sm:p-7">
@@ -294,12 +320,19 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
         <div className="relative z-10 flex flex-col gap-6">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.3em] text-amber-300">Find your frame</p>
-              <p className="mt-2 text-sm leading-6 text-white/40">Search across the crafts of cinema, then build your combination.</p>
+              <p className="text-[10px] uppercase tracking-[0.3em] text-amber-300">
+                Find your frame
+              </p>
+              <p className="mt-2 text-sm leading-6 text-white/40">
+                Search across the crafts of cinema, then build your combination.
+              </p>
             </div>
 
             <label className="group flex w-full max-w-md items-center gap-3 rounded-full border border-white/10 bg-black/30 px-4 py-3 transition-colors focus-within:border-amber-400/45 lg:w-[360px]">
-              <Search size={17} className="text-white/30 transition-colors group-focus-within:text-amber-300" />
+              <Search
+                size={17}
+                className="text-white/30 transition-colors group-focus-within:text-amber-300"
+              />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
@@ -313,14 +346,20 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
             <section className="rounded-[1.6rem] border border-amber-400/15 bg-gradient-to-br from-amber-500/[0.07] to-transparent p-5 sm:p-6">
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">Primary craft</p>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">
+                    Primary craft
+                  </p>
                   <p className="mt-2 text-xs text-amber-300/70">Choose exactly one</p>
                 </div>
-                <span className="grid h-9 w-9 place-items-center rounded-full border border-amber-400/20 bg-amber-500/[0.08] text-[10px] text-amber-300">01</span>
+                <span className="grid h-9 w-9 place-items-center rounded-full border border-amber-400/20 bg-amber-500/[0.08] text-[10px] text-amber-300">
+                  01
+                </span>
               </div>
 
               <div className="mb-5 min-h-[56px] rounded-2xl border border-white/[0.07] bg-black/25 px-4 py-3">
-                <p className="text-[9px] uppercase tracking-[0.22em] text-white/25">Your lead frame</p>
+                <p className="text-[9px] uppercase tracking-[0.22em] text-white/25">
+                  Your lead frame
+                </p>
                 <p className="mt-1 text-lg font-semibold text-white">
                   {profile.primaryCraft || "Choose your primary craft"}
                 </p>
@@ -332,7 +371,10 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
                 onSelect={(title) => {
                   updateProfile("primaryCraft", title);
                   if (profile.supportingCrafts.includes(title)) {
-                    updateProfile("supportingCrafts", profile.supportingCrafts.filter((item) => item !== title));
+                    updateProfile(
+                      "supportingCrafts",
+                      profile.supportingCrafts.filter((item) => item !== title),
+                    );
                   }
                 }}
               />
@@ -342,8 +384,12 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
               <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-amber-400/70 via-amber-400/15 to-transparent" />
               <div className="mb-5 flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">Supporting crafts</p>
-                  <p className="mt-2 text-xs text-white/35">Choose as many as genuinely support your work</p>
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/45">
+                    Supporting crafts
+                  </p>
+                  <p className="mt-2 text-xs text-white/35">
+                    Choose as many as genuinely support your work
+                  </p>
                 </div>
                 <span className="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-[10px] text-white/45">
                   {String(profile.supportingCrafts.length).padStart(2, "0")}
@@ -369,7 +415,11 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
                 ? `Primary: ${profile.primaryCraft}`
                 : "Select one primary craft to continue"}
             </p>
-            <Button disabled={!canContinue} onClick={onContinue} className="inline-flex shrink-0 items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35">
+            <Button
+              disabled={!canContinue}
+              onClick={onContinue}
+              className="inline-flex shrink-0 items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35"
+            >
               Continue
               <ArrowRight size={17} />
             </Button>
@@ -422,16 +472,17 @@ function LocationStep({ profile, updateProfile, onContinue }) {
   return (
     <StepFrame
       eyebrow="03 — Location"
-      title={<>WHERE ARE YOU<br />LOCATED?</>}
+      title={
+        <>
+          WHERE ARE YOU
+          <br />
+          LOCATED?
+        </>
+      }
       description="Your location is structured to keep the Talent Network consistent and searchable. India is currently the first supported country."
     >
       <div className="grid gap-4 lg:grid-cols-3">
-        <CustomSelect
-          label="Country"
-          value="India"
-          disabled
-          options={["India"]}
-        />
+        <CustomSelect label="Country" value="India" disabled options={["India"]} />
 
         <CustomSelect
           label="State / Union Territory"
@@ -452,7 +503,11 @@ function LocationStep({ profile, updateProfile, onContinue }) {
       </div>
 
       <div className="mt-8 flex justify-end">
-        <Button disabled={!canContinue} onClick={onContinue} className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35">
+        <Button
+          disabled={!canContinue}
+          onClick={onContinue}
+          className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35"
+        >
           Finish onboarding
           <ArrowRight size={17} />
         </Button>
@@ -461,7 +516,14 @@ function LocationStep({ profile, updateProfile, onContinue }) {
   );
 }
 
-function CustomSelect({ label, value, options, placeholder = "Select an option", disabled = false, onChange }) {
+function CustomSelect({
+  label,
+  value,
+  options,
+  placeholder = "Select an option",
+  disabled = false,
+  onChange,
+}) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
 
@@ -486,8 +548,13 @@ function CustomSelect({ label, value, options, placeholder = "Select an option",
             : "border-white/10 bg-white/[0.025] hover:border-white/20"
         } ${disabled ? "cursor-not-allowed opacity-45" : ""}`}
       >
-        <span className={value ? "text-base font-medium text-white" : "text-sm text-white/30"}>{value || placeholder}</span>
-        <ChevronDown size={18} className={`text-amber-300 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <span className={value ? "text-base font-medium text-white" : "text-sm text-white/30"}>
+          {value || placeholder}
+        </span>
+        <ChevronDown
+          size={18}
+          className={`text-amber-300 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
       </button>
 
       <AnimatePresence>
@@ -558,12 +625,15 @@ function Completion({ profile, onEnter }) {
           <div className="mx-auto mb-8 grid h-16 w-16 place-items-center rounded-full border border-amber-400/40 bg-amber-500/[0.08] text-amber-300">
             <Check size={30} />
           </div>
-          <p className="text-[10px] uppercase tracking-[0.4em] text-amber-300">Talent onboarding complete</p>
+          <p className="text-[10px] uppercase tracking-[0.4em] text-amber-300">
+            Talent onboarding complete
+          </p>
           <h1 className="mt-5 text-6xl font-black leading-[0.82] tracking-tight sm:text-8xl lg:text-[10rem]">
             YOU&apos;RE IN.
           </h1>
           <p className="mx-auto mt-7 max-w-xl text-base leading-8 text-white/45">
-            Your place in the Talent Network starts here. Your profile and portfolio can grow with your work.
+            Your place in the Talent Network starts here. Your profile and portfolio can grow with
+            your work.
           </p>
         </motion.div>
 

@@ -21,21 +21,18 @@ export default function AboutSection() {
 
           <div className="mt-8 space-y-6 text-neutral-400 text-lg leading-relaxed">
             <p>
-              24 Crafts of Cinema is more than a portfolio platform.
-              It is a creative ecosystem designed to bridge filmmakers
-              with elite cinema talent.
+              24 Crafts of Cinema is more than a portfolio platform. It is a creative ecosystem
+              designed to bridge filmmakers with elite cinema talent.
             </p>
 
             <p>
-              From screenplay and cinematography to editing,
-              sound design, VFX, music composition, acting,
-              and production management — every craft exists
-              under one cinematic network.
+              From screenplay and cinematography to editing, sound design, VFX, music composition,
+              acting, and production management — every craft exists under one cinematic network.
             </p>
 
             <p>
-              Built with a storytelling-first philosophy, the platform
-              empowers collaboration, production partnerships, and artistic discovery.
+              Built with a storytelling-first philosophy, the platform empowers collaboration,
+              production partnerships, and artistic discovery.
             </p>
           </div>
         </div>

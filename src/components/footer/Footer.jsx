@@ -1,9 +1,4 @@
-import {
-  Camera,
-  Play,
-  Briefcase,
-  Mail,
-} from "lucide-react";
+import { Camera, Play, Briefcase, Mail } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const links = [
@@ -56,9 +51,8 @@ export default function Footer() {
             </h2>
 
             <p className="mt-4 sm:mt-5 text-neutral-400 leading-relaxed max-w-md">
-              A cinematic marketplace connecting filmmakers,
-              artists, storytellers, and production professionals
-              across all 24 crafts of cinema.
+              A cinematic marketplace connecting filmmakers, artists, storytellers, and production
+              professionals across all 24 crafts of cinema.
             </p>
 
             <div className="flex items-center gap-4 mt-6">
@@ -74,7 +68,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white text-lg font-semibold uppercase tracking-[0.2em]">Navigation</h3>
+            <h3 className="text-white text-lg font-semibold uppercase tracking-[0.2em]">
+              Navigation
+            </h3>
             <div className="mt-5 flex flex-col gap-3.5">
               {links.map((item) => (
                 <Link
@@ -90,7 +86,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white text-lg font-semibold uppercase tracking-[0.2em]">Storytelling First</h3>
+            <h3 className="text-white text-lg font-semibold uppercase tracking-[0.2em]">
+              Storytelling First
+            </h3>
             <div className="mt-5 space-y-3.5 text-neutral-400 leading-relaxed">
               <p>Cinema is collaboration.</p>
               <p>From screenplay to final color grading, every frame is shaped by artists.</p>
@@ -100,8 +98,12 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 sm:mt-14 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-neutral-500 text-sm uppercase tracking-[0.18em]">© 2026 — 24 Crafts Of Cinema</p>
-          <p className="text-neutral-600 text-xs uppercase tracking-[0.25em]">Built For Storytellers Worldwide</p>
+          <p className="text-neutral-500 text-sm uppercase tracking-[0.18em]">
+            © 2026 — 24 Crafts Of Cinema
+          </p>
+          <p className="text-neutral-600 text-xs uppercase tracking-[0.25em]">
+            Built For Storytellers Worldwide
+          </p>
         </div>
       </div>
     </footer>

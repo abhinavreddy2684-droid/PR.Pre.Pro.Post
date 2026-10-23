@@ -30,7 +30,7 @@ const indiaLocations = {
   "Andaman and Nicobar Islands": ["Port Blair"],
   Chandigarh: ["Chandigarh"],
   "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Silvassa"],
-  "Delhi": ["New Delhi", "Delhi"],
+  Delhi: ["New Delhi", "Delhi"],
   "Jammu and Kashmir": ["Srinagar", "Jammu"],
   Ladakh: ["Leh", "Kargil"],
   Lakshadweep: ["Kavaratti"],

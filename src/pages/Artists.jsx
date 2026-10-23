@@ -12,9 +12,7 @@ export default function Artists() {
       <Navbar />
 
       <section className="pt-40 pb-32 px-6">
-        
         <div className="max-w-7xl mx-auto">
-          
           <SectionHeading
             eyebrow="Talent Network"
             title="Cinema Professionals"
@@ -24,10 +22,7 @@ export default function Artists() {
 
           <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {artists.map((artist) => (
-              <TalentCard
-                key={artist.name}
-                artist={artist}
-              />
+              <TalentCard key={artist.name} artist={artist} />
             ))}
           </div>
         </div>

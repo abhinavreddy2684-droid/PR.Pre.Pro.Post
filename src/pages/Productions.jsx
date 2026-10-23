@@ -12,9 +12,7 @@ export default function Productions() {
       <Navbar />
 
       <section className="pt-40 pb-32 px-6">
-        
         <div className="max-w-7xl mx-auto">
-          
           <SectionHeading
             eyebrow="Cinema Showcase"
             title="Featured Productions"
@@ -24,10 +22,7 @@ export default function Productions() {
 
           <div className="mt-20 grid lg:grid-cols-3 gap-8">
             {productions.map((production) => (
-              <ProductionCard
-                key={production.title}
-                production={production}
-              />
+              <ProductionCard key={production.title} production={production} />
             ))}
           </div>
         </div>

@@ -7,9 +7,7 @@ export default function MainLayout({ children }) {
       <AmbientLight />
       <GrainOverlay />
 
-      <main className="relative z-10">
-        {children}
-      </main>
+      <main className="relative z-10">{children}</main>
     </div>
   );
 }
