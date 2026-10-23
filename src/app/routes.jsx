@@ -1,12 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 
-import HomePage from "@/features/home/pages/HomePage";
-import ProductionsPage from "@/features/productions/pages/ProductionsPage";
-import ArtistsPage from "@/features/artists/pages/ArtistsPage";
-import TalentDiscoveryPage from "@/features/talent/pages/TalentDiscoveryPage";
-import TalentProfilePage from "@/features/talent/pages/TalentProfilePage";
-import TalentOnboardingPage from "@/features/talent/pages/TalentOnboardingPage";
-import TalentOwnerProfilePage from "@/features/talent/pages/TalentOwnerProfilePage";
+import { ArtistsPage } from "@/features/artists";
+import { HomePage } from "@/features/home";
+import { ProductionsPage } from "@/features/productions";
+import {
+  TalentDiscoveryPage,
+  TalentOnboardingPage,
+  TalentOwnerProfilePage,
+  TalentProfilePage,
+} from "@/features/talent";
 
 // Route table. Order matters: /talent/onboarding and /talent/me must stay above /talent/:talentId.
 const routes = [

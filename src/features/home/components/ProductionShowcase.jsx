@@ -1,7 +1,5 @@
-import ProductionCard from "@/features/productions/components/ProductionCard";
+import { ProductionCard, productions } from "@/features/productions";
 import SectionHeading from "@/components/ui/SectionHeading";
-
-import productions from "@/features/productions/data/productions";
 
 export default function ProductionShowcase() {
   return (
