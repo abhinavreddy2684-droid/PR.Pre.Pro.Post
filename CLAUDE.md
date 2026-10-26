@@ -88,6 +88,7 @@ stay above `/talent/:talentId`.
 | `/login`             | `LoginPage` (not linked from the UI yet)                  | `auth`        |
 | `/register`          | `RegisterPage` (not linked from the UI yet)               | `auth`        |
 | `/verify-email`      | `VerifyEmailPage` (`?email=` shows the address)           | `auth`        |
+| `*`                  | `NotFoundPage` (404 catch-all)                            | `auth`        |
 
 ## Import rules
 
@@ -97,7 +98,7 @@ stay above `/talent/:talentId`.
 - **Each feature's `index.js` is its public API.** Code outside a feature imports from
   `@/features/<name>`, never from its internals. Current exports:
   - `artists`: `ArtistsPage`, `ArtistCard`, `getArtists`
-  - `auth`: `LoginPage`, `RegisterPage`, `VerifyEmailPage`
+  - `auth`: `LoginPage`, `RegisterPage`, `VerifyEmailPage`, `NotFoundPage`
   - `home`: `HomePage`
   - `productions`: `ProductionsPage`, `ProductionCard`, `getProductions`
   - `talent`: `TalentDiscoveryPage`, `TalentProfilePage`, `TalentOwnerProfilePage`,
