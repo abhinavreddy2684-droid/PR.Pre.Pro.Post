@@ -4,7 +4,7 @@ import RecruiterScene from "@/features/home/components/ecosystem-story/scenes/Re
 import DiscoveryScene from "@/features/home/components/ecosystem-story/scenes/DiscoveryScene";
 import ConnectionScene from "@/features/home/components/ecosystem-story/scenes/ConnectionScene";
 
-export default function Scene({ id }) {
+export default function StoryScene({ id }) {
   if (id === "talent") return <TalentScene />;
   if (id === "portfolio") return <PortfolioScene />;
   if (id === "recruiter") return <RecruiterScene />;

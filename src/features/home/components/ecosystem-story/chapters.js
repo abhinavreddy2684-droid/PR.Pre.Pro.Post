@@ -1,4 +1,4 @@
-export const chapters = [
+export const CHAPTERS = [
   {
     id: "talent",
     label: "Talent",
@@ -35,3 +35,6 @@ export const chapters = [
     copy: "The talent gets a genuine chance to be discovered. The recruiter finds the right craft for the production. Both sides can move toward the work.",
   },
 ];
+
+/** How long each chapter shows before the story advances on its own. */
+export const STORY_INTERVAL_MS = 6500;

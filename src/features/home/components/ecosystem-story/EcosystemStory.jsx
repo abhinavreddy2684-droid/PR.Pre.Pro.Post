@@ -1,26 +1,20 @@
-import { motion } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import useAutoAdvance from "@/hooks/useAutoAdvance";
 import { pad2 } from "@/lib/format";
-import { chapters } from "@/features/home/components/ecosystem-story/chapters";
+import { CHAPTERS, STORY_INTERVAL_MS } from "@/features/home/components/ecosystem-story/chapters";
+import StoryControls from "@/features/home/components/ecosystem-story/StoryControls";
+import StoryProgress from "@/features/home/components/ecosystem-story/StoryProgress";
 import FilmGrain from "@/features/home/components/ecosystem-story/FilmGrain";
-import Scene from "@/features/home/components/ecosystem-story/scenes/StoryScene";
+import StoryScene from "@/features/home/components/ecosystem-story/scenes/StoryScene";
 
 export default function EcosystemStory() {
-  const [step, setStep] = useState(0);
   const [paused, setPaused] = useState(false);
-  const current = chapters[step];
-
-  useEffect(() => {
-    if (paused) return undefined;
-    const timer = window.setInterval(() => {
-      setStep((value) => (value + 1) % chapters.length);
-    }, 6500);
-    return () => window.clearInterval(timer);
-  }, [paused]);
+  const [step, setStep] = useAutoAdvance(CHAPTERS.length, STORY_INTERVAL_MS, paused);
+  const current = CHAPTERS[step];
 
   const move = (direction) => {
-    setStep((value) => (value + direction + chapters.length) % chapters.length);
+    setStep((value) => (value + direction + CHAPTERS.length) % CHAPTERS.length);
   };
 
   return (
@@ -41,35 +35,11 @@ export default function EcosystemStory() {
             </p>
           </div>
           <div className="rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-[7px] uppercase tracking-[0.2em] text-neutral-600">
-            {pad2(step + 1)} / 05
+            {pad2(step + 1)} / {pad2(CHAPTERS.length)}
           </div>
         </div>
 
-        <div className="mt-4 flex gap-1.5">
-          {chapters.map((chapter, index) => (
-            <button
-              key={chapter.id}
-              type="button"
-              aria-label={`Show ${chapter.label} chapter`}
-              onClick={() => setStep(index)}
-              className="group flex-1"
-            >
-              <div className="h-1 overflow-hidden rounded-full bg-white/[0.06]">
-                <motion.div
-                  className="h-full rounded-full bg-amber-400"
-                  initial={false}
-                  animate={{ width: index < step ? "100%" : index === step ? "100%" : "0%" }}
-                  transition={{ duration: 0.4 }}
-                />
-              </div>
-              <span
-                className={`mt-1 hidden text-[6px] uppercase tracking-[0.16em] sm:block ${index === step ? "text-amber-400" : "text-neutral-700"}`}
-              >
-                {chapter.label}
-              </span>
-            </button>
-          ))}
-        </div>
+        <StoryProgress step={step} onSelect={setStep} />
 
         <div className="mt-5 flex items-start justify-between gap-4">
           <div className="max-w-xl">
@@ -83,34 +53,17 @@ export default function EcosystemStory() {
               {current.copy}
             </p>
           </div>
-          <div className="flex shrink-0 gap-1.5">
-            <button
-              type="button"
-              onClick={() => move(-1)}
-              aria-label="Previous chapter"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-neutral-500 transition hover:border-amber-400/30 hover:text-amber-300"
-            >
-              <ChevronLeft size={14} />
-            </button>
-            <button
-              type="button"
-              onClick={() => move(1)}
-              aria-label="Next chapter"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-neutral-500 transition hover:border-amber-400/30 hover:text-amber-300"
-            >
-              <ChevronRight size={14} />
-            </button>
-          </div>
+          <StoryControls onPrevious={() => move(-1)} onNext={() => move(1)} />
         </div>
 
         <div className="relative mt-6 flex-1 min-h-0">
-          {chapters.map((chapter, index) => (
+          {CHAPTERS.map((chapter, index) => (
             <div
               key={chapter.id}
               className={`absolute inset-0 transition-[opacity,transform] duration-700 ease-out ${index === step ? "visible translate-y-0 opacity-100" : "pointer-events-none invisible translate-y-3 opacity-0"}`}
               aria-hidden={index !== step}
             >
-              <Scene id={chapter.id} />
+              <StoryScene id={chapter.id} />
             </div>
           ))}
         </div>

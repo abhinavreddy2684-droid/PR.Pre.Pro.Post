@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { BadgeCheck, Camera, Check, MapPin, Play } from "lucide-react";
 import StoryWindow from "@/features/home/components/ecosystem-story/StoryWindow";
 
-const crafts = [
+const PORTFOLIO_CRAFTS = [
   "Screenplay",
   "Direction",
   "Cinematography",
@@ -61,7 +61,7 @@ export default function PortfolioScene() {
         <div className="rounded-[1.25rem] border border-white/[0.08] bg-white/[0.018] p-4 sm:p-5">
           <p className="text-[7px] uppercase tracking-[0.22em] text-neutral-600">CRAFT</p>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {crafts.map((craft) => (
+            {PORTFOLIO_CRAFTS.map((craft) => (
               <span
                 key={craft}
                 className="rounded-full border border-white/[0.07] px-2.5 py-1.5 text-[7px] text-neutral-500"
