@@ -1,11 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function SectionHeading({
-  eyebrow,
-  title,
-  subtitle,
-  center = false,
-}) {
+export default function SectionHeading({ eyebrow, title, subtitle, center = false }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}

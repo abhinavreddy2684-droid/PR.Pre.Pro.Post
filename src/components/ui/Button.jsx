@@ -9,8 +9,7 @@ export default function Button({
   ...props
 }) {
   const variants = {
-    primary:
-      "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_40px_rgba(245,158,11,0.25)]",
+    primary: "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_40px_rgba(245,158,11,0.25)]",
     secondary:
       "border border-white/15 bg-white/5 hover:border-amber-500/40 text-white backdrop-blur-xl",
   };
