@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 
+/** Full-screen spinner. Not used by any page yet; kept for route-level loading. */
 export default function Loader() {
   return (
     <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">

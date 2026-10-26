@@ -1,0 +1,96 @@
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import Button from "@/components/ui/Button";
+import MobileMenu from "@/components/layout/MobileMenu";
+import { EASE_CINEMATIC } from "@/animations/easing";
+import { scrollToHash } from "@/lib/scroll";
+import { NAV_LINKS } from "@/components/layout/navLinks";
+
+// Scroll distance after which the bar turns opaque and tightens its padding.
+const SCROLLED_AFTER_PX = 24;
+
+/** Fixed top bar: brand, section links and the mobile menu. Turns opaque after scrolling. */
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > SCROLLED_AFTER_PX);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleNavigation = (event, href) => {
+    const url = new URL(href, window.location.origin);
+    const targetPath = url.pathname;
+    const targetHash = url.hash;
+    const currentPath = location.pathname;
+    const currentHash = window.location.hash;
+
+    if (currentPath === targetPath && currentHash === targetHash) {
+      event.preventDefault();
+      requestAnimationFrame(() => scrollToHash(targetHash));
+      return;
+    }
+
+    if (currentPath === targetPath && currentPath === "/") {
+      event.preventDefault();
+      navigate(targetHash ? `/${targetHash}` : "/");
+    }
+  };
+
+  return (
+    <motion.nav
+      initial={{ y: -24, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.65, ease: EASE_CINEMATIC }}
+      className={`fixed top-0 left-0 w-full z-50 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-500 ease-out ${scrolled ? "bg-black/70 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]" : "bg-black/20 backdrop-blur-md border-b border-transparent"}`}
+    >
+      <div
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between gap-3 transition-[padding] duration-500 ease-out ${scrolled ? "py-2.5 sm:py-3.5 lg:py-4" : "py-3 sm:py-4 lg:py-5"}`}
+      >
+        <Link
+          to="/"
+          onClick={(event) => handleNavigation(event, "/")}
+          className="flex min-w-0 items-center gap-2 sm:gap-3"
+        >
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.25, ease: EASE_CINEMATIC }}
+            className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full border border-amber-500/30 bg-amber-500/10 flex items-center justify-center"
+          >
+            <span className="text-sm sm:text-base text-amber-400">PR</span>
+          </motion.div>
+          <p className="truncate text-[11px] sm:text-sm lg:text-base font-black tracking-[0.18em] sm:tracking-[0.3em] text-amber-400 uppercase">
+            PRE PRO POST
+          </p>
+        </Link>
+
+        <div className="hidden lg:flex items-center gap-8 xl:gap-10">
+          {NAV_LINKS.map((item) => (
+            <Link
+              key={item.label}
+              to={item.href}
+              onClick={(event) => handleNavigation(event, item.href)}
+              className="relative py-2 text-sm uppercase tracking-[0.18em] text-neutral-300 hover:text-amber-400 transition-colors duration-300 ease-out after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-amber-400 after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+
+        <div className="hidden lg:flex">
+          <Button className="!px-6 !py-3">Start Project</Button>
+        </div>
+        <div className="lg:hidden shrink-0">
+          <MobileMenu />
+        </div>
+      </div>
+    </motion.nav>
+  );
+}
