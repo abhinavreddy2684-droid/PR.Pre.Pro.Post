@@ -5,6 +5,12 @@ import Input from "@/components/ui/Input";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Textarea from "@/components/ui/Textarea";
 
+const CONTACT_OPTIONS = [
+  { key: "camera", Icon: Camera },
+  { key: "mail", Icon: Mail },
+  { key: "chat", Icon: MessageCircle },
+];
+
 export default function ContactSection() {
   const socialButtonClass = "!p-0 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center";
 
@@ -28,9 +34,9 @@ export default function ContactSection() {
               production professionals across all 24 crafts.
             </p>
             <div className="flex items-center gap-4 mt-7">
-              {[Camera, Mail, MessageCircle].map((Icon, index) => (
+              {CONTACT_OPTIONS.map(({ key, Icon }, index) => (
                 <Button
-                  key={index}
+                  key={key}
                   variant="secondary"
                   aria-label={`Contact option ${index + 1}`}
                   className={socialButtonClass}
@@ -45,14 +51,20 @@ export default function ContactSection() {
             <Input
               type="text"
               placeholder="Your Name"
+              aria-label="Your name"
               className="px-5 py-4 rounded-2xl border border-white/10 bg-black/30 text-white focus:border-amber-500/40"
             />
             <Input
               type="email"
               placeholder="Email Address"
+              aria-label="Email address"
               className="px-5 py-4 rounded-2xl border border-white/10 bg-black/30 text-white focus:border-amber-500/40"
             />
-            <Textarea rows="5" placeholder="Tell us about your production..." />
+            <Textarea
+              rows="5"
+              placeholder="Tell us about your production..."
+              aria-label="About your production"
+            />
             <Button type="submit" className="w-full">
               Begin Production
             </Button>

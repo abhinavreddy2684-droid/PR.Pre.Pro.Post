@@ -8,13 +8,17 @@ import { EASE_CINEMATIC } from "@/animations/easing";
 import { scrollToHash } from "@/lib/scroll";
 import { NAV_LINKS } from "@/components/layout/navLinks";
 
+// Scroll distance after which the bar turns opaque and tightens its padding.
+const SCROLLED_AFTER_PX = 24;
+
+/** Fixed top bar: brand, section links and the mobile menu. Turns opaque after scrolling. */
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
+    const handleScroll = () => setScrolled(window.scrollY > SCROLLED_AFTER_PX);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -62,9 +66,9 @@ export default function Navbar() {
           >
             <span className="text-sm sm:text-base text-amber-400">PR</span>
           </motion.div>
-          <h1 className="truncate text-[11px] sm:text-sm lg:text-base font-black tracking-[0.18em] sm:tracking-[0.3em] text-amber-400 uppercase">
+          <p className="truncate text-[11px] sm:text-sm lg:text-base font-black tracking-[0.18em] sm:tracking-[0.3em] text-amber-400 uppercase">
             PRE PRO POST
-          </h1>
+          </p>
         </Link>
 
         <div className="hidden lg:flex items-center gap-8 xl:gap-10">

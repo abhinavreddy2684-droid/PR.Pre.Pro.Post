@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 import { pad2 } from "@/lib/format";
 
+/**
+ * One craft tile in the reel. `active` highlights it; other props go to the <button>.
+ * @param {{ craftId: number, active?: boolean, onClick: () => void }} props
+ */
 export default function CraftReelButton({ children, active = false, onClick, craftId, ...props }) {
   return (
     <motion.button

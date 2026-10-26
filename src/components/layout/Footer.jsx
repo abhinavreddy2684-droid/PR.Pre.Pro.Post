@@ -3,6 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NAV_LINKS } from "@/components/layout/navLinks";
 import { scrollToId, scrollToTop } from "@/lib/scroll";
 
+// Placeholder social buttons (no destinations yet); labelled by what their icon shows.
+const SOCIAL_BUTTONS = [
+  { Icon: Camera, label: "Camera" },
+  { Icon: Play, label: "Play" },
+  { Icon: Briefcase, label: "Briefcase" },
+  { Icon: Mail, label: "Mail" },
+];
+
+/** Site footer with the same section links as the navbar. */
 export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -46,9 +55,11 @@ export default function Footer() {
             </p>
 
             <div className="flex items-center gap-4 mt-6">
-              {[Camera, Play, Briefcase, Mail].map((Icon, index) => (
+              {SOCIAL_BUTTONS.map(({ Icon, label }) => (
                 <button
-                  key={index}
+                  key={label}
+                  type="button"
+                  aria-label={label}
                   className="w-11 h-11 rounded-full border border-white/10 bg-white/5 hover:border-amber-500/40 hover:bg-amber-500/10 transition-all duration-300 flex items-center justify-center"
                 >
                   <Icon size={17} />

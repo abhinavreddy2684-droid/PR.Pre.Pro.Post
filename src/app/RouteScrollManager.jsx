@@ -11,10 +11,11 @@ export default function RouteScrollManager() {
     const previousScrollRestoration = window.history.scrollRestoration;
     window.history.scrollRestoration = "manual";
 
+    let frame;
     if (hash) {
       const target = document.getElementById(hash.slice(1));
       if (target) {
-        requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => {
           target.scrollIntoView({ behavior: "smooth", block: "start" });
         });
       }
@@ -23,6 +24,7 @@ export default function RouteScrollManager() {
     }
 
     return () => {
+      cancelAnimationFrame(frame);
       window.history.scrollRestoration = previousScrollRestoration;
     };
   }, [pathname, hash]);

@@ -4,6 +4,7 @@ import indiaLocations from "./indiaLocations";
 // Reference data shared by several features. This is the seam for GET /api/bootstrap.
 
 /** All crafts: { id, title, description, talentTypes }. */
+/** @returns {import("@/lib/types").Craft[]} */
 export const getCrafts = () => crafts;
 
 export const getCraftTitles = () => crafts.map((craft) => craft.title);

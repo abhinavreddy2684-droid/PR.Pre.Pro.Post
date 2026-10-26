@@ -1,22 +1,18 @@
 import { Check, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import useClickOutside from "@/hooks/useClickOutside";
 
 export default function CustomDropdown({ value, options, onChange, placeholder = "Select" }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
-  useEffect(() => {
-    const close = (event) => {
-      if (!ref.current?.contains(event.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
-  }, []);
+  useClickOutside(ref, () => setOpen(false));
   const selected = options.find((option) => option.value === value);
   return (
     <div ref={ref} className="relative">
       <button
         type="button"
+        aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
         className={`flex w-full items-center justify-between rounded-2xl bg-white/[0.035] px-4 py-3 text-left text-sm transition hover:bg-white/[0.055] ${selected ? "text-white" : "text-white/30"}`}
       >
