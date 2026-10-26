@@ -1,4 +1,4 @@
-export default function Field({ label, value, onChange, multiline = false, placeholder }) {
+export default function SettingsField({ label, value, onChange, multiline = false, placeholder }) {
   const className =
     "w-full rounded-2xl bg-white/[0.035] px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/20 focus:bg-white/[0.055] focus:ring-1 focus:ring-amber-500/30";
   return (

@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react";
-import Field from "@/features/talent/components/settings/fields/Field";
+import { useState } from "react";
+import SettingsField from "@/features/talent/components/settings/fields/SettingsField";
 import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
+import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
 
 export default function ProfessionalSettings({ settings, onSave }) {
   const [draft, setDraft] = useState(settings);
-  const [saved, setSaved] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- re-syncs the local draft when the panel reloads settings; Phase 4 replaces this with a key-based reset.
-  useEffect(() => setDraft(settings), [settings]);
+  const [saved, flashSaved] = useSavedFlash(1400);
   const update = (key, value) => setDraft((current) => ({ ...current, [key]: value }));
   const save = () => {
     onSave(draft);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1400);
+    flashSaved();
   };
   return (
     <div className="space-y-5">
@@ -21,19 +19,19 @@ export default function ProfessionalSettings({ settings, onSave }) {
         description="Keep the information recruiters see on your public talent profile accurate and current."
       >
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field
+          <SettingsField
             label="Professional name"
             value={draft.name}
             onChange={(value) => update("name", value)}
             placeholder="Your professional name"
           />
-          <Field
+          <SettingsField
             label="Location"
             value={draft.location}
             onChange={(value) => update("location", value)}
             placeholder="City, country"
           />
-          <Field
+          <SettingsField
             label="Experience"
             value={draft.experience}
             onChange={(value) => update("experience", value)}
@@ -41,7 +39,7 @@ export default function ProfessionalSettings({ settings, onSave }) {
           />
         </div>
         <div className="mt-5">
-          <Field
+          <SettingsField
             label="Bio"
             value={draft.bio}
             onChange={(value) => update("bio", value)}

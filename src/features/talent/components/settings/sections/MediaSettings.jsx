@@ -1,9 +1,10 @@
 import { Image, Plus, Search, Trash2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
 import CustomDropdown from "@/features/talent/components/settings/fields/CustomDropdown";
 import MediaEditor from "@/features/talent/components/settings/sections/MediaEditor";
+import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
 
 export default function MediaSettings({ settings, onSave }) {
   const [media, setMedia] = useState(settings);
@@ -11,9 +12,7 @@ export default function MediaSettings({ settings, onSave }) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Latest");
-  const [saved, setSaved] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- re-syncs the local draft when the panel reloads settings; Phase 4 replaces this with a key-based reset.
-  useEffect(() => setMedia(settings), [settings]);
+  const [saved, flashSaved] = useSavedFlash(1200);
   const filtered = useMemo(
     () =>
       [...media]
@@ -31,8 +30,7 @@ export default function MediaSettings({ settings, onSave }) {
   const persist = (next) => {
     setMedia(next);
     onSave(next);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1200);
+    flashSaved();
   };
   const upload = (event) => {
     const file = event.target.files?.[0];
@@ -73,7 +71,9 @@ export default function MediaSettings({ settings, onSave }) {
           <div className="flex flex-wrap gap-2">
             {["All", "Video", "Audio", "Image"].map((item) => (
               <button
+                type="button"
                 key={item}
+                aria-pressed={filter === item}
                 onClick={() => setFilter(item)}
                 className={`rounded-full px-3.5 py-2.5 text-xs font-semibold transition ${filter === item ? "bg-amber-500 text-black" : "bg-white/[0.04] text-white/45 hover:bg-white/[0.08] hover:text-white"}`}
               >
@@ -120,12 +120,15 @@ export default function MediaSettings({ settings, onSave }) {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setEditing(item)}
                 className="rounded-full bg-white/[0.05] px-3 py-2 text-[10px] font-semibold text-white/45 opacity-70 transition group-hover:opacity-100 hover:bg-white/[0.1] hover:text-white"
               >
                 Edit
               </button>
               <button
+                aria-label={`Delete ${item.title}`}
+                type="button"
                 onClick={() => persist(media.filter((entry) => entry.id !== item.id))}
                 className="grid h-9 w-9 place-items-center rounded-full bg-white/[0.04] text-white/25 transition hover:bg-amber-500 hover:text-black"
               >

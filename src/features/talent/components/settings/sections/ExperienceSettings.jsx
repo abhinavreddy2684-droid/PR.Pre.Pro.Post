@@ -1,13 +1,11 @@
 import { Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
 import ExperienceEditor from "@/features/talent/components/settings/sections/ExperienceEditor";
 
 export default function ExperienceSettings({ settings, onSave }) {
   const [entries, setEntries] = useState(settings);
   const [editing, setEditing] = useState(null);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- re-syncs the local draft when the panel reloads settings; Phase 4 replaces this with a key-based reset.
-  useEffect(() => setEntries(settings), [settings]);
   const saveEntries = (next) => {
     setEntries(next);
     onSave(next);
@@ -21,6 +19,7 @@ export default function ExperienceSettings({ settings, onSave }) {
       >
         <div className="flex justify-end">
           <button
+            type="button"
             onClick={() => setEditing({ ...empty, index: -1 })}
             className="inline-flex items-center gap-2 rounded-full bg-amber-500 px-4 py-2.5 text-xs font-bold text-black hover:bg-amber-400"
           >
@@ -45,12 +44,15 @@ export default function ExperienceSettings({ settings, onSave }) {
                   <p className="mt-1 text-xs text-white/30">{entry.company}</p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setEditing({ ...entry, index })}
                   className="self-start rounded-full bg-white/[0.05] px-3 py-2 text-[10px] font-semibold text-white/50 hover:bg-white/[0.09] hover:text-white"
                 >
                   Edit
                 </button>
                 <button
+                  aria-label={`Delete ${entry.title || "experience"}`}
+                  type="button"
                   onClick={() => saveEntries(entries.filter((_, itemIndex) => itemIndex !== index))}
                   className="self-start grid h-8 w-8 place-items-center rounded-full bg-white/[0.04] text-white/25 hover:bg-amber-500 hover:text-black"
                 >

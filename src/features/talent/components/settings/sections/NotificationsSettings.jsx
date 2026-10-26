@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
+import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
 
 export default function NotificationsSettings({ settings, onSave }) {
   const [draft, setDraft] = useState(settings);
-  const [saved, setSaved] = useState(false);
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- re-syncs the local draft when the panel reloads settings; Phase 4 replaces this with a key-based reset.
-  useEffect(() => setDraft(settings), [settings]);
+  const [saved, flashSaved] = useSavedFlash(1400);
   const rows = [
     {
       key: "opportunities",
@@ -26,8 +25,7 @@ export default function NotificationsSettings({ settings, onSave }) {
   ];
   const save = () => {
     onSave(draft);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1400);
+    flashSaved();
   };
   return (
     <div className="space-y-5">
@@ -43,8 +41,10 @@ export default function NotificationsSettings({ settings, onSave }) {
                 <p className="mt-1 text-xs leading-5 text-white/30">{row.body}</p>
               </div>
               <button
+                type="button"
                 role="switch"
                 aria-checked={draft[row.key]}
+                aria-label={row.title}
                 onClick={() => setDraft({ ...draft, [row.key]: !draft[row.key] })}
                 className={`relative h-7 w-12 shrink-0 rounded-full transition ${draft[row.key] ? "bg-amber-500" : "bg-white/10"}`}
               >

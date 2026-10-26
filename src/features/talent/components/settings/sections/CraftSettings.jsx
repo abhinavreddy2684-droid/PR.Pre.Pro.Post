@@ -1,18 +1,17 @@
 import { Search } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getCraftTitles } from "@/catalog";
 import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
 import CustomDropdown from "@/features/talent/components/settings/fields/CustomDropdown";
 import ChipInput from "@/features/talent/components/settings/fields/ChipInput";
+import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
 
 export default function CraftSettings({ settings, onSave }) {
   const [draft, setDraft] = useState(settings);
   const [query, setQuery] = useState("");
-  const [saved, setSaved] = useState(false);
+  const [saved, flashSaved] = useSavedFlash(1400);
   const [mode, setMode] = useState("supporting");
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- re-syncs the local draft when the panel reloads settings; Phase 4 replaces this with a key-based reset.
-  useEffect(() => setDraft(settings), [settings]);
   const allCrafts = useMemo(() => getCraftTitles(), []);
   const filtered = useMemo(
     () => allCrafts.filter((craft) => craft.toLowerCase().includes(query.trim().toLowerCase())),
@@ -39,8 +38,7 @@ export default function CraftSettings({ settings, onSave }) {
   };
   const save = () => {
     onSave(draft);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 1400);
+    flashSaved();
   };
   const options = [
     { value: "primary", label: "Primary craft" },
@@ -55,12 +53,16 @@ export default function CraftSettings({ settings, onSave }) {
         <div className="mx-auto max-w-[360px] rounded-full bg-white/[0.055] p-1">
           <div className="grid grid-cols-2 gap-1">
             <button
+              type="button"
+              aria-pressed={mode === "primary"}
               onClick={() => setMode("primary")}
               className={`rounded-full px-4 py-2 text-xs font-semibold transition ${mode === "primary" ? "bg-amber-500 text-black shadow-[0_4px_20px_rgba(245,158,11,.12)]" : "text-white/35 hover:text-white/65"}`}
             >
               Primary
             </button>
             <button
+              type="button"
+              aria-pressed={mode === "supporting"}
               onClick={() => setMode("supporting")}
               className={`rounded-full px-4 py-2 text-xs font-semibold transition ${mode === "supporting" ? "bg-amber-500 text-black shadow-[0_4px_20px_rgba(245,158,11,.12)]" : "text-white/35 hover:text-white/65"}`}
             >
@@ -119,7 +121,9 @@ export default function CraftSettings({ settings, onSave }) {
             const supporting = isSupporting(craft);
             return (
               <button
+                type="button"
                 key={craft}
+                aria-pressed={primary || supporting}
                 onClick={() => selectCraft(craft)}
                 className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${primary ? "bg-amber-500 text-black shadow-[0_0_24px_rgba(245,158,11,.13)]" : supporting ? "bg-white/[0.11] text-white ring-1 ring-amber-500/30" : "bg-white/[0.035] text-white/50 hover:-translate-y-0.5 hover:bg-white/[0.07] hover:text-white"}`}
               >

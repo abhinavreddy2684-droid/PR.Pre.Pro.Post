@@ -20,6 +20,7 @@ export default function ChipInput({ values, onChange, placeholder }) {
             {item}
             <button
               type="button"
+              aria-label={`Remove ${item}`}
               onClick={() => onChange(values.filter((current) => current !== item))}
               className="text-amber-300/50 hover:text-amber-300"
             >
@@ -42,6 +43,7 @@ export default function ChipInput({ values, onChange, placeholder }) {
           className="min-w-0 flex-1 rounded-xl bg-white/[0.035] px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/20 focus:bg-white/[0.055]"
         />
         <button
+          aria-label="Add"
           type="button"
           onClick={add}
           className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-white/50 transition hover:bg-amber-500 hover:text-black"
