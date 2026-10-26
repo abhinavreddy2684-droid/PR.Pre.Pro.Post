@@ -35,7 +35,7 @@ export default function MobileMenuOverlay({ onClose, onNavigate }) {
       className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex flex-col"
       ref={dialogRef}
       tabIndex={-1}
-      style={{ outline: "none" }}
+      style={{ outlineStyle: "none" }}
       role="dialog"
       aria-modal="true"
       aria-label="Mobile navigation"

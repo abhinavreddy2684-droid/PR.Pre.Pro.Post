@@ -25,7 +25,7 @@ export default function SettingsModal({
       aria-modal="true"
       aria-label={title}
       tabIndex={-1}
-      style={{ outline: "none" }}
+      style={{ outlineStyle: "none" }}
       className="fixed inset-0 z-[100] grid place-items-center bg-black/70 p-5 backdrop-blur-sm"
     >
       <div

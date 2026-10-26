@@ -12,7 +12,7 @@ const openDialogs = [];
  * inside it, and Escape calls `onClose` (only for the top-most dialog when several are open).
  *
  * The element in `ref` should have tabIndex={-1} so it can take focus; give it
- * style={{ outline: "none" }} so the container itself never shows a focus ring.
+ * style={{ outlineStyle: "none" }} so the dialog element itself never shows a focus indicator.
  * @param {{ current: HTMLElement | null }} ref
  * @param {() => void} onClose
  */

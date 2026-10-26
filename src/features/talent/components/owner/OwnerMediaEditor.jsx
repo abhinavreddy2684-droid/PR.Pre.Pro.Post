@@ -13,7 +13,7 @@ export default function OwnerMediaEditor({ item, onClose, onSave }) {
       aria-modal="true"
       aria-label="Edit media"
       tabIndex={-1}
-      style={{ outline: "none" }}
+      style={{ outlineStyle: "none" }}
       className="fixed inset-0 z-[90] grid place-items-center bg-black/70 p-5 backdrop-blur-sm"
     >
       <div className="w-full max-w-xl rounded-3xl border border-white/10 bg-[#121212] p-6 shadow-2xl sm:p-8">

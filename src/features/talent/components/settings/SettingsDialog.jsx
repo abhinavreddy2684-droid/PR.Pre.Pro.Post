@@ -31,7 +31,7 @@ export default function SettingsDialog({ active, selected, session, onSelect, on
       <motion.aside
         ref={dialogRef}
         tabIndex={-1}
-        style={{ outline: "none" }}
+        style={{ outlineStyle: "none" }}
         role="dialog"
         aria-modal="true"
         aria-label="Talent settings"
