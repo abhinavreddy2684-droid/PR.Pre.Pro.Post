@@ -1,4 +1,4 @@
-import { ArtistCard, artists } from "@/features/artists";
+import { ArtistCard, getArtists } from "@/features/artists";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function TalentNetwork() {
@@ -12,7 +12,7 @@ export default function TalentNetwork() {
         />
 
         <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {artists.map((artist) => (
+          {getArtists().map((artist) => (
             <ArtistCard key={artist.name} artist={artist} />
           ))}
         </div>

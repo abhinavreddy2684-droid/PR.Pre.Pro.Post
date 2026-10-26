@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-import artists from "@/features/artists/data/artists";
+import { getArtists } from "@/features/artists/data";
 
 import ArtistCard from "@/features/artists/components/ArtistCard";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -21,7 +21,7 @@ export default function ArtistsPage() {
           />
 
           <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {artists.map((artist) => (
+            {getArtists().map((artist) => (
               <ArtistCard key={artist.name} artist={artist} />
             ))}
           </div>

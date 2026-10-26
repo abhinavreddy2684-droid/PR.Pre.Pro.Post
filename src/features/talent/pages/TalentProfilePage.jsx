@@ -23,83 +23,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
-import talents from "@/features/talent/data/talents";
+import { MEDIA_SEED, getTalentById } from "@/features/talent/data";
 import { pad2 } from "@/lib/format";
-
-const mediaSeed = [
-  {
-    id: 1,
-    title: "Featured performance",
-    description: "A live vocal performance recorded during a recent production session.",
-    type: "Video",
-    year: 2026,
-    likes: 184,
-  },
-  {
-    id: 2,
-    title: "Studio session",
-    description: "A studio recording session focused on an intimate cinematic vocal arrangement.",
-    type: "Audio",
-    year: 2026,
-    likes: 127,
-  },
-  {
-    id: 3,
-    title: "Behind the performance",
-    description: "A quiet look at the preparation behind a feature-film recording.",
-    type: "Image",
-    year: 2025,
-    likes: 96,
-  },
-  {
-    id: 4,
-    title: "Live stage performance",
-    description: "Captured during a live performance with a full ensemble and backing musicians.",
-    type: "Video",
-    year: 2025,
-    likes: 241,
-  },
-  {
-    id: 5,
-    title: "Original soundtrack",
-    description: "Original vocal work created for an independent short-film soundtrack.",
-    type: "Audio",
-    year: 2025,
-    likes: 168,
-  },
-  {
-    id: 6,
-    title: "Recording day",
-    description: "From the recording floor during a collaborative studio production.",
-    type: "Image",
-    year: 2024,
-    likes: 82,
-  },
-  {
-    id: 7,
-    title: "Acoustic session",
-    description: "An acoustic interpretation recorded for a small independent project.",
-    type: "Video",
-    year: 2024,
-    likes: 113,
-  },
-  {
-    id: 8,
-    title: "Vocal arrangement",
-    description: "Layered vocal arrangement prepared for a cinematic score.",
-    type: "Audio",
-    year: 2023,
-    likes: 74,
-  },
-  {
-    id: 9,
-    title: "On set",
-    description: "A production still from a day spent recording vocals for screen.",
-    type: "Image",
-    year: 2023,
-    likes: 61,
-  },
-];
 
 const mediaIcon = { Video, Audio: Music2, Image: ImageIcon };
 
@@ -181,7 +106,7 @@ function Gallery({ talent }) {
   const [sort, setSort] = useState("Latest");
   const [visibleCount, setVisibleCount] = useState(6);
   const [uploadName, setUploadName] = useState("");
-  const media = Array.isArray(talent.media) ? talent.media : mediaSeed;
+  const media = Array.isArray(talent.media) ? talent.media : MEDIA_SEED;
   const filtered = useMemo(
     () =>
       [...media]
@@ -520,7 +445,7 @@ function Availability() {
 
 export default function TalentProfilePage() {
   const { talentId } = useParams();
-  const talent = talents.find((item) => String(item.id) === talentId);
+  const talent = getTalentById(talentId);
   if (!talent)
     return (
       <div className="min-h-screen bg-[#050505] text-white">

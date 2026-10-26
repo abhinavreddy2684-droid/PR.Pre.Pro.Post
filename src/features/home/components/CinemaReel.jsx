@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, BriefcaseBusiness, Clapperboard, Layers3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import crafts from "@/catalog/crafts";
+import { getCrafts } from "@/catalog";
 import Button from "@/components/ui/Button";
 import CraftReelButton from "@/features/home/components/CraftReelButton";
 import { pad2 } from "@/lib/format";
 
 export default function CinemaReel() {
   const navigate = useNavigate();
+  const crafts = getCrafts();
   const [activeCraft, setActiveCraft] = useState(crafts[1]);
   const [shouldScrollToCraft, setShouldScrollToCraft] = useState(false);
   const detailSectionRef = useRef(null);

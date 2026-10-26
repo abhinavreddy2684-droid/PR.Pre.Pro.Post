@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import HeroSection from "@/components/sections/hero/HeroSection";
 import Button from "@/components/ui/Button";
-import crafts from "@/catalog/crafts";
-import indiaLocations from "@/catalog/indiaLocations";
+import { getCities, getCrafts, getStates } from "@/catalog";
 import { pad2 } from "@/lib/format";
 
 const steps = [
@@ -289,6 +288,7 @@ function IdentityStep({ profile, updateProfile, onContinue }) {
 function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }) {
   const [query, setQuery] = useState("");
   const canContinue = Boolean(profile.primaryCraft);
+  const crafts = getCrafts();
   const normalizedQuery = query.trim().toLowerCase();
   const filteredCrafts = normalizedQuery
     ? crafts.filter((craft) => craft.title.toLowerCase().includes(normalizedQuery))
@@ -459,8 +459,8 @@ function CraftGroup({ options, selected, multiple = false, onSelect }) {
 }
 
 function LocationStep({ profile, updateProfile, onContinue }) {
-  const states = useMemo(() => Object.keys(indiaLocations), []);
-  const cities = profile.state ? indiaLocations[profile.state] : [];
+  const states = useMemo(() => getStates(), []);
+  const cities = getCities(profile.state);
   const canContinue = Boolean(profile.state && profile.city);
 
   const selectState = (value) => {

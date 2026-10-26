@@ -16,11 +16,9 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import talents from "@/features/talent/data/talents";
-import crafts from "@/catalog/crafts";
+import { getCraftTitles } from "@/catalog";
+import { getOwnerTalent, readStoredSettings, saveStoredSettings } from "@/features/talent/data";
 import { EASE_CINEMATIC } from "@/animations/easing";
-
-const STORAGE_KEY = "pre-pro-post:talent-settings";
 
 const sections = [
   {
@@ -87,28 +85,9 @@ const fallbackMedia = [
 
 const defaultNotifications = { opportunities: true, profileActivity: true, platformUpdates: false };
 
-function readStored() {
-  if (typeof window === "undefined") return null;
-  try {
-    const value = window.localStorage.getItem(STORAGE_KEY);
-    return value ? JSON.parse(value) : null;
-  } catch {
-    return null;
-  }
-}
-
-function saveSettings(settings) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-  } catch {
-    /* optional persistence */
-  }
-}
-
 function getInitialSettings() {
-  const talent = talents[0] || {};
-  const stored = readStored();
+  const talent = getOwnerTalent() || {};
+  const stored = readStoredSettings();
   return {
     professional: {
       name: stored?.professional?.name ?? talent.name ?? "",
@@ -350,7 +329,7 @@ function CraftSettings({ settings, onSave }) {
   const [mode, setMode] = useState("supporting");
   // eslint-disable-next-line react-hooks/set-state-in-effect -- re-syncs the local draft when the panel reloads settings; Phase 4 replaces this with a key-based reset.
   useEffect(() => setDraft(settings), [settings]);
-  const allCrafts = useMemo(() => crafts.map((craft) => craft.title), []);
+  const allCrafts = useMemo(() => getCraftTitles(), []);
   const filtered = useMemo(
     () => allCrafts.filter((craft) => craft.toLowerCase().includes(query.trim().toLowerCase())),
     [allCrafts, query],
@@ -1092,7 +1071,7 @@ export default function TalentSettingsPanel({ open, onClose, initialSection = "p
   const update = (key, value) =>
     setSettings((current) => {
       const next = { ...current, [key]: value };
-      saveSettings(next);
+      saveStoredSettings(next);
       return next;
     });
   const eyebrow =

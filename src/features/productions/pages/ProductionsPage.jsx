@@ -1,7 +1,7 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-import productions from "@/features/productions/data/productions";
+import { getProductions } from "@/features/productions/data";
 
 import ProductionCard from "@/features/productions/components/ProductionCard";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -21,7 +21,7 @@ export default function ProductionsPage() {
           />
 
           <div className="mt-20 grid lg:grid-cols-3 gap-8">
-            {productions.map((production) => (
+            {getProductions().map((production) => (
               <ProductionCard key={production.title} production={production} />
             ))}
           </div>

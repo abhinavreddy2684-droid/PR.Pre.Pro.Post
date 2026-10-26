@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import TalentMarketplaceCard from "@/features/talent/components/discovery/TalentMarketplaceCard";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
-import talents from "@/features/talent/data/talents";
+import { getTalents } from "@/features/talent/data";
 
 const formatCraft = (craft) => {
   if (!craft) return "Talent Network";
@@ -16,6 +16,7 @@ const formatCraft = (craft) => {
 };
 
 export default function TalentDiscoveryPage() {
+  const talents = getTalents();
   const [searchParams] = useSearchParams();
   const craft = searchParams.get("craft");
   const [search, setSearch] = useState("");
@@ -24,7 +25,7 @@ export default function TalentDiscoveryPage() {
 
   const craftTalents = useMemo(
     () => (craft ? talents.filter((talent) => talent.craft === craft) : talents),
-    [craft],
+    [craft, talents],
   );
 
   const locations = [

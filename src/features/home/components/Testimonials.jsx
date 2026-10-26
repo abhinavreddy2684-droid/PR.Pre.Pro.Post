@@ -1,7 +1,7 @@
 import TestimonialCard from "@/features/home/components/TestimonialCard";
 import SectionHeading from "@/components/ui/SectionHeading";
 
-import testimonials from "@/features/home/data/testimonials";
+import { getTestimonials } from "@/features/home/data";
 
 export default function Testimonials() {
   return (
@@ -15,7 +15,7 @@ export default function Testimonials() {
         />
 
         <div className="mt-10 sm:mt-12 lg:mt-14 grid md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {testimonials.map((item) => (
+          {getTestimonials().map((item) => (
             <TestimonialCard key={item.name} item={item} />
           ))}
         </div>
