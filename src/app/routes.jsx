@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import { ArtistsPage } from "@/features/artists";
-import { LoginPage, RegisterPage, VerifyEmailPage } from "@/features/auth";
+import { LoginPage, NotFoundPage, RegisterPage, VerifyEmailPage } from "@/features/auth";
 import { HomePage } from "@/features/home";
 import { ProductionsPage } from "@/features/productions";
 import {
@@ -12,6 +12,7 @@ import {
 } from "@/features/talent";
 
 // Route table. Order matters: /talent/onboarding and /talent/me must stay above /talent/:talentId.
+// React Router ranks routes by specificity, so the "*" catch-all only matches unknown paths.
 const routes = [
   { path: "/", Page: HomePage },
   { path: "/talent", Page: TalentDiscoveryPage },
@@ -23,6 +24,7 @@ const routes = [
   { path: "/login", Page: LoginPage },
   { path: "/register", Page: RegisterPage },
   { path: "/verify-email", Page: VerifyEmailPage },
+  { path: "*", Page: NotFoundPage },
 ];
 
 export default function AppRoutes() {
