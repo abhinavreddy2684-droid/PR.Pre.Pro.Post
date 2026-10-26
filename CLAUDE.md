@@ -50,11 +50,11 @@ src/
   app/                     App.jsx (BrowserRouter shell), routes.jsx (route table),
                            RouteScrollManager.jsx (scroll-to-top / hash handling)
   features/                one folder per product area, see "Features" below
-    artists/ home/ productions/ talent/
+    artists/ auth/ home/ productions/ talent/
       index.js             the feature's public API
       pages/               route-level components (*Page.jsx)
       components/          feature-private components
-      hooks/               feature-private hooks (talent only today)
+      hooks/               feature-private hooks (talent and auth today)
       data/                mock data behind accessor functions (see "Mock vs real")
   components/              shared, feature-agnostic building blocks
     layout/                Navbar, MobileMenu, Footer, OnboardingBrand, navLinks.js
@@ -85,6 +85,9 @@ stay above `/talent/:talentId`.
 | `/talent/:talentId`  | `TalentProfilePage` (public view)                         | `talent`      |
 | `/productions`       | `ProductionsPage`                                         | `productions` |
 | `/artists`           | `ArtistsPage`                                             | `artists`     |
+| `/login`             | `LoginPage` (not linked from the UI yet)                  | `auth`        |
+| `/register`          | `RegisterPage` (not linked from the UI yet)               | `auth`        |
+| `/verify-email`      | `VerifyEmailPage` (`?email=` shows the address)           | `auth`        |
 
 ## Import rules
 
@@ -94,6 +97,7 @@ stay above `/talent/:talentId`.
 - **Each feature's `index.js` is its public API.** Code outside a feature imports from
   `@/features/<name>`, never from its internals. Current exports:
   - `artists`: `ArtistsPage`, `ArtistCard`, `getArtists`
+  - `auth`: `LoginPage`, `RegisterPage`, `VerifyEmailPage`
   - `home`: `HomePage`
   - `productions`: `ProductionsPage`, `ProductionCard`, `getProductions`
   - `talent`: `TalentDiscoveryPage`, `TalentProfilePage`, `TalentOwnerProfilePage`,
@@ -116,18 +120,19 @@ stay above `/talent/:talentId`.
 
 **Everything is mock. There is no network code, no auth and no `.env` API URL in the app.**
 
-| Area                                                                 | State                                                                                                                                                                                    |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Talent list and profiles (`/talent`, `/talent/:id`)                  | Mock. `features/talent/data/talents.js`, read via `getTalents` / `getTalentById`. Ids are numbers.                                                                                       |
-| Owner profile (`/talent/me`)                                         | Mock. `getOwnerTalent()` returns the first mock talent. There is no "signed-in user".                                                                                                    |
-| Talent settings panel                                                | Persists to `localStorage` key `pre-pro-post:talent-settings` (`settingsStorage.js`), read back by the owner talent. Not sent anywhere.                                                  |
-| Onboarding (`/talent/onboarding`)                                    | Local component state only. Nothing is submitted. The chosen photo is a browser object URL.                                                                                              |
-| Media upload / gallery                                               | Mock seed (`MEDIA_SEED`). The file input only reads the file name; nothing is uploaded. Likes are static numbers.                                                                        |
-| Availability calendar                                                | UI over mock data, not persisted.                                                                                                                                                        |
-| Productions, artists, testimonials                                   | Mock data via `getProductions`, `getArtists`, `getTestimonials`.                                                                                                                         |
-| Crafts, states, cities                                               | Static files in `src/catalog/` (`getCrafts`, `getStates`, `getCities`). This is the seam to replace with `GET /api/bootstrap`. Mock crafts have numeric `id` and are matched by `title`. |
-| Contact form (home)                                                  | Markup only. It has no submit handler.                                                                                                                                                   |
-| Login, signup, recruiter side, offers, search ranking, notifications | Not built. No pages, no routes.                                                                                                                                                          |
+| Area                                                  | State                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Talent list and profiles (`/talent`, `/talent/:id`)   | Mock. `features/talent/data/talents.js`, read via `getTalents` / `getTalentById`. Ids are numbers.                                                                                                                                                                                                                                                                                           |
+| Owner profile (`/talent/me`)                          | Mock. `getOwnerTalent()` returns the first mock talent. There is no "signed-in user".                                                                                                                                                                                                                                                                                                        |
+| Talent settings panel                                 | Persists to `localStorage` key `pre-pro-post:talent-settings` (`settingsStorage.js`), read back by the owner talent. Not sent anywhere.                                                                                                                                                                                                                                                      |
+| Onboarding (`/talent/onboarding`)                     | Local component state only. Nothing is submitted. The chosen photo is a browser object URL.                                                                                                                                                                                                                                                                                                  |
+| Media upload / gallery                                | Mock seed (`MEDIA_SEED`). The file input only reads the file name; nothing is uploaded. Likes are static numbers.                                                                                                                                                                                                                                                                            |
+| Availability calendar                                 | UI over mock data, not persisted.                                                                                                                                                                                                                                                                                                                                                            |
+| Productions, artists, testimonials                    | Mock data via `getProductions`, `getArtists`, `getTestimonials`.                                                                                                                                                                                                                                                                                                                             |
+| Crafts, states, cities                                | Static files in `src/catalog/` (`getCrafts`, `getStates`, `getCities`). This is the seam to replace with `GET /api/bootstrap`. Mock crafts have numeric `id` and are matched by `title`.                                                                                                                                                                                                     |
+| Contact form (home)                                   | Markup only. It has no submit handler.                                                                                                                                                                                                                                                                                                                                                       |
+| Login, register, verify-email pages (`features/auth`) | UI exists at `/login`, `/register`, `/verify-email` but is **not connected**: client-side validation only, and a valid submit shows "Not connected yet" unless a page is given an `onSubmit` / `onResend` prop. No session, token or `lib/api` yet. Not linked from the Navbar; the wiring PR adds the entry point. No Google sign-in or password reset (the backend has no such endpoints). |
+| Recruiter side, offers, search ranking, notifications | Not built. No pages, no routes.                                                                                                                                                                                                                                                                                                                                                              |
 
 Rules that follow from this:
 
