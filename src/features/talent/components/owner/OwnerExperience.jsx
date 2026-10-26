@@ -58,6 +58,7 @@ export default function OwnerExperience({ talent, onManage }) {
           </p>
           <div className="flex gap-2">
             <button
+              type="button"
               disabled={!start}
               onClick={() => setStart((value) => Math.max(0, value - 1))}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-white/50 disabled:opacity-20"
@@ -65,6 +66,7 @@ export default function OwnerExperience({ talent, onManage }) {
               <ChevronLeft size={16} />
             </button>
             <button
+              type="button"
               disabled={start >= entries.length - 3}
               onClick={() => setStart((value) => Math.min(entries.length - 3, value + 1))}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-white/50 disabled:opacity-20"

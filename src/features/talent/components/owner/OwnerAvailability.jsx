@@ -1,24 +1,18 @@
-import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import { useMemo, useState } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SectionAction from "@/features/talent/components/owner/SectionAction";
+import { dateKey, monthGrid, monthLabel } from "@/lib/calendar";
+import CalendarNav from "@/features/talent/components/calendar/CalendarNav";
+import WeekdayHeader from "@/features/talent/components/calendar/WeekdayHeader";
+import { nextAvailability } from "@/lib/availability";
 
 export default function OwnerAvailability({ onManage }) {
   const [cursor, setCursor] = useState(() => new Date());
   const [selectedDay, setSelectedDay] = useState(null);
   const [states, setStates] = useState({});
-  const monthLabel = useMemo(
-    () => new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(cursor),
-    [cursor],
-  );
-  const { firstDay, daysInMonth } = useMemo(() => {
-    const year = cursor.getFullYear();
-    const month = cursor.getMonth();
-    return {
-      firstDay: new Date(year, month, 1).getDay(),
-      daysInMonth: new Date(year, month + 1, 0).getDate(),
-    };
-  }, [cursor]);
+  const label = monthLabel(cursor);
+  const { firstDay, daysInMonth } = useMemo(() => monthGrid(cursor), [cursor]);
   const today = useMemo(() => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -27,7 +21,7 @@ export default function OwnerAvailability({ onManage }) {
   const getStatus = (day) => {
     const date = new Date(cursor.getFullYear(), cursor.getMonth(), day);
     if (date < today) return "unavailable";
-    return states[date.toISOString().slice(0, 10)] || "available";
+    return states[dateKey(date)] || "available";
   };
   const meta = {
     available: { label: "Open", dot: "bg-amber-500", text: "text-amber-400" },
@@ -41,16 +35,8 @@ export default function OwnerAvailability({ onManage }) {
   const cycle = (day) => {
     const date = new Date(cursor.getFullYear(), cursor.getMonth(), day);
     if (date < today) return;
-    const key = date.toISOString().slice(0, 10);
-    setStates((current) => ({
-      ...current,
-      [key]:
-        current[key] === "tentative"
-          ? "unavailable"
-          : current[key] === "unavailable"
-            ? "available"
-            : "tentative",
-    }));
+    const key = dateKey(date);
+    setStates((current) => ({ ...current, [key]: nextAvailability(current[key] || "available") }));
     setSelectedDay(day);
   };
   const selectedStatus = selectedDay ? getStatus(selectedDay) : null;
@@ -82,36 +68,14 @@ export default function OwnerAvailability({ onManage }) {
           </div>
           {selectedDay && (
             <p className="mt-5 text-sm text-neutral-400">
-              {monthLabel} {selectedDay} ·{" "}
+              {label} {selectedDay} ·{" "}
               <span className={meta[selectedStatus].text}>{meta[selectedStatus].label}</span>
             </p>
           )}
         </div>
         <div className="w-full max-w-[400px] rounded-[2rem] bg-black/25 p-5 sm:p-6">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => shift(-1)}
-              aria-label="Previous month"
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <p className="text-sm font-bold text-white">{monthLabel}</p>
-            <button
-              onClick={() => shift(1)}
-              aria-label="Next month"
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-          <div className="mt-5 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold uppercase tracking-wider text-white/25">
-            {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
-              <span key={`${day}-${index}`} className="py-1">
-                {day}
-              </span>
-            ))}
-          </div>
+          <CalendarNav label={label} onPrevious={() => shift(-1)} onNext={() => shift(1)} />
+          <WeekdayHeader />
           <div className="mt-1 grid grid-cols-7 gap-1">
             {Array.from({ length: firstDay }).map((_, index) => (
               <span key={`blank-${index}`} className="h-9" />
@@ -121,6 +85,7 @@ export default function OwnerAvailability({ onManage }) {
               const isSelected = selectedDay === day;
               return (
                 <button
+                  type="button"
                   key={day}
                   disabled={
                     status === "unavailable" &&

@@ -1,22 +1,14 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo, useState } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
+import { monthGrid, monthLabel } from "@/lib/calendar";
+import CalendarNav from "@/features/talent/components/calendar/CalendarNav";
+import WeekdayHeader from "@/features/talent/components/calendar/WeekdayHeader";
 
 export default function PublicAvailability() {
   const [cursor, setCursor] = useState(() => new Date());
   const [selectedDay, setSelectedDay] = useState(null);
-  const monthLabel = useMemo(
-    () => new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(cursor),
-    [cursor],
-  );
-  const { firstDay, daysInMonth } = useMemo(() => {
-    const year = cursor.getFullYear();
-    const month = cursor.getMonth();
-    return {
-      firstDay: new Date(year, month, 1).getDay(),
-      daysInMonth: new Date(year, month + 1, 0).getDate(),
-    };
-  }, [cursor]);
+  const label = monthLabel(cursor);
+  const { firstDay, daysInMonth } = useMemo(() => monthGrid(cursor), [cursor]);
   const getStatus = (day) => {
     const date = new Date(cursor.getFullYear(), cursor.getMonth(), day);
     const today = new Date();
@@ -56,7 +48,7 @@ export default function PublicAvailability() {
           </div>
           {selectedDay && (
             <p className="mt-5 text-sm text-neutral-400">
-              {monthLabel} {selectedDay} ·{" "}
+              {label} {selectedDay} ·{" "}
               <span className={meta[getStatus(selectedDay)].text}>
                 {meta[getStatus(selectedDay)].label}
               </span>
@@ -64,30 +56,8 @@ export default function PublicAvailability() {
           )}
         </div>
         <div className="w-full max-w-[400px] rounded-[2rem] bg-black/25 p-5 sm:p-6">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => shift(-1)}
-              aria-label="Previous month"
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <p className="text-sm font-bold text-white">{monthLabel}</p>
-            <button
-              onClick={() => shift(1)}
-              aria-label="Next month"
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-          <div className="mt-5 grid grid-cols-7 gap-1 text-center text-[9px] font-semibold uppercase tracking-wider text-white/25">
-            {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
-              <span key={`${day}-${i}`} className="py-1">
-                {day}
-              </span>
-            ))}
-          </div>
+          <CalendarNav label={label} onPrevious={() => shift(-1)} onNext={() => shift(1)} />
+          <WeekdayHeader />
           <div className="mt-1 grid grid-cols-7 gap-1">
             {Array.from({ length: firstDay }).map((_, i) => (
               <span key={`blank-${i}`} className="h-9" />
@@ -97,6 +67,7 @@ export default function PublicAvailability() {
               const isSelected = selectedDay === day;
               return (
                 <button
+                  type="button"
                   key={day}
                   disabled={status === "unavailable"}
                   onClick={() => setSelectedDay(day)}

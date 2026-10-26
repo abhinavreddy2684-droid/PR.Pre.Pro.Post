@@ -75,6 +75,7 @@ export default function PublicExperience({ talent }) {
           </p>
           <div className="flex gap-2">
             <button
+              type="button"
               disabled={!canPrev}
               onClick={() => setStart((value) => Math.max(0, value - 1))}
               className="grid h-11 w-11 place-items-center rounded-full bg-white/5 text-white/60 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
@@ -82,6 +83,7 @@ export default function PublicExperience({ talent }) {
               <ChevronLeft size={17} />
             </button>
             <button
+              type="button"
               disabled={!canNext}
               onClick={() => setStart((value) => Math.min(entries.length - 3, value + 1))}
               className="grid h-11 w-11 place-items-center rounded-full bg-white/5 text-white/60 transition hover:bg-amber-500 hover:text-black disabled:cursor-not-allowed disabled:opacity-30"

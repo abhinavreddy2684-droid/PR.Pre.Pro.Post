@@ -37,6 +37,7 @@ export default function OwnerMediaCard({ item, talent, onEdit, onDelete }) {
         )}
         <div className="absolute bottom-4 right-4 flex gap-2 opacity-0 transition group-hover:opacity-100">
           <button
+            type="button"
             aria-label="Edit media"
             onClick={() => onEdit(item)}
             className="grid h-9 w-9 place-items-center rounded-full bg-white/90 text-black transition hover:bg-amber-500"
@@ -44,6 +45,7 @@ export default function OwnerMediaCard({ item, talent, onEdit, onDelete }) {
             <Pencil size={14} />
           </button>
           <button
+            type="button"
             aria-label="Remove media"
             onClick={() => onDelete(item)}
             className="grid h-9 w-9 place-items-center rounded-full bg-amber-500 text-black transition hover:bg-amber-400"

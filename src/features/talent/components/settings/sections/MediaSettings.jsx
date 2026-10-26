@@ -5,6 +5,7 @@ import FloatingCard from "@/features/talent/components/settings/fields/FloatingC
 import CustomDropdown from "@/features/talent/components/settings/fields/CustomDropdown";
 import MediaEditor from "@/features/talent/components/settings/sections/MediaEditor";
 import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
+import { mediaTypeFromFile } from "@/lib/media";
 
 export default function MediaSettings({ settings, onSave }) {
   const [media, setMedia] = useState(settings);
@@ -35,11 +36,7 @@ export default function MediaSettings({ settings, onSave }) {
   const upload = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    const type = file.type.startsWith("video")
-      ? "Video"
-      : file.type.startsWith("audio")
-        ? "Audio"
-        : "Image";
+    const type = mediaTypeFromFile(file);
     persist([
       {
         id: `media-${Date.now()}`,
