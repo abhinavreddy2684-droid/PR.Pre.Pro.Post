@@ -5,8 +5,11 @@ import { Menu, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Button from "@/components/ui/Button";
+import { EASE_CINEMATIC } from "@/animations/easing";
+import { scrollToHash } from "@/lib/scroll";
+import { NAV_LINKS } from "@/components/layout/navLinks";
 
-export default function MobileMenu({ navLinks }) {
+export default function MobileMenu() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,16 +38,7 @@ export default function MobileMenu({ navLinks }) {
     // Explicitly handle that case so Home always means "go to the top" and
     // the current anchor can still be reselected.
     if (location.pathname === targetPath && currentHash === targetHash) {
-      requestAnimationFrame(() => {
-        if (targetHash) {
-          document.getElementById(targetHash.slice(1))?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        } else {
-          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        }
-      });
+      requestAnimationFrame(() => scrollToHash(targetHash));
       return;
     }
 
@@ -57,7 +51,7 @@ export default function MobileMenu({ navLinks }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.28, ease: EASE_CINEMATIC }}
         className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex flex-col"
         role="dialog"
         aria-modal="true"
@@ -79,7 +73,7 @@ export default function MobileMenu({ navLinks }) {
 
         <nav className="flex-1 overflow-y-auto px-5 py-8 sm:py-14">
           <div className="mx-auto max-w-sm flex flex-col gap-3">
-            {navLinks.map((item, index) => (
+            {NAV_LINKS.map((item, index) => (
               <motion.div
                 key={item.label}
                 initial={{ opacity: 0, x: 24 }}
@@ -87,7 +81,7 @@ export default function MobileMenu({ navLinks }) {
                 transition={{
                   delay: index * 0.05,
                   duration: 0.4,
-                  ease: [0.22, 1, 0.36, 1],
+                  ease: EASE_CINEMATIC,
                 }}
               >
                 <button

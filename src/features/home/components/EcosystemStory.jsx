@@ -14,6 +14,7 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { pad2 } from "@/lib/format";
 
 const chapters = [
   {
@@ -438,7 +439,7 @@ export default function EcosystemStory() {
             </p>
           </div>
           <div className="rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-[7px] uppercase tracking-[0.2em] text-neutral-600">
-            {String(step + 1).padStart(2, "0")} / 05
+            {pad2(step + 1)} / 05
           </div>
         </div>
 

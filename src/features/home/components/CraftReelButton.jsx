@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { pad2 } from "@/lib/format";
 
 export default function CraftReelButton({ children, active = false, onClick, craftId, ...props }) {
   return (
@@ -26,7 +27,7 @@ export default function CraftReelButton({ children, active = false, onClick, cra
           active ? "text-black/60" : "text-neutral-600"
         }`}
       >
-        {String(craftId).padStart(2, "0")}
+        {pad2(craftId)}
       </span>
     </motion.button>
   );

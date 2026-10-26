@@ -1,14 +1,7 @@
 import { Camera, Play, Briefcase, Mail } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
-const links = [
-  { label: "Home", href: "/" },
-  { label: "Crafts", href: "/#cinema-reel" },
-  { label: "Talent Network", href: "/talent" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
-];
+import { NAV_LINKS } from "@/components/layout/navLinks";
+import { scrollToId, scrollToTop } from "@/lib/scroll";
 
 export default function Footer() {
   const location = useLocation();
@@ -22,10 +15,7 @@ export default function Footer() {
     event.preventDefault();
 
     if (url.hash) {
-      document.getElementById(url.hash.slice(1))?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToId(url.hash.slice(1));
       if (window.location.hash !== url.hash) {
         navigate(`${url.pathname}${url.hash}`);
       }
@@ -35,7 +25,7 @@ export default function Footer() {
     if (window.location.hash) {
       navigate(url.pathname);
     } else {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      scrollToTop();
     }
   };
 
@@ -72,7 +62,7 @@ export default function Footer() {
               Navigation
             </h3>
             <div className="mt-5 flex flex-col gap-3.5">
-              {links.map((item) => (
+              {NAV_LINKS.map((item) => (
                 <Link
                   key={item.label}
                   to={item.href}

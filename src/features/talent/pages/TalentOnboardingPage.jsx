@@ -7,6 +7,7 @@ import HeroSection from "@/components/sections/hero/HeroSection";
 import Button from "@/components/ui/Button";
 import crafts from "@/catalog/crafts";
 import indiaLocations from "@/catalog/indiaLocations";
+import { pad2 } from "@/lib/format";
 
 const steps = [
   { number: "01", label: "Identity" },
@@ -167,9 +168,7 @@ function OnboardingShell({ step, onBack, children }) {
             Back
           </button>
 
-          <p className="text-[9px] uppercase tracking-[0.28em] text-white/20">
-            {String(step).padStart(2, "0")} / 03
-          </p>
+          <p className="text-[9px] uppercase tracking-[0.28em] text-white/20">{pad2(step)} / 03</p>
         </div>
       </main>
     </div>
@@ -392,7 +391,7 @@ function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }
                   </p>
                 </div>
                 <span className="grid h-9 w-9 place-items-center rounded-full border border-white/10 bg-white/[0.03] text-[10px] text-white/45">
-                  {String(profile.supportingCrafts.length).padStart(2, "0")}
+                  {pad2(profile.supportingCrafts.length)}
                 </span>
               </div>
 

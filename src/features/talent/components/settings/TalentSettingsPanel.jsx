@@ -18,6 +18,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import talents from "@/features/talent/data/talents";
 import crafts from "@/catalog/crafts";
+import { EASE_CINEMATIC } from "@/animations/easing";
 
 const STORAGE_KEY = "pre-pro-post:talent-settings";
 
@@ -1126,7 +1127,7 @@ export default function TalentSettingsPanel({ open, onClose, initialSection = "p
             initial={{ opacity: 0, y: 28, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
-            transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.38, ease: EASE_CINEMATIC }}
           >
             <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-amber-500/[0.06] blur-3xl" />
             <div className="pointer-events-none absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-amber-500/[0.035] blur-3xl" />

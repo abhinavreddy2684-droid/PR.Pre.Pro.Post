@@ -4,17 +4,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Button from "@/components/ui/Button";
 import MobileMenu from "@/components/layout/MobileMenu";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Crafts", href: "/#cinema-reel" },
-  { label: "Talent Network", href: "/talent" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
-];
-
-const navEase = [0.22, 1, 0.36, 1];
+import { EASE_CINEMATIC } from "@/animations/easing";
+import { scrollToHash } from "@/lib/scroll";
+import { NAV_LINKS } from "@/components/layout/navLinks";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -37,15 +29,7 @@ export default function Navbar() {
 
     if (currentPath === targetPath && currentHash === targetHash) {
       event.preventDefault();
-      requestAnimationFrame(() => {
-        if (targetHash) {
-          document
-            .getElementById(targetHash.slice(1))
-            ?.scrollIntoView({ behavior: "smooth", block: "start" });
-        } else {
-          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        }
-      });
+      requestAnimationFrame(() => scrollToHash(targetHash));
       return;
     }
 
@@ -59,7 +43,7 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.65, ease: navEase }}
+      transition={{ duration: 0.65, ease: EASE_CINEMATIC }}
       className={`fixed top-0 left-0 w-full z-50 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-500 ease-out ${scrolled ? "bg-black/70 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.18)]" : "bg-black/20 backdrop-blur-md border-b border-transparent"}`}
     >
       <div
@@ -73,7 +57,7 @@ export default function Navbar() {
           <motion.div
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.25, ease: navEase }}
+            transition={{ duration: 0.25, ease: EASE_CINEMATIC }}
             className="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-full border border-amber-500/30 bg-amber-500/10 flex items-center justify-center"
           >
             <span className="text-sm sm:text-base text-amber-400">PR</span>
@@ -84,7 +68,7 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden lg:flex items-center gap-8 xl:gap-10">
-          {navLinks.map((item) => (
+          {NAV_LINKS.map((item) => (
             <Link
               key={item.label}
               to={item.href}
@@ -100,7 +84,7 @@ export default function Navbar() {
           <Button className="!px-6 !py-3">Start Project</Button>
         </div>
         <div className="lg:hidden shrink-0">
-          <MobileMenu navLinks={navLinks} />
+          <MobileMenu />
         </div>
       </div>
     </motion.nav>

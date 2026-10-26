@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { scrollToTop } from "@/lib/scroll";
 
 // Scrolls to the top on route changes, or to #hash targets, and keeps the browser from
 // restoring old scroll positions while the app is mounted.
@@ -18,7 +19,7 @@ export default function RouteScrollManager() {
         });
       }
     } else {
-      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      scrollToTop("auto");
     }
 
     return () => {

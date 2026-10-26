@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import crafts from "@/catalog/crafts";
 import Button from "@/components/ui/Button";
 import CraftReelButton from "@/features/home/components/CraftReelButton";
+import { pad2 } from "@/lib/format";
 
 export default function CinemaReel() {
   const navigate = useNavigate();
@@ -116,9 +117,7 @@ export default function CinemaReel() {
               <p className="uppercase tracking-[0.28em] text-[10px] font-semibold text-amber-400">
                 Cinema Craft
               </p>
-              <span className="font-mono text-xs text-amber-500/60">
-                {String(activeCraft.id).padStart(2, "0")}
-              </span>
+              <span className="font-mono text-xs text-amber-500/60">{pad2(activeCraft.id)}</span>
             </div>
             <h3 className="mt-3 text-4xl sm:text-5xl font-black tracking-tight leading-[0.95]">
               {activeCraft.title}
@@ -201,7 +200,7 @@ export default function CinemaReel() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.13),transparent_45%)] pointer-events-none" />
             <div className="relative max-w-4xl">
               <p className="uppercase tracking-[0.35em] text-xs text-amber-400">
-                Cinema Craft · {String(activeCraft.id).padStart(2, "0")}
+                Cinema Craft · {pad2(activeCraft.id)}
               </p>
               <h3 className="mt-5 text-5xl md:text-7xl font-black tracking-tight">
                 {activeCraft.title}

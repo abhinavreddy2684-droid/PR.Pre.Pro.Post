@@ -29,6 +29,7 @@ import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
 import TalentSettingsPanel from "@/features/talent/components/settings/TalentSettingsPanel";
 import talents from "@/features/talent/data/talents";
+import { pad2 } from "@/lib/format";
 
 const mediaSeed = [
   {
@@ -200,9 +201,7 @@ function MediaCard({ item, talent, onEdit, onDelete }) {
               {item.description}
             </p>
           </div>
-          <span className="text-xs font-bold text-white/15">
-            {String(item.id).padStart(2, "0")}
-          </span>
+          <span className="text-xs font-bold text-white/15">{pad2(item.id)}</span>
         </div>
         <div className="mt-6 flex items-center justify-between">
           <span className="text-[10px] uppercase tracking-[0.18em] text-white/25">
