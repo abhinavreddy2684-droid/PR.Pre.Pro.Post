@@ -6,7 +6,12 @@ import { pad2 } from "@/lib/format";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
 import CraftGroup from "@/features/talent/components/onboarding/CraftGroup";
 
-export default function CraftStep({ profile, updateProfile, toggleSupportingCraft, onContinue }) {
+export default function CraftStep({
+  profile,
+  selectPrimaryCraft,
+  toggleSupportingCraft,
+  onContinue,
+}) {
   const [query, setQuery] = useState("");
   const canContinue = Boolean(profile.primaryCraft);
   const crafts = getCrafts();
@@ -15,7 +20,6 @@ export default function CraftStep({ profile, updateProfile, toggleSupportingCraf
     ? crafts.filter((craft) => craft.title.toLowerCase().includes(normalizedQuery))
     : crafts;
 
-  const primaryOptions = filteredCrafts;
   const supportingCraftOptions = filteredCrafts.filter(
     (craft) => craft.title !== profile.primaryCraft,
   );
@@ -57,6 +61,7 @@ export default function CraftStep({ profile, updateProfile, toggleSupportingCraf
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search a craft..."
+                aria-label="Search a craft"
                 className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/25"
               />
             </label>
@@ -86,17 +91,9 @@ export default function CraftStep({ profile, updateProfile, toggleSupportingCraf
               </div>
 
               <CraftGroup
-                options={primaryOptions}
+                options={filteredCrafts}
                 selected={profile.primaryCraft}
-                onSelect={(title) => {
-                  updateProfile("primaryCraft", title);
-                  if (profile.supportingCrafts.includes(title)) {
-                    updateProfile(
-                      "supportingCrafts",
-                      profile.supportingCrafts.filter((item) => item !== title),
-                    );
-                  }
-                }}
+                onSelect={selectPrimaryCraft}
               />
             </section>
 

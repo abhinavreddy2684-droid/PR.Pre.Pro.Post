@@ -1,10 +1,10 @@
-export const steps = [
+export const ONBOARDING_STEPS = [
   { number: "01", label: "Identity" },
   { number: "02", label: "Craft" },
   { number: "03", label: "Location" },
 ];
 
-export const initialProfile = {
+export const INITIAL_PROFILE = {
   fullName: "",
   professionalName: "",
   photo: "",
@@ -13,3 +13,5 @@ export const initialProfile = {
   state: "",
   city: "",
 };
+
+export const MIN_FULL_NAME_LENGTH = 2;

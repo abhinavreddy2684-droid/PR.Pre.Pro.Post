@@ -1,53 +1,36 @@
-import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import HeroSection from "@/components/sections/hero/HeroSection";
-import { initialProfile } from "@/features/talent/components/onboarding/steps";
+import useOnboardingForm, { STEP_COMPLETE } from "@/features/talent/hooks/useOnboardingForm";
 import OnboardingShell from "@/features/talent/components/onboarding/OnboardingShell";
 import IdentityStep from "@/features/talent/components/onboarding/IdentityStep";
 import CraftStep from "@/features/talent/components/onboarding/CraftStep";
 import LocationStep from "@/features/talent/components/onboarding/LocationStep";
-import Completion from "@/features/talent/components/onboarding/Completion";
+import OnboardingComplete from "@/features/talent/components/onboarding/OnboardingComplete";
 
 export default function TalentOnboardingPage() {
-  const [step, setStep] = useState(0);
-  const [profile, setProfile] = useState(initialProfile);
   const navigate = useNavigate();
-
-  const updateProfile = (field, value) => {
-    setProfile((current) => ({ ...current, [field]: value }));
-  };
-
-  const toggleSupportingCraft = (craft) => {
-    setProfile((current) => ({
-      ...current,
-      supportingCrafts: current.supportingCrafts.includes(craft)
-        ? current.supportingCrafts.filter((item) => item !== craft)
-        : [...current.supportingCrafts, craft],
-    }));
-  };
+  const form = useOnboardingForm();
+  const { step, profile } = form;
 
   if (step === 0) {
-    return <HeroSection variant="onboarding" onPrimaryAction={() => setStep(1)} />;
+    return <HeroSection variant="onboarding" onPrimaryAction={() => form.goTo(1)} />;
   }
 
-  if (step === 4) {
-    return <Completion profile={profile} onEnter={() => navigate("/talent")} />;
+  if (step === STEP_COMPLETE) {
+    return <OnboardingComplete profile={profile} onEnter={() => navigate("/talent")} />;
   }
 
   return (
-    <OnboardingShell
-      step={step}
-      profile={profile}
-      onBack={() => setStep((current) => (current === 1 ? 0 : current - 1))}
-    >
+    <OnboardingShell step={step} onBack={form.goBack}>
       <AnimatePresence mode="wait">
         {step === 1 && (
           <IdentityStep
             key="identity"
             profile={profile}
-            updateProfile={updateProfile}
-            onContinue={() => setStep(2)}
+            updateProfile={form.updateProfile}
+            onPhotoChange={form.setPhoto}
+            onContinue={() => form.goTo(2)}
           />
         )}
 
@@ -55,9 +38,9 @@ export default function TalentOnboardingPage() {
           <CraftStep
             key="craft"
             profile={profile}
-            updateProfile={updateProfile}
-            toggleSupportingCraft={toggleSupportingCraft}
-            onContinue={() => setStep(3)}
+            selectPrimaryCraft={form.selectPrimaryCraft}
+            toggleSupportingCraft={form.toggleSupportingCraft}
+            onContinue={() => form.goTo(3)}
           />
         )}
 
@@ -65,8 +48,9 @@ export default function TalentOnboardingPage() {
           <LocationStep
             key="location"
             profile={profile}
-            updateProfile={updateProfile}
-            onContinue={() => setStep(4)}
+            updateProfile={form.updateProfile}
+            selectState={form.selectState}
+            onContinue={() => form.goTo(STEP_COMPLETE)}
           />
         )}
       </AnimatePresence>

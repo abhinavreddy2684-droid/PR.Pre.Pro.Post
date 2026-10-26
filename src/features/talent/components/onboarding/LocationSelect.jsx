@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import useClickOutside from "@/hooks/useClickOutside";
 
-export default function CustomSelect({
+export default function LocationSelect({
   label,
   value,
   options,
@@ -13,20 +14,21 @@ export default function CustomSelect({
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
 
-  useEffect(() => {
-    const close = (event) => {
-      if (!rootRef.current?.contains(event.target)) setOpen(false);
-    };
-    document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
-  }, []);
+  useClickOutside(rootRef, () => setOpen(false));
 
   return (
-    <div ref={rootRef} className="relative">
+    <div
+      ref={rootRef}
+      className="relative"
+      onKeyDown={(event) => {
+        if (event.key === "Escape") setOpen(false);
+      }}
+    >
       <p className="mb-3 text-[10px] uppercase tracking-[0.22em] text-white/35">{label}</p>
       <button
         type="button"
         disabled={disabled}
+        aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
         className={`flex min-h-[76px] w-full items-center justify-between rounded-[1.35rem] border px-5 text-left transition-all ${
           open

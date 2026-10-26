@@ -24,6 +24,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import Button from "@/components/ui/Button";
+import OnboardingBrand from "@/components/layout/OnboardingBrand";
 
 const morphIcons = [
   Camera,
@@ -169,19 +170,7 @@ export default function HeroSection({ variant = "home", onPrimaryAction }) {
 
       {isOnboarding && (
         <header className="absolute left-0 right-0 top-0 z-40 mx-auto flex max-w-[1600px] items-center justify-between px-8 py-7 lg:px-14 xl:px-16">
-          <div className="flex items-center gap-3">
-            <div className="grid h-11 w-11 place-items-center rounded-full border border-amber-400/30 bg-amber-500/[0.07] text-sm tracking-wide text-amber-300">
-              PR
-            </div>
-            <div>
-              <p className="font-['Bebas_Neue'] text-2xl tracking-[0.24em] text-white sm:text-3xl">
-                PRE PRO POST
-              </p>
-              <p className="mt-0.5 text-[9px] uppercase tracking-[0.34em] text-amber-300/55">
-                Talent onboarding
-              </p>
-            </div>
-          </div>
+          <OnboardingBrand />
           <p className="hidden text-[10px] uppercase tracking-[0.3em] text-white/30 sm:block">
             Build your place in cinema
           </p>

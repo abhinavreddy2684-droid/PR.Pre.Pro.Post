@@ -3,17 +3,12 @@ import { ArrowRight } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { getCities, getStates } from "@/catalog";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
-import CustomSelect from "@/features/talent/components/onboarding/CustomSelect";
+import LocationSelect from "@/features/talent/components/onboarding/LocationSelect";
 
-export default function LocationStep({ profile, updateProfile, onContinue }) {
+export default function LocationStep({ profile, updateProfile, selectState, onContinue }) {
   const states = useMemo(() => getStates(), []);
   const cities = getCities(profile.state);
   const canContinue = Boolean(profile.state && profile.city);
-
-  const selectState = (value) => {
-    updateProfile("state", value);
-    updateProfile("city", "");
-  };
 
   return (
     <StepFrame
@@ -28,9 +23,9 @@ export default function LocationStep({ profile, updateProfile, onContinue }) {
       description="Your location is structured to keep the Talent Network consistent and searchable. India is currently the first supported country."
     >
       <div className="grid gap-4 lg:grid-cols-3">
-        <CustomSelect label="Country" value="India" disabled options={["India"]} />
+        <LocationSelect label="Country" value="India" disabled options={["India"]} />
 
-        <CustomSelect
+        <LocationSelect
           label="State / Union Territory"
           value={profile.state}
           placeholder="Select state"
@@ -38,7 +33,7 @@ export default function LocationStep({ profile, updateProfile, onContinue }) {
           onChange={selectState}
         />
 
-        <CustomSelect
+        <LocationSelect
           label="City"
           value={profile.city}
           placeholder={profile.state ? "Select city" : "Select state first"}

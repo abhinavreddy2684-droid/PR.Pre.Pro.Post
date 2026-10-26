@@ -2,7 +2,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
 
-export default function Completion({ profile, onEnter }) {
+export default function OnboardingComplete({ profile, onEnter }) {
   const displayName = profile.professionalName || profile.fullName;
 
   return (

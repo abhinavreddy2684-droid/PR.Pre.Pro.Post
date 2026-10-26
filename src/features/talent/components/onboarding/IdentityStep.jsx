@@ -2,16 +2,17 @@ import { useRef } from "react";
 import { ArrowRight, Upload, UserRound } from "lucide-react";
 import Button from "@/components/ui/Button";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
-import Field from "@/features/talent/components/onboarding/Field";
+import UnderlineField from "@/features/talent/components/onboarding/UnderlineField";
+import { MIN_FULL_NAME_LENGTH } from "@/features/talent/components/onboarding/steps";
 
-export default function IdentityStep({ profile, updateProfile, onContinue }) {
+export default function IdentityStep({ profile, updateProfile, onPhotoChange, onContinue }) {
   const inputRef = useRef(null);
-  const canContinue = profile.fullName.trim().length > 1;
+  const canContinue = profile.fullName.trim().length >= MIN_FULL_NAME_LENGTH;
 
   const handlePhoto = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    updateProfile("photo", URL.createObjectURL(file));
+    onPhotoChange(file);
   };
 
   return (
@@ -35,7 +36,7 @@ export default function IdentityStep({ profile, updateProfile, onContinue }) {
           {profile.photo ? (
             <img
               src={profile.photo}
-              alt=""
+              alt="Your profile photo"
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
@@ -61,7 +62,7 @@ export default function IdentityStep({ profile, updateProfile, onContinue }) {
         </button>
 
         <div className="space-y-5">
-          <Field
+          <UnderlineField
             label="Full name"
             required
             value={profile.fullName}
@@ -69,7 +70,7 @@ export default function IdentityStep({ profile, updateProfile, onContinue }) {
             placeholder="Enter your full name"
             autoFocus
           />
-          <Field
+          <UnderlineField
             label="Professional name"
             optional
             value={profile.professionalName}
