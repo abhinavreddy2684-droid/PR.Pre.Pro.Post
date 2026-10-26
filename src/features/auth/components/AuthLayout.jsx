@@ -1,0 +1,102 @@
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const PERFORATIONS = Array.from({ length: 24 }, (_, index) => index);
+
+function FilmEdge({ side }) {
+  const edge = side === "left" ? "left-0 border-r" : "right-0 border-l";
+  return (
+    <div
+      className={`absolute bottom-0 top-0 hidden w-10 flex-col items-center border-white/10 opacity-10 lg:flex ${edge}`}
+      aria-hidden="true"
+    >
+      {PERFORATIONS.map((hole) => (
+        <div key={hole} className="mt-4 h-4 w-6 rounded-sm border border-white/30" />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Cinematic two-column shell for the auth pages: brand header, large headline on the left
+ * (shown above the form on small screens) and the form `children` on the right.
+ * @param {object} props
+ * @param {string} props.eyebrow small caption above the headline
+ * @param {import("react").ReactNode} props.title headline
+ * @param {string} props.description supporting copy under the headline
+ * @param {import("react").ReactNode} [props.footer] links under the form
+ */
+export default function AuthLayout({ eyebrow, title, description, children, footer }) {
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#040404] text-white selection:bg-amber-400/20">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute left-1/2 top-1/2 h-[1400px] w-[1400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/10 blur-[200px]" />
+        <div className="absolute left-[10%] top-[-20%] h-[160%] w-[520px] rotate-[22deg] bg-gradient-to-b from-amber-400/10 to-transparent blur-3xl" />
+        <div className="absolute inset-0 opacity-[0.045] [background-image:radial-gradient(rgba(255,255,255,0.8)_0.5px,transparent_0.5px)] [background-size:4px_4px]" />
+        <FilmEdge side="left" />
+        <FilmEdge side="right" />
+      </div>
+
+      <header className="relative z-10 mx-auto flex max-w-[1600px] items-center justify-between px-8 py-7 lg:px-14 xl:px-16">
+        <Link to="/" className="group flex min-w-0 items-center gap-2 sm:gap-3">
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.25 }}
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-amber-500/30 bg-amber-500/10 sm:h-12 sm:w-12"
+          >
+            <span className="text-sm text-amber-400 sm:text-base">PR</span>
+          </motion.div>
+          <span className="truncate text-[11px] font-black uppercase tracking-[0.18em] text-amber-400 sm:text-sm sm:tracking-[0.3em] lg:text-base">
+            PRE PRO POST
+          </span>
+        </Link>
+        <Link
+          to="/"
+          className="rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-white/75 transition hover:bg-white/[0.04] hover:text-white"
+        >
+          Back to home
+        </Link>
+      </header>
+
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-96px)] max-w-[1600px] items-center px-8 pb-16 pt-6 lg:px-14 xl:px-16">
+        <div className="grid w-full items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 xl:gap-28">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="hidden lg:block"
+          >
+            <p className="mb-6 text-[10px] uppercase tracking-[0.38em] text-amber-300/85">
+              {eyebrow}
+            </p>
+            <p className="max-w-3xl font-sans text-[5.5rem] font-black leading-[0.8] tracking-[-0.06em] xl:text-[6.5rem] 2xl:text-[7.25rem]">
+              {title}
+            </p>
+            <div className="mt-9 h-px w-28 bg-gradient-to-r from-amber-500 to-transparent" />
+            <p className="mt-7 max-w-xl text-[1.05rem] leading-8 text-white/75">{description}</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.05 }}
+            className="w-full max-w-2xl lg:ml-auto"
+          >
+            <div className="mb-9 lg:hidden">
+              <p className="mb-3 text-[10px] uppercase tracking-[0.32em] text-amber-300/85">
+                {eyebrow}
+              </p>
+              <p className="font-sans text-5xl font-black leading-[0.82] tracking-[-0.05em] text-white sm:text-6xl">
+                {title}
+              </p>
+              <p className="mt-5 text-sm leading-6 text-white/70">{description}</p>
+            </div>
+            {children}
+            {footer && <div className="mt-10 border-t border-white/[0.10] pt-7">{footer}</div>}
+          </motion.div>
+        </div>
+      </section>
+    </main>
+  );
+}

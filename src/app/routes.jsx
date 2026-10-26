@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import { ArtistsPage } from "@/features/artists";
+import { LoginPage, RegisterPage, VerifyEmailPage } from "@/features/auth";
 import { HomePage } from "@/features/home";
 import { ProductionsPage } from "@/features/productions";
 import {
@@ -19,6 +20,9 @@ const routes = [
   { path: "/talent/:talentId", Page: TalentProfilePage },
   { path: "/productions", Page: ProductionsPage },
   { path: "/artists", Page: ArtistsPage },
+  { path: "/login", Page: LoginPage },
+  { path: "/register", Page: RegisterPage },
+  { path: "/verify-email", Page: VerifyEmailPage },
 ];
 
 export default function AppRoutes() {
