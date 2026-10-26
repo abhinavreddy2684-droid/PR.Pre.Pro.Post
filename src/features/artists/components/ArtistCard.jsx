@@ -56,6 +56,7 @@ export default function ArtistCard({ artist }) {
         </div>
 
         <button
+          type="button"
           className="
             mt-10 w-full py-4 rounded-full
             bg-amber-500 text-black

@@ -1,4 +1,5 @@
-import crafts from "@/catalog/crafts";
+import { getCrafts } from "@/catalog";
+import { readStoredSettings } from "./settingsStorage";
 
 const playbackSingers = [
   {
@@ -221,7 +222,7 @@ const images = [
 const genres = ["Film", "Indie", "Commercial", "Classical", "Contemporary", "Experimental"];
 const availability = ["Available", "Available", "On request"];
 
-const generatedTalents = crafts
+const generatedTalents = getCrafts()
   .filter((craft) => craft.title !== "Playback Singing")
   .flatMap((craft, craftIndex) =>
     craft.talentTypes.slice(0, 3).map((role, index) => {
@@ -247,21 +248,9 @@ const generatedTalents = crafts
     }),
   );
 
-const profileStorageKey = "pre-pro-post:talent-settings";
-
-const readProfileOverrides = () => {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(profileStorageKey);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-};
-
 const ownerTalent = new Proxy(playbackSingers[0], {
   get(target, property) {
-    const stored = readProfileOverrides();
+    const stored = readStoredSettings();
     if (!stored) return target[property];
     if (property === "name") return stored.professional?.name ?? target.name;
     if (property === "location") return stored.professional?.location ?? target.location;

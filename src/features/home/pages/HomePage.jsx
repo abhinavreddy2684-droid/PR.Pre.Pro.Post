@@ -2,7 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 import HeroSection from "@/components/sections/hero/HeroSection";
-import CinemaReel from "@/features/home/components/CinemaReel";
+import CinemaReel from "@/features/home/components/cinema-reel/CinemaReel";
 import AboutSection from "@/features/home/components/AboutSection";
 import HowItWorks from "@/features/home/components/HowItWorks";
 import Testimonials from "@/features/home/components/Testimonials";

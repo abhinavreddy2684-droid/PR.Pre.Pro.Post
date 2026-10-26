@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 import Button from "@/components/ui/Button";
 
+/**
+ * Card for one talent on the discovery grid, linking to their profile.
+ * @param {{ talent: import("@/lib/types").Talent }} props
+ */
 export default function TalentMarketplaceCard({ talent }) {
   const navigate = useNavigate();
 

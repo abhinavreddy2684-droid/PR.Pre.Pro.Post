@@ -1,15 +1,17 @@
 import { Camera, Play, Briefcase, Mail } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { NAV_LINKS } from "@/components/layout/navLinks";
+import { scrollToId, scrollToTop } from "@/lib/scroll";
 
-const links = [
-  { label: "Home", href: "/" },
-  { label: "Crafts", href: "/#cinema-reel" },
-  { label: "Talent Network", href: "/talent" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "About", href: "/#about" },
-  { label: "Contact", href: "/#contact" },
+// Placeholder social buttons (no destinations yet); labelled by what their icon shows.
+const SOCIAL_BUTTONS = [
+  { Icon: Camera, label: "Camera" },
+  { Icon: Play, label: "Play" },
+  { Icon: Briefcase, label: "Briefcase" },
+  { Icon: Mail, label: "Mail" },
 ];
 
+/** Site footer with the same section links as the navbar. */
 export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,10 +24,7 @@ export default function Footer() {
     event.preventDefault();
 
     if (url.hash) {
-      document.getElementById(url.hash.slice(1))?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToId(url.hash.slice(1));
       if (window.location.hash !== url.hash) {
         navigate(`${url.pathname}${url.hash}`);
       }
@@ -35,7 +34,7 @@ export default function Footer() {
     if (window.location.hash) {
       navigate(url.pathname);
     } else {
-      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      scrollToTop();
     }
   };
 
@@ -56,9 +55,11 @@ export default function Footer() {
             </p>
 
             <div className="flex items-center gap-4 mt-6">
-              {[Camera, Play, Briefcase, Mail].map((Icon, index) => (
+              {SOCIAL_BUTTONS.map(({ Icon, label }) => (
                 <button
-                  key={index}
+                  key={label}
+                  type="button"
+                  aria-label={label}
                   className="w-11 h-11 rounded-full border border-white/10 bg-white/5 hover:border-amber-500/40 hover:bg-amber-500/10 transition-all duration-300 flex items-center justify-center"
                 >
                   <Icon size={17} />
@@ -72,7 +73,7 @@ export default function Footer() {
               Navigation
             </h3>
             <div className="mt-5 flex flex-col gap-3.5">
-              {links.map((item) => (
+              {NAV_LINKS.map((item) => (
                 <Link
                   key={item.label}
                   to={item.href}

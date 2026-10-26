@@ -1,4 +1,4 @@
-import { ProductionCard, productions } from "@/features/productions";
+import { ProductionCard, getProductions } from "@/features/productions";
 import SectionHeading from "@/components/ui/SectionHeading";
 
 export default function ProductionShowcase() {
@@ -12,7 +12,7 @@ export default function ProductionShowcase() {
         />
 
         <div className="mt-20 grid lg:grid-cols-3 gap-8">
-          {productions.map((production) => (
+          {getProductions().map((production) => (
             <ProductionCard key={production.title} production={production} />
           ))}
         </div>
