@@ -7,7 +7,6 @@ export const ONBOARDING_STEPS = [
 export const INITIAL_PROFILE = {
   fullName: "",
   professionalName: "",
-  photo: "",
   primaryCraft: "", // craft slug
   supportingCrafts: [], // craft slugs
   state: "", // state id (bootstrap locations)

@@ -3,8 +3,16 @@ import Button from "@/components/ui/Button";
 import { useCatalog } from "@/catalog";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
 import LocationSelect from "@/features/talent/components/onboarding/LocationSelect";
+import OnboardingError from "@/features/talent/components/onboarding/OnboardingError";
 
-export default function LocationStep({ profile, updateProfile, selectState, onContinue }) {
+export default function LocationStep({
+  profile,
+  updateProfile,
+  selectState,
+  pending,
+  error,
+  onFinish,
+}) {
   const catalog = useCatalog();
   const toOption = (place) => ({ value: place.id, label: place.name });
   const stateOptions = catalog.states.map(toOption);
@@ -49,13 +57,19 @@ export default function LocationStep({ profile, updateProfile, selectState, onCo
         />
       </div>
 
+      {error && (
+        <div className="mt-8">
+          <OnboardingError error={error} />
+        </div>
+      )}
+
       <div className="mt-8 flex justify-end">
         <Button
-          disabled={!canContinue}
-          onClick={onContinue}
+          disabled={!canContinue || pending}
+          onClick={onFinish}
           className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35"
         >
-          Finish onboarding
+          {pending ? "Creating your profile…" : "Finish onboarding"}
           <ArrowRight size={17} />
         </Button>
       </div>
