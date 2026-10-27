@@ -155,7 +155,7 @@ Auth is real (see the table). Everything else listed as mock still is.
 Rules that follow from this:
 
 - Page and component code reads data only through the accessor functions (`getTalents()`,
-  `getCrafts()`, ...), never by importing a data file directly. That keeps the swap to the API in
+  `useCatalog()`, ...), never by importing a data file directly. That keeps the swap to the API in
   one place per feature.
 - No half-wired UI. Do not add a button, form, toggle or link that looks functional but does
   nothing. Either wire it end to end, or leave it out, or render it visibly disabled with the
