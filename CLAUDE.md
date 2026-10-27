@@ -36,10 +36,16 @@ npm run format         # prettier --write .
 npm run format:check   # prettier --check . (what to run before committing)
 ```
 
-Copy `.env.example` to `.env.local` (git-ignored; only `.env.example` is committed). Today the only
-variable is `VITE_ALLOWED_HOSTS`, a comma-separated list of extra hostnames the dev server accepts
-(for example an ngrok tunnel). Add every new variable to `.env.example`. Only `VITE_`-prefixed
-variables reach browser code, so never put a secret in one.
+Copy `.env.example` to `.env.local` (git-ignored; only `.env.example` is committed). Variables:
+
+| Variable             | Meaning                                                                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`  | Backend origin, default `http://localhost:8000`. Use `localhost`, never `127.0.0.1`: the dev server is `http://localhost:5173` and the refresh cookie is same-site. |
+| `VITE_ALLOWED_HOSTS` | Comma-separated extra hostnames the dev server accepts (for example an ngrok tunnel).                                                                               |
+
+Add every new variable to `.env.example`. Only `VITE_`-prefixed variables reach browser code, so
+never put a secret in one. The backend must list the dev origin in `CORS_ALLOWED_ORIGINS` (its
+default is `FRONTEND_URL`, `http://localhost:5173`).
 
 ## Folder map
 
@@ -66,10 +72,14 @@ src/
   hooks/                   shared hooks: useAutoAdvance, useClickOutside, useDialog
   lib/                     pure helpers: availability, calendar, cn, format, media, scroll,
                            types.js (JSDoc typedefs)
+    api/                   the HTTP client: every request to the backend goes through here
   styles/index.css         the single global stylesheet (Tailwind layers + global CSS)
 ```
 
-`src/lib/api/` does not exist yet. It is where all HTTP code goes once the backend is wired in.
+`src/lib/api/` is the only place that talks HTTP: `apiFetch` / `api.get|post|put|patch|delete`
+(base URL, JSON, `credentials: "include"`, Bearer token, one shared refresh-and-retry on a 401,
+absolute `next` URLs accepted), `ApiError` with `{ status, code, message, details }`, and the
+helpers `userMessage(error)` and `fieldErrors(error)` for showing errors.
 
 ### Features and routes
 
@@ -154,16 +164,18 @@ or is missing something, raise it on the backend repo; do not work around it or 
 frontend. Do not invent endpoints: if `openapi.yaml` does not list it, it does not exist.
 
 - **All HTTP goes through `src/lib/api/`.** No `fetch` or XHR in components, hooks or pages.
-  Components call feature-level functions that call `lib/api`. (The folder is not created yet.)
+  Components call feature-level functions that call `lib/api`.
 - **Auth.** The access token lives **in memory only**: a module variable or store. Never write it
   to `localStorage`, `sessionStorage`, cookies, IndexedDB or the URL, and never log it. The refresh
   token is an **HttpOnly cookie that JS never reads or sets**; the browser sends it, so requests to
   the refresh endpoint need `credentials: "include"`. After a page reload the access token is gone
-  and must be re-obtained through the refresh flow. The exact endpoints are TODO: read them from
-  `openapi.yaml`.
+  and must be re-obtained through the refresh flow. `src/lib/api/token.js` holds the token;
+  `apiFetch` refreshes once on a 401 (concurrent 401s share one `POST /api/auth/refresh`) and
+  retries; a 401 from refresh means signed out.
 - **Errors** have one shape: `{"error": {"code", "message", "details"}}`. Branch on `code`, show
   `message` to users only when it is meant for them, and use `details` for field-level form errors.
-  Parse this in one place in `lib/api`. The list of codes is TODO (see `openapi.yaml`).
+  Parsed only in `src/lib/api/errors.js`. 429 means rate limited (`userMessage` says so). The full
+  list of codes is TODO (see `openapi.yaml` and the backend services).
 - **Lists use cursor pagination:** `{ "next", "previous", "results" }`. Follow `next` / `previous`
   as opaque URLs or cursors; do not build page numbers or offsets, and do not assume a total count.
 - **Ids are UUID strings.** Treat them as opaque strings; never `Number()`, `parseInt` or compare
@@ -180,8 +192,8 @@ frontend. Do not invent endpoints: if `openapi.yaml` does not list it, it does n
   display edge (`src/lib/format.js`). No money UI exists yet.
 - **Types.** `src/lib/types.js` describes today's mock shapes. When wiring an endpoint, update the
   typedefs to match `openapi.yaml`; generating a typed client from it is a possible later step (TODO).
-- Not yet decided (TODO): API base URL variable and dev proxy, CORS/cookie setup between dev server
-  and API, token refresh/retry strategy, error toasts vs inline errors, loading-state conventions.
+- Errors are shown inline, next to the form or section that caused them (no toasts).
+- Not yet decided (TODO): a dev proxy instead of CORS, loading-state conventions.
 
 ## Definition of Done (run before EVERY commit)
 
