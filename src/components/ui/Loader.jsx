@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
 
-/** Full-screen spinner. Not used by any page yet; kept for route-level loading. */
+/** Full-screen spinner for route-level loading (session restore, guarded pages). */
 export default function Loader() {
   return (
-    <div className="fixed inset-0 bg-black z-[9999] flex items-center justify-center">
+    <div
+      role="status"
+      aria-label="Loading"
+      className="fixed inset-0 bg-black z-[9999] flex items-center justify-center"
+    >
       <div className="relative">
         <motion.div
           animate={{ rotate: 360 }}

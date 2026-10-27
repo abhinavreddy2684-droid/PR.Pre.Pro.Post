@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { X } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { EASE_CINEMATIC } from "@/animations/easing";
+import AccountActions from "@/components/layout/AccountActions";
 import { NAV_LINKS } from "@/components/layout/navLinks";
 import useDialog from "@/hooks/useDialog";
 
@@ -76,6 +77,9 @@ export default function MobileMenuOverlay({ onClose, onNavigate }) {
               </button>
             </motion.div>
           ))}
+        </div>
+        <div className="mt-8 border-t border-white/10 pt-8">
+          <AccountActions variant="menu" onNavigate={onClose} />
         </div>
       </nav>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import Button from "@/components/ui/Button";
+import AccountActions from "@/components/layout/AccountActions";
 import MobileMenu from "@/components/layout/MobileMenu";
 import { EASE_CINEMATIC } from "@/animations/easing";
 import { scrollToHash } from "@/lib/scroll";
@@ -11,7 +11,7 @@ import { NAV_LINKS } from "@/components/layout/navLinks";
 // Scroll distance after which the bar turns opaque and tightens its padding.
 const SCROLLED_AFTER_PX = 24;
 
-/** Fixed top bar: brand, section links and the mobile menu. Turns opaque after scrolling. */
+/** Fixed top bar: brand, section links, account actions and the mobile menu. Turns opaque after scrolling. */
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -85,7 +85,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex">
-          <Button className="!px-6 !py-3">Start Project</Button>
+          <AccountActions />
         </div>
         <div className="lg:hidden shrink-0">
           <MobileMenu />

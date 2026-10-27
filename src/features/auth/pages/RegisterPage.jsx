@@ -1,9 +1,36 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
 import AuthLayout from "@/features/auth/components/AuthLayout";
 import RegisterForm from "@/features/auth/components/RegisterForm";
+import { safeNextPath } from "@/features/auth/nextPath";
 
-/** @param {{ onSubmit?: (values: { email: string, password: string }) => Promise<void> }} props */
-export default function RegisterPage({ onSubmit }) {
+// A new account goes on to talent onboarding unless ?next= says otherwise.
+const DEFAULT_AFTER_REGISTER = "/talent/onboarding";
+
+/** Create an account (which signs in), then show the "check your inbox" notice. */
+export default function RegisterPage() {
+  const { status, register } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const rawNext = searchParams.get("next");
+  const next = safeNextPath(rawNext, DEFAULT_AFTER_REGISTER);
+  const [registering, setRegistering] = useState(false);
+
+  // Someone already signed in has nothing to do here (but a fresh registration moves on below).
+  if (status === "signedIn" && !registering) return <Navigate to={next} replace />;
+
+  const handleSubmit = async (values) => {
+    setRegistering(true);
+    try {
+      await register(values);
+    } catch (error) {
+      setRegistering(false);
+      throw error;
+    }
+    navigate(`/verify-email?next=${encodeURIComponent(next)}`, { replace: true });
+  };
+
   return (
     <AuthLayout
       eyebrow="Talent Network / Create account"
@@ -22,7 +49,10 @@ export default function RegisterPage({ onSubmit }) {
       footer={
         <p className="text-center text-xs text-white/80">
           Already have an account?{" "}
-          <Link to="/login" className="font-medium text-amber-300 transition hover:text-amber-200">
+          <Link
+            to={rawNext ? `/login?next=${encodeURIComponent(next)}` : "/login"}
+            className="font-medium text-amber-300 transition hover:text-amber-200"
+          >
             Sign in
           </Link>
         </p>
@@ -38,7 +68,7 @@ export default function RegisterPage({ onSubmit }) {
         <p className="mt-3 text-sm text-white/65">Join the Talent Network.</p>
       </div>
 
-      <RegisterForm onSubmit={onSubmit} />
+      <RegisterForm onSubmit={handleSubmit} />
     </AuthLayout>
   );
 }

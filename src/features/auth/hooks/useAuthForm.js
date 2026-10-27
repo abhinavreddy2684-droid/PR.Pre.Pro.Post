@@ -1,12 +1,11 @@
 import { useState } from "react";
-
-export const NOT_CONNECTED_MESSAGE = "Not connected yet";
+import { fieldErrors, userMessage } from "@/lib/api";
 
 /**
  * State for an auth form: field values, per-field errors, a form-level message and a pending flag.
  * `validate(values)` returns { field: "message" } with an empty string for valid fields.
- * `onSubmit(values)` is supplied by the page; it may throw an Error whose message is shown.
- * Without one (nothing is wired to the backend yet) a valid submit shows "Not connected yet".
+ * `onSubmit(values)` comes from the page. When it throws, field errors from the API's `details`
+ * are shown under their fields and the error's message above the form.
  */
 export default function useAuthForm({ initialValues, validate, onSubmit }) {
   const [values, setValues] = useState(initialValues);
@@ -28,19 +27,15 @@ export default function useAuthForm({ initialValues, validate, onSubmit }) {
     setErrors(found);
     if (Object.values(found).some(Boolean)) return;
 
-    if (!onSubmit) {
-      setMessage({ kind: "notice", text: NOT_CONNECTED_MESSAGE });
-      return;
-    }
-
     setPending(true);
     try {
       await onSubmit(values);
     } catch (error) {
-      setMessage({
-        kind: "error",
-        text: error?.message || "Something went wrong. Please try again.",
-      });
+      const fromServer = fieldErrors(error);
+      setErrors(
+        Object.fromEntries(Object.keys(initialValues).map((key) => [key, fromServer[key] ?? ""])),
+      );
+      setMessage({ kind: "error", text: userMessage(error) });
     } finally {
       setPending(false);
     }

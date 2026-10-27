@@ -1,5 +1,6 @@
-// Client-side checks only. The backend is the authority on what is accepted.
-// TODO: align MIN_PASSWORD_LENGTH with the password rules in openapi.yaml.
+// Client-side checks only. The backend is the authority on what is accepted: it also rejects
+// common, all-numeric and email-like passwords, and those errors show under the field.
+// 8 matches Django's MinimumLengthValidator default used by the backend.
 export const MIN_PASSWORD_LENGTH = 8;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
