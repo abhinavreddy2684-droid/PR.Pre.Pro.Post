@@ -1,11 +1,16 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-export default function ChipInput({ values, onChange, placeholder }) {
+/**
+ * Tag list with an add box. `maxItems` / `maxLength` mirror the API limits; at the item limit
+ * the add box is disabled.
+ */
+export default function ChipInput({ values, onChange, placeholder, maxItems, maxLength, label }) {
   const [value, setValue] = useState("");
+  const full = maxItems !== undefined && values.length >= maxItems;
   const add = () => {
     const next = value.trim();
-    if (!next || values.includes(next)) return;
+    if (!next || full || values.some((item) => item.toLowerCase() === next.toLowerCase())) return;
     onChange([...values, next]);
     setValue("");
   };
@@ -39,14 +44,18 @@ export default function ChipInput({ values, onChange, placeholder }) {
               add();
             }
           }}
-          placeholder={placeholder}
-          className="min-w-0 flex-1 rounded-xl bg-white/[0.035] px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/20 focus:bg-white/[0.055]"
+          placeholder={full ? `Limit of ${maxItems} reached` : placeholder}
+          maxLength={maxLength}
+          disabled={full}
+          aria-label={label}
+          className="min-w-0 flex-1 rounded-xl bg-white/[0.035] px-3 py-2.5 text-sm text-white outline-none placeholder:text-white/20 focus:bg-white/[0.055] disabled:opacity-40"
         />
         <button
-          aria-label="Add"
+          aria-label={label ? `Add ${label.toLowerCase()}` : "Add"}
           type="button"
           onClick={add}
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-white/50 transition hover:bg-amber-500 hover:text-black"
+          disabled={full}
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-white/50 transition hover:bg-amber-500 hover:text-black disabled:opacity-40"
         >
           <Plus size={16} />
         </button>
