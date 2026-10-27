@@ -5,6 +5,7 @@ import SettingsDialog from "@/features/talent/components/settings/SettingsDialog
 import SectionUnavailable from "@/features/talent/components/settings/SectionUnavailable";
 import ProfessionalSettings from "@/features/talent/components/settings/sections/ProfessionalSettings";
 import CraftSettings from "@/features/talent/components/settings/sections/CraftSettings";
+import ExperienceSettings from "@/features/talent/components/settings/sections/ExperienceSettings";
 
 const NOT_WIRED_YET = "This section is being connected in this update";
 
@@ -13,7 +14,7 @@ const SECTION_VIEWS = {
   professional: ProfessionalSettings,
   crafts: CraftSettings,
   media: () => <SectionUnavailable reason={NOT_WIRED_YET} />,
-  experience: () => <SectionUnavailable reason={NOT_WIRED_YET} />,
+  experience: ExperienceSettings,
   calendar: () => <SectionUnavailable reason={NOT_WIRED_YET} />,
   notifications: () => <SectionUnavailable reason={NOT_WIRED_YET} />,
 };
