@@ -6,7 +6,9 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { toTalentProfile } from "@/features/talent/api/talentAdapters";
 import useMyTalent from "@/features/talent/hooks/useMyTalent";
+import useMyAvailability from "@/features/talent/hooks/useMyAvailability";
 import { OwnerTalentContext } from "@/features/talent/hooks/ownerTalentContext";
+import OwnerAvailability from "@/features/talent/components/owner/OwnerAvailability";
 import OwnerControls from "@/features/talent/components/owner/OwnerControls";
 import OwnerExperience from "@/features/talent/components/owner/OwnerExperience";
 import SettingsHint from "@/features/talent/components/owner/SettingsHint";
@@ -17,14 +19,19 @@ import TalentSettingsPanel from "@/features/talent/components/settings/TalentSet
 /**
  * /talent/me (signed in): the owner's own profile from GET /api/talent/me. An account without a
  * finished talent profile is sent to onboarding. The settings panel edits it through the API and
- * puts the saved profile back here (OwnerTalentContext). The gallery returns with the media work.
+ * puts the saved profile (and availability) back here through OwnerTalentContext. The gallery
+ * returns with the media work.
  */
 export default function TalentOwnerProfilePage() {
   const { craftBySlug } = useCatalog();
   const { status, talent: data, error, retry, replace, reload } = useMyTalent();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState("professional");
-  const ownerContext = useMemo(() => ({ talent: data, replace, reload }), [data, replace, reload]);
+  const availability = useMyAvailability();
+  const ownerContext = useMemo(
+    () => ({ talent: data, replace, reload, availability }),
+    [data, replace, reload, availability],
+  );
   const openSettings = (section = "professional") => {
     setSettingsSection(section);
     setSettingsOpen(true);
@@ -63,6 +70,10 @@ export default function TalentOwnerProfilePage() {
               <SettingsHint onOpen={() => openSettings()} />
             </TalentProfileHero>
             <OwnerExperience talent={talent} onManage={() => openSettings("experience")} />
+            <OwnerAvailability
+              availability={availability}
+              onManage={() => openSettings("calendar")}
+            />
           </div>
         </main>
         <Footer />
