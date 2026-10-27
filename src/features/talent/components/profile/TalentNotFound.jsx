@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
-/** Shown at /talent/:talentId when no talent has that id. */
+/** Shown at /talent/:talentId when the API has no published talent with that id (404). */
 export default function TalentNotFound() {
   return (
     <div className="min-h-screen bg-[#050505] text-white">

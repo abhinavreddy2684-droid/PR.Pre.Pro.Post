@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 
+/** Work history from the profile's `experiences`; hidden when there are none. */
 export default function PublicExperience({ talent }) {
-  const entries = Array.isArray(talent.experiences) ? talent.experiences : [];
+  const entries = talent.experiences;
   const [start, setStart] = useState(0);
   if (!entries.length) return null;
   const hasCarousel = entries.length > 3;
@@ -28,7 +29,7 @@ export default function PublicExperience({ talent }) {
       <div className={`relative mt-10 ${gridClass}`}>
         {visible.map((entry, index) => (
           <motion.article
-            key={`${entry.company}-${entry.period}-${index}`}
+            key={entry.id}
             initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -46,23 +47,26 @@ export default function PublicExperience({ talent }) {
               </div>
               <div className="relative mt-10">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-amber-400">
-                  {entry.period || "Professional chapter"}
+                  {entry.period}
                 </p>
                 <h3 className="mt-4 text-3xl font-black leading-tight tracking-tight text-white">
-                  {entry.title || talent.role || talent.craft}
+                  {entry.title}
                 </h3>
-                <p className="mt-2 text-sm font-medium text-neutral-400">
-                  {entry.company || "Independent / Production"}
-                </p>
-                <p className="mt-6 max-w-xl text-base leading-relaxed text-neutral-400">
-                  {entry.description ||
-                    "Professional work contributing to cinematic productions and creative collaborations."}
-                </p>
-                <div className="mt-auto pt-8">
-                  <span className="rounded-full bg-white/5 px-4 py-2 text-xs font-semibold text-white/50">
-                    {entry.craft || talent.craft}
-                  </span>
-                </div>
+                {entry.company && (
+                  <p className="mt-2 text-sm font-medium text-neutral-400">{entry.company}</p>
+                )}
+                {entry.description && (
+                  <p className="mt-6 max-w-xl whitespace-pre-line text-base leading-relaxed text-neutral-400">
+                    {entry.description}
+                  </p>
+                )}
+                {entry.craft && (
+                  <div className="mt-auto pt-8">
+                    <span className="rounded-full bg-white/5 px-4 py-2 text-xs font-semibold text-white/50">
+                      {entry.craft}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </motion.article>
@@ -77,6 +81,7 @@ export default function PublicExperience({ talent }) {
             <button
               type="button"
               disabled={!canPrev}
+              aria-label="Previous experiences"
               onClick={() => setStart((value) => Math.max(0, value - 1))}
               className="grid h-11 w-11 place-items-center rounded-full bg-white/5 text-white/60 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30"
             >
@@ -85,6 +90,7 @@ export default function PublicExperience({ talent }) {
             <button
               type="button"
               disabled={!canNext}
+              aria-label="Next experiences"
               onClick={() => setStart((value) => Math.min(entries.length - 3, value + 1))}
               className="grid h-11 w-11 place-items-center rounded-full bg-white/5 text-white/60 transition hover:bg-amber-500 hover:text-black disabled:cursor-not-allowed disabled:opacity-30"
             >
