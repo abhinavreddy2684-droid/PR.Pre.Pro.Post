@@ -7,17 +7,18 @@ import ProfessionalSettings from "@/features/talent/components/settings/sections
 import CraftSettings from "@/features/talent/components/settings/sections/CraftSettings";
 import ExperienceSettings from "@/features/talent/components/settings/sections/ExperienceSettings";
 import AvailabilitySettings from "@/features/talent/components/settings/sections/AvailabilitySettings";
+import NotificationsSettings from "@/features/talent/components/settings/sections/NotificationsSettings";
 
-const NOT_WIRED_YET = "This section is being connected in this update";
+const MEDIA_NOT_YET = "Portfolio uploads and editing arrive in the next update";
 
 // The view for each section. Sections read and save the owner profile through useOwnerTalent.
 const SECTION_VIEWS = {
   professional: ProfessionalSettings,
   crafts: CraftSettings,
-  media: () => <SectionUnavailable reason={NOT_WIRED_YET} />,
+  media: () => <SectionUnavailable reason={MEDIA_NOT_YET} />,
   experience: ExperienceSettings,
   calendar: AvailabilitySettings,
-  notifications: () => <SectionUnavailable reason={NOT_WIRED_YET} />,
+  notifications: NotificationsSettings,
 };
 
 /**

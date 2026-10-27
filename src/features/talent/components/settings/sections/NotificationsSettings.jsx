@@ -1,40 +1,31 @@
-import { useState } from "react";
-import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
-import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
+import SectionUnavailable from "@/features/talent/components/settings/SectionUnavailable";
+import { NOTIFICATIONS_DISABLED_REASON } from "@/features/talent/components/owner/ownerNotices";
 
-export default function NotificationsSettings({ settings, onSave }) {
-  const [draft, setDraft] = useState(settings);
-  const [saved, flashSaved] = useSavedFlash(1400);
-  const rows = [
-    {
-      key: "opportunities",
-      title: "New opportunities",
-      body: "Relevant hiring activity and opportunities.",
-    },
-    {
-      key: "profileActivity",
-      title: "Profile activity",
-      body: "When recruiters interact with your profile or work.",
-    },
-    {
-      key: "platformUpdates",
-      title: "Platform updates",
-      body: "Product changes and important service announcements.",
-    },
-  ];
-  const save = () => {
-    onSave(draft);
-    flashSaved();
-  };
+const ROWS = [
+  { key: "opportunities", title: "New opportunities", body: "Relevant hiring activity." },
+  {
+    key: "profileActivity",
+    title: "Profile activity",
+    body: "When recruiters interact with your profile or work.",
+  },
+  {
+    key: "platformUpdates",
+    title: "Platform updates",
+    body: "Product changes and important service announcements.",
+  },
+];
+
+/** Notification preferences. The backend has no notifications API yet, so this is read-only. */
+export default function NotificationsSettings() {
   return (
-    <div className="space-y-5">
+    <SectionUnavailable reason={NOTIFICATIONS_DISABLED_REASON}>
       <FloatingCard
         title="What should reach you?"
         description="Control the activity that matters to your work."
       >
         <div className="space-y-2">
-          {rows.map((row) => (
+          {ROWS.map((row) => (
             <div key={row.key} className="flex items-center gap-4 rounded-2xl bg-white/[0.025] p-4">
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-white/75">{row.title}</p>
@@ -43,22 +34,18 @@ export default function NotificationsSettings({ settings, onSave }) {
               <button
                 type="button"
                 role="switch"
-                aria-checked={draft[row.key]}
+                aria-checked="false"
                 aria-label={row.title}
-                onClick={() => setDraft({ ...draft, [row.key]: !draft[row.key] })}
-                className={`relative h-7 w-12 shrink-0 rounded-full transition ${draft[row.key] ? "bg-amber-500" : "bg-white/10"}`}
+                disabled
+                tabIndex={-1}
+                className="relative h-7 w-12 shrink-0 rounded-full bg-white/10"
               >
-                <span
-                  className={`absolute top-1 h-5 w-5 rounded-full bg-white transition ${draft[row.key] ? "left-6" : "left-1"}`}
-                />
+                <span className="absolute left-1 top-1 h-5 w-5 rounded-full bg-white/60" />
               </button>
             </div>
           ))}
         </div>
       </FloatingCard>
-      <div className="flex justify-end">
-        <SaveButton onClick={save} saved={saved} />
-      </div>
-    </div>
+    </SectionUnavailable>
   );
 }
