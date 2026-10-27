@@ -60,12 +60,7 @@ export default function CraftDetailDesktop({ craft, number, onExplore }) {
       </div>
 
       <div className="p-8 md:p-10 border-t border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 bg-black/20">
-        <div>
-          <p className="text-sm text-neutral-500">Explore available talent in {craft.title}.</p>
-          <p className="mt-2 text-xs text-neutral-600">
-            Profiles are currently powered by mock marketplace data.
-          </p>
-        </div>
+        <p className="text-sm text-neutral-500">Explore available talent in {craft.title}.</p>
         <Button onClick={onExplore} className="flex items-center justify-center gap-3 shrink-0">
           Explore Talent <ArrowRight size={18} />
         </Button>

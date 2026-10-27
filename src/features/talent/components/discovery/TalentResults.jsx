@@ -8,9 +8,9 @@ import DiscoveryError from "@/features/talent/components/discovery/DiscoveryErro
 /**
  * Result grid for a useTalentSearch() result: loading, empty and error states, and "Load more".
  * @param {{ search: ReturnType<typeof import("@/features/talent/hooks/useTalentSearch").default>,
- *   paginate?: boolean }} props
+ *   paginate?: boolean, columns?: 3 | 4 }} props  `columns` at the widest breakpoint
  */
-export default function TalentResults({ search, paginate = true }) {
+export default function TalentResults({ search, paginate = true, columns = 4 }) {
   const { status, results } = search;
 
   if (status === "error") return <DiscoveryError error={search.error} onRetry={search.retry} />;
@@ -31,7 +31,8 @@ export default function TalentResults({ search, paginate = true }) {
       <div
         aria-busy={status === "loading"}
         className={cn(
-          "mt-7 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 transition-opacity",
+          "mt-7 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 transition-opacity",
+          columns === 4 && "xl:grid-cols-4",
           status === "loading" && "opacity-50",
         )}
       >
