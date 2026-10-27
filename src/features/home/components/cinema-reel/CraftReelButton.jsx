@@ -3,9 +3,10 @@ import { pad2 } from "@/lib/format";
 
 /**
  * One craft tile in the reel. `active` highlights it; other props go to the <button>.
- * @param {{ craftId: number, active?: boolean, onClick: () => void }} props
+ * @param {{ number: number, active?: boolean, onClick: () => void }} props  `number` is the
+ *   craft's position in the reel
  */
-export default function CraftReelButton({ children, active = false, onClick, craftId, ...props }) {
+export default function CraftReelButton({ children, active = false, onClick, number, ...props }) {
   return (
     <motion.button
       type="button"
@@ -31,7 +32,7 @@ export default function CraftReelButton({ children, active = false, onClick, cra
           active ? "text-black/60" : "text-neutral-600"
         }`}
       >
-        {pad2(craftId)}
+        {pad2(number)}
       </span>
     </motion.button>
   );

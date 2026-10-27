@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useCatalog } from "@/catalog";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import TalentMarketplaceCard from "@/features/talent/components/discovery/TalentMarketplaceCard";
@@ -13,12 +14,13 @@ import { getTalents } from "@/features/talent/data";
 export default function TalentDiscoveryPage() {
   const talents = getTalents();
   const [searchParams] = useSearchParams();
-  const craft = searchParams.get("craft");
-  const heading = formatCraftHeading(craft);
+  const { craftBySlug } = useCatalog();
+  const craftSlug = searchParams.get("craft");
+  const heading = formatCraftHeading(craftSlug && (craftBySlug(craftSlug)?.title ?? craftSlug));
 
   const craftTalents = useMemo(
-    () => (craft ? talents.filter((talent) => talent.craft === craft) : talents),
-    [craft, talents],
+    () => (craftSlug ? talents.filter((talent) => talent.craftSlug === craftSlug) : talents),
+    [craftSlug, talents],
   );
   const filters = useTalentFilters(craftTalents);
   const filteredTalents = filters.filtered;

@@ -8,10 +8,10 @@ export const INITIAL_PROFILE = {
   fullName: "",
   professionalName: "",
   photo: "",
-  primaryCraft: "",
-  supportingCrafts: [],
-  state: "",
-  city: "",
+  primaryCraft: "", // craft slug
+  supportingCrafts: [], // craft slugs
+  state: "", // state id (bootstrap locations)
+  city: "", // city id, sent as city_id
 };
 
 export const MIN_FULL_NAME_LENGTH = 2;

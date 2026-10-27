@@ -1,9 +1,12 @@
 import { ArrowRight, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
+import { useCatalog } from "@/catalog";
 
 export default function OnboardingComplete({ profile, onEnter }) {
+  const { craftBySlug, cityById } = useCatalog();
   const displayName = profile.professionalName || profile.fullName;
+  const city = cityById(profile.city);
 
   return (
     <div className="relative flex min-h-screen items-center overflow-hidden bg-[#040404] px-6 text-white sm:px-10">
@@ -36,8 +39,8 @@ export default function OnboardingComplete({ profile, onEnter }) {
           className="mx-auto mt-10 grid max-w-3xl gap-px overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/10 text-left sm:grid-cols-3"
         >
           <SummaryItem label="Talent" value={displayName} />
-          <SummaryItem label="Primary craft" value={profile.primaryCraft} />
-          <SummaryItem label="Location" value={`${profile.city}, ${profile.state}`} />
+          <SummaryItem label="Primary craft" value={craftBySlug(profile.primaryCraft)?.title} />
+          <SummaryItem label="Location" value={city && `${city.name}, ${city.state.name}`} />
         </motion.div>
 
         <motion.div

@@ -125,14 +125,6 @@
 // Mock shapes (not wired yet)
 
 /**
- * @typedef {object} Craft
- * @property {number} id
- * @property {string} title
- * @property {string} description
- * @property {string[]} talentTypes
- */
-
-/**
  * @typedef {object} MediaItem
  * @property {number | string} id
  * @property {string} title
@@ -156,7 +148,8 @@
  * @typedef {object} Talent
  * @property {number} id
  * @property {string} name
- * @property {string} craft  primary craft, matches Craft.title
+ * @property {string} craft  primary craft's title
+ * @property {string} craftSlug  primary craft's slug, used in ?craft= links
  * @property {string} [role]
  * @property {string} location  "City, Country"
  * @property {string} experience  e.g. "8 years"

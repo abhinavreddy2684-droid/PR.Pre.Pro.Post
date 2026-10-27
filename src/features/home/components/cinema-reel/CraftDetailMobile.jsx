@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 import { pad2 } from "@/lib/format";
 
 /** Craft detail card shown below the lg breakpoint. */
-export default function CraftDetailMobile({ craft, onExplore }) {
+export default function CraftDetailMobile({ craft, number, onExplore }) {
   return (
     <div className="relative z-10 lg:hidden overflow-hidden rounded-[1.75rem] border border-amber-500/15 bg-[#0b0b0b] shadow-[0_20px_70px_rgba(0,0,0,0.45)] animate-fade-in-up">
       <div className="relative px-5 pt-6 pb-7 border-b border-white/10 bg-gradient-to-br from-amber-500/[0.12] via-transparent to-transparent">
@@ -11,7 +11,7 @@ export default function CraftDetailMobile({ craft, onExplore }) {
           <p className="uppercase tracking-[0.28em] text-[10px] font-semibold text-amber-400">
             Cinema Craft
           </p>
-          <span className="font-mono text-xs text-amber-500/60">{pad2(craft.id)}</span>
+          <span className="font-mono text-xs text-amber-500/60">{pad2(number)}</span>
         </div>
         <h3 className="mt-3 text-4xl sm:text-5xl font-black tracking-tight leading-[0.95]">
           {craft.title}
@@ -37,12 +37,12 @@ export default function CraftDetailMobile({ craft, onExplore }) {
             for your next project.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
-            {craft.talentTypes.map((talentType) => (
+            {craft.talent_types.map((talentType) => (
               <span
-                key={talentType}
+                key={talentType.slug}
                 className="px-3 py-2 rounded-full border border-white/10 bg-white/[0.035] text-xs text-neutral-300"
               >
-                {talentType}
+                {talentType.title}
               </span>
             ))}
           </div>

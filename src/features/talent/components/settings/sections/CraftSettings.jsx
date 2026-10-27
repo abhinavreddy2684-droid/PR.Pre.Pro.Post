@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
-import { getCraftTitles } from "@/catalog";
+import { useCatalog } from "@/catalog";
 import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
 import CustomDropdown from "@/features/talent/components/settings/fields/CustomDropdown";
@@ -12,7 +12,9 @@ export default function CraftSettings({ settings, onSave }) {
   const [query, setQuery] = useState("");
   const [saved, flashSaved] = useSavedFlash(1400);
   const [mode, setMode] = useState("supporting");
-  const allCrafts = useMemo(() => getCraftTitles(), []);
+  const { crafts } = useCatalog();
+  // TODO: the settings mock stores craft titles; use slugs when settings are wired to the API.
+  const allCrafts = useMemo(() => crafts.map((craft) => craft.title), [crafts]);
   const filtered = useMemo(
     () => allCrafts.filter((craft) => craft.toLowerCase().includes(query.trim().toLowerCase())),
     [allCrafts, query],

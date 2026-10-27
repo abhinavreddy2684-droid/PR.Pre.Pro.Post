@@ -67,8 +67,9 @@ src/
     layout/                Navbar, MobileMenu, Footer, OnboardingBrand, navLinks.js
     sections/hero/         the landing hero and its parts
     ui/                    primitives: Button, Input, Select, Textarea, Loader, SectionHeading
-  catalog/                 reference data shared by features: crafts, India states/cities
-                           (index.js exposes getCrafts, getCraftTitles, getStates, getCities)
+  catalog/                 reference data from GET /api/bootstrap: BootstrapProvider (in
+                           App.jsx) and useCatalog() (crafts, states with cities, enums, and
+                           craftBySlug / stateById / cityById / enumOptions / enumLabel)
   animations/              easing.js, shared easing curve
   hooks/                   shared hooks: useAutoAdvance, useClickOutside, useDialog, useAuth
                            (+ authContext.js; AuthProvider in features/auth fills it)
@@ -146,7 +147,7 @@ Auth is real (see the table). Everything else listed as mock still is.
 | Media upload / gallery                                   | Mock seed (`MEDIA_SEED`). The file input only reads the file name; nothing is uploaded. Likes are static numbers.                                                                                                                                                                                                                                                                                                             |
 | Availability calendar                                    | UI over mock data, not persisted.                                                                                                                                                                                                                                                                                                                                                                                             |
 | Productions, artists, testimonials                       | Mock data via `getProductions`, `getArtists`, `getTestimonials`.                                                                                                                                                                                                                                                                                                                                                              |
-| Crafts, states, cities                                   | Static files in `src/catalog/` (`getCrafts`, `getStates`, `getCities`). This is the seam to replace with `GET /api/bootstrap`. Mock crafts have numeric `id` and are matched by `title`.                                                                                                                                                                                                                                      |
+| Crafts, states, cities, enums                            | **Real.** `GET /api/bootstrap` via `BootstrapProvider` / `useCatalog()`. Used by the home craft reel, onboarding and the discovery heading. `?craft=` takes a slug.                                                                                                                                                                                                                                                           |
 | Contact form (home)                                      | Markup only. It has no submit handler.                                                                                                                                                                                                                                                                                                                                                                                        |
 | Login, register, verify-email, session (`features/auth`) | **Real.** `POST /api/auth/login`, `/register`, `/logout`, `/refresh`, `/verify-email`, `/resend-verification` and `GET /api/me`. `AuthProvider` restores the session on load (refresh, then `/api/me`; a 401 means signed out). Navbar and mobile menu show "Login / Sign up" or "My profile" / "Log out" (and "Verify your email" when unverified). No Google sign-in or password reset (the backend has no such endpoints). |
 | Recruiter side, offers, search ranking, notifications    | Not built. No pages, no routes.                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -190,8 +191,10 @@ frontend. Do not invent endpoints: if `openapi.yaml` does not list it, it does n
 - **Reference data comes from `GET /api/bootstrap`**, loaded once at startup and cached (the
   backend documents ETag revalidation). Crafts and locations (states, cities) are referenced by
   `slug` or `id` as `openapi.yaml` specifies, **never by display name and never hardcoded**.
-  `src/catalog/` is the temporary mock for this; matching crafts by `title` must go away when
-  bootstrap is wired. Whether the frontend keeps bootstrap in a store or context is TODO.
+  `BootstrapProvider` (a plain React context in `src/catalog/`) loads it once; nothing renders
+  until it has, and a failure shows a full-page retry. Read it with `useCatalog()`. Crafts go in
+  URLs and requests by `slug`, cities by `id` (`city_id`). Use `enumLabel(name, value)` for the
+  labels of backend enums (gallery stages, media kinds, ...) instead of hardcoding them.
 - **Privacy.** The backend never returns a talent's `full_name`, `gender`, `date_of_birth`, email or
   phone in a public response. Do not add UI that expects them on public talent views.
 - **Money** is integer minor units (paise) plus a currency code. Never floats; format only at the
