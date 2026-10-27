@@ -1,9 +1,5 @@
 import talents from "./talents";
 
-/** All talents. The first entry is the signed-in owner (see getOwnerTalent). */
-/** @returns {import("@/lib/types").Talent[]} */
-export const getTalents = () => talents;
-
 /** @returns {import("@/lib/types").Talent | undefined} */
 export const getTalentById = (id) => talents.find((talent) => String(talent.id) === String(id));
 

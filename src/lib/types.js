@@ -103,6 +103,20 @@
  */
 
 /**
+ * A search result from GET /api/talent. Public fields only.
+ * @typedef {object} TalentCard
+ * @property {string} id
+ * @property {string} professional_name
+ * @property {string} [bio]  full bio (<= 1000 chars), may be empty
+ * @property {CityOut | null} city
+ * @property {number | null} [years_experience]
+ * @property {string[]} [genres]
+ * @property {{ slug: string, title: string } | null} primary_craft
+ * @property {SignedUrls | null} avatar  thumbnails "96" and "400"
+ * @property {boolean} is_available  false only when the next 7 days are all unavailable
+ */
+
+/**
  * GET /api/talent/me (the owner's own profile, including private fields).
  * @typedef {object} PrivateTalent
  * @property {string} id
