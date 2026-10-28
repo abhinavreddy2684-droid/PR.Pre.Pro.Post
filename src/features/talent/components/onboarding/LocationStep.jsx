@@ -3,6 +3,7 @@ import Button from "@/components/ui/Button";
 import { useCatalog } from "@/catalog";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
 import LocationSelect from "@/features/talent/components/onboarding/LocationSelect";
+import UploadProgress from "@/features/talent/components/media/UploadProgress";
 import OnboardingError from "@/features/talent/components/onboarding/OnboardingError";
 
 export default function LocationStep({
@@ -11,6 +12,7 @@ export default function LocationStep({
   selectState,
   pending,
   error,
+  photoProgress,
   onFinish,
 }) {
   const catalog = useCatalog();
@@ -57,6 +59,16 @@ export default function LocationStep({
         />
       </div>
 
+      {photoProgress?.phase && (
+        <div className="mt-8 max-w-sm">
+          <UploadProgress
+            phase={photoProgress.phase}
+            fraction={photoProgress.fraction}
+            label="Uploading your photo"
+          />
+        </div>
+      )}
+
       {error && (
         <div className="mt-8">
           <OnboardingError error={error} />
@@ -69,7 +81,11 @@ export default function LocationStep({
           onClick={onFinish}
           className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35"
         >
-          {pending ? "Creating your profile…" : "Finish onboarding"}
+          {pending
+            ? photoProgress?.phase
+              ? "Uploading your photo…"
+              : "Creating your profile…"
+            : "Finish onboarding"}
           <ArrowRight size={17} />
         </Button>
       </div>

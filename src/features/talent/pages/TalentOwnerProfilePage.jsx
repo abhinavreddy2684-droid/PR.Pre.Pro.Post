@@ -12,6 +12,7 @@ import useRefetchBefore from "@/hooks/useRefetchBefore";
 import { OwnerTalentContext } from "@/features/talent/hooks/ownerTalentContext";
 import OwnerAvailability from "@/features/talent/components/owner/OwnerAvailability";
 import OwnerControls from "@/features/talent/components/owner/OwnerControls";
+import PhotoNotice from "@/features/talent/components/owner/PhotoNotice";
 import OwnerExperience from "@/features/talent/components/owner/OwnerExperience";
 import SettingsHint from "@/features/talent/components/owner/SettingsHint";
 import ProfileLoadState from "@/features/talent/components/profile/ProfileLoadState";
@@ -58,6 +59,7 @@ export default function TalentOwnerProfilePage() {
         <OwnerControls onSettings={() => openSettings()} />
         <main className="px-6 pb-24 pt-32">
           <div className="mx-auto max-w-7xl">
+            <PhotoNotice />
             <p className="inline-flex items-center gap-2 text-sm text-neutral-500">
               {data.is_published ? <Eye size={16} /> : <EyeOff size={16} />}
               {data.is_published

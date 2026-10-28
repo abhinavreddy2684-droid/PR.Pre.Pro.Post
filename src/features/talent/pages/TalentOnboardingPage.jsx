@@ -24,6 +24,8 @@ export default function TalentOnboardingPage() {
           <IdentityStep
             key="identity"
             profile={profile}
+            photoUrl={form.photoUrl}
+            onPhotoChange={form.setPhoto}
             updateProfile={form.updateProfile}
             onContinue={() => form.goTo(2)}
           />
@@ -47,6 +49,7 @@ export default function TalentOnboardingPage() {
             selectState={form.selectState}
             pending={submission.pending}
             error={submission.error}
+            photoProgress={submission.photoProgress}
             onFinish={() => submission.submit(profile)}
           />
         )}
