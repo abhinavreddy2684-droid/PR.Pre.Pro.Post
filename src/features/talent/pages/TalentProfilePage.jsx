@@ -1,8 +1,10 @@
+import { useCallback } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useCatalog } from "@/catalog";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import useRefetchBefore from "@/hooks/useRefetchBefore";
 import { toTalentProfile } from "@/features/talent/api/talentAdapters";
 import usePublicTalent from "@/features/talent/hooks/usePublicTalent";
 import PublicExperience from "@/features/talent/components/profile/PublicExperience";
@@ -16,7 +18,10 @@ import TalentNotFound from "@/features/talent/components/profile/TalentNotFound"
 export default function TalentProfilePage() {
   const { talentId } = useParams();
   const { craftBySlug } = useCatalog();
-  const { status, talent: data, error, retry } = usePublicTalent(talentId);
+  const { status, talent: data, error, retry, reload } = usePublicTalent(talentId);
+  const refreshProfile = useCallback(() => reload().catch(() => {}), [reload]);
+  // The photo's signed URL expires; fetch the profile again before it does.
+  useRefetchBefore(data?.avatar?.expires_at, refreshProfile);
 
   if (status === "notFound") return <TalentNotFound />;
   if (status !== "ready") return <ProfileLoadState error={error} onRetry={retry} />;

@@ -4,10 +4,11 @@ import TalentPhoto from "@/features/talent/components/discovery/TalentPhoto";
 
 /**
  * Photo + headline block at the top of a talent profile. `children` render under the genre
- * tags (the public and owner profiles put different things there).
+ * tags (the public and owner profiles put different things there). `photoNote` is a small label
+ * over the photo (the owner's "Photo in review").
  * @param {{ talent: ReturnType<typeof import("@/features/talent/api/talentAdapters").toTalentProfile> }} props
  */
-export default function TalentProfileHero({ talent, children }) {
+export default function TalentProfileHero({ talent, photoNote, children }) {
   return (
     <section className="mt-10 grid items-stretch gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
       <motion.div
@@ -20,6 +21,11 @@ export default function TalentProfileHero({ talent, children }) {
           <TalentPhoto src={talent.image} alt={talent.name} />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
+        {photoNote && (
+          <span className="absolute bottom-6 left-6 rounded-full bg-amber-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-black">
+            {photoNote}
+          </span>
+        )}
       </motion.div>
       <motion.div
         initial={{ opacity: 0, x: 40 }}

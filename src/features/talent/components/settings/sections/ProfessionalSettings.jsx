@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCatalog } from "@/catalog";
 import { fieldErrors } from "@/lib/api";
+import AvatarSettingsCard from "@/features/talent/components/settings/AvatarSettingsCard";
 import ChipInput from "@/features/talent/components/settings/fields/ChipInput";
 import CustomDropdown from "@/features/talent/components/settings/fields/CustomDropdown";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
@@ -67,6 +68,7 @@ export default function ProfessionalSettings() {
 
   return (
     <div className="space-y-5">
+      <AvatarSettingsCard />
       <FloatingCard
         title="Professional identity"
         description="Keep the information recruiters see on your public talent profile accurate and current."

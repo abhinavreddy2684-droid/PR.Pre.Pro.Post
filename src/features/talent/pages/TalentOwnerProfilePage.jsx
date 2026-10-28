@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { useCatalog } from "@/catalog";
@@ -7,6 +7,8 @@ import Footer from "@/components/layout/Footer";
 import { toTalentProfile } from "@/features/talent/api/talentAdapters";
 import useMyTalent from "@/features/talent/hooks/useMyTalent";
 import useMyAvailability from "@/features/talent/hooks/useMyAvailability";
+import useMyAvatar from "@/features/talent/hooks/useMyAvatar";
+import useRefetchBefore from "@/hooks/useRefetchBefore";
 import { OwnerTalentContext } from "@/features/talent/hooks/ownerTalentContext";
 import OwnerAvailability from "@/features/talent/components/owner/OwnerAvailability";
 import OwnerControls from "@/features/talent/components/owner/OwnerControls";
@@ -14,6 +16,7 @@ import OwnerExperience from "@/features/talent/components/owner/OwnerExperience"
 import SettingsHint from "@/features/talent/components/owner/SettingsHint";
 import ProfileLoadState from "@/features/talent/components/profile/ProfileLoadState";
 import TalentProfileHero from "@/features/talent/components/profile/TalentProfileHero";
+import { AVATAR_IN_FLIGHT as AVATAR_REVIEW_STAGES } from "@/features/talent/hooks/useMyAvatar";
 import TalentSettingsPanel from "@/features/talent/components/settings/TalentSettingsPanel";
 
 /**
@@ -28,9 +31,13 @@ export default function TalentOwnerProfilePage() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState("professional");
   const availability = useMyAvailability();
+  const avatar = useMyAvatar({ onAvatarChanged: () => reload().catch(() => {}) });
+  const refreshProfile = useCallback(() => reload().catch(() => {}), [reload]);
+  // The avatar's signed URLs expire; fetch the profile again before they do.
+  useRefetchBefore(data?.avatar?.expires_at, refreshProfile);
   const ownerContext = useMemo(
-    () => ({ talent: data, replace, reload, availability }),
-    [data, replace, reload, availability],
+    () => ({ talent: data, replace, reload, availability, avatar }),
+    [data, replace, reload, availability, avatar],
   );
   const openSettings = (section = "professional") => {
     setSettingsSection(section);
@@ -57,7 +64,12 @@ export default function TalentOwnerProfilePage() {
                 ? "Your profile is published and appears in search."
                 : "Your profile is hidden from search."}
             </p>
-            <TalentProfileHero talent={talent}>
+            <TalentProfileHero
+              talent={talent}
+              photoNote={
+                AVATAR_REVIEW_STAGES.includes(avatar.stage) ? "Photo in review" : undefined
+              }
+            >
               {data.is_published && (
                 <Link
                   to={`/talent/${talent.id}`}

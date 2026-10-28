@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { isAbortError } from "@/lib/api";
 import { getPublicTalent } from "@/features/talent/api/talentSearchApi";
 
@@ -23,6 +23,12 @@ export default function usePublicTalent(id) {
     return () => controller.abort();
   }, [id, attempt]);
 
+  /** Refetch quietly (no loading state), e.g. before the signed photo URL expires. */
+  const reload = useCallback(async () => {
+    const talent = await getPublicTalent(id);
+    setResult((current) => ({ ...current, talent, error: null }));
+  }, [id]);
+
   let status = "ready";
   if (result.key !== key) status = "loading";
   else if (result.error?.status === 404) status = "notFound";
@@ -33,5 +39,6 @@ export default function usePublicTalent(id) {
     talent: result.key === key ? result.talent : null,
     error: result.error,
     retry: () => setAttempt((value) => value + 1),
+    reload,
   };
 }
