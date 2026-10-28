@@ -3,14 +3,14 @@ import Button from "@/components/ui/Button";
 import { pad2 } from "@/lib/format";
 
 /** Craft detail card shown from the lg breakpoint up. */
-export default function CraftDetailDesktop({ craft, onExplore }) {
+export default function CraftDetailDesktop({ craft, number, onExplore }) {
   return (
     <div className="relative z-10 hidden lg:block rounded-[2.5rem] border border-white/10 bg-white/[0.025] overflow-hidden shadow-2xl animate-fade-in-up">
       <div className="relative p-8 md:p-14 border-b border-white/10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.13),transparent_45%)] pointer-events-none" />
         <div className="relative max-w-4xl">
           <p className="uppercase tracking-[0.35em] text-xs text-amber-400">
-            Cinema Craft · {pad2(craft.id)}
+            Cinema Craft · {pad2(number)}
           </p>
           <h3 className="mt-5 text-5xl md:text-7xl font-black tracking-tight">{craft.title}</h3>
           <p className="mt-7 text-lg md:text-xl text-neutral-400 leading-relaxed max-w-3xl">
@@ -30,12 +30,12 @@ export default function CraftDetailDesktop({ craft, onExplore }) {
             for your next project.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
-            {craft.talentTypes.map((talentType) => (
+            {craft.talent_types.map((talentType) => (
               <span
-                key={talentType}
+                key={talentType.slug}
                 className="px-3 py-2 rounded-full border border-white/10 bg-white/[0.03] text-sm text-neutral-300"
               >
-                {talentType}
+                {talentType.title}
               </span>
             ))}
           </div>

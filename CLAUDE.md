@@ -36,10 +36,16 @@ npm run format         # prettier --write .
 npm run format:check   # prettier --check . (what to run before committing)
 ```
 
-Copy `.env.example` to `.env.local` (git-ignored; only `.env.example` is committed). Today the only
-variable is `VITE_ALLOWED_HOSTS`, a comma-separated list of extra hostnames the dev server accepts
-(for example an ngrok tunnel). Add every new variable to `.env.example`. Only `VITE_`-prefixed
-variables reach browser code, so never put a secret in one.
+Copy `.env.example` to `.env.local` (git-ignored; only `.env.example` is committed). Variables:
+
+| Variable             | Meaning                                                                                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_API_BASE_URL`  | Backend origin, default `http://localhost:8000`. Use `localhost`, never `127.0.0.1`: the dev server is `http://localhost:5173` and the refresh cookie is same-site. |
+| `VITE_ALLOWED_HOSTS` | Comma-separated extra hostnames the dev server accepts (for example an ngrok tunnel).                                                                               |
+
+Add every new variable to `.env.example`. Only `VITE_`-prefixed variables reach browser code, so
+never put a secret in one. The backend must list the dev origin in `CORS_ALLOWED_ORIGINS` (its
+default is `FRONTEND_URL`, `http://localhost:5173`).
 
 ## Folder map
 
@@ -47,48 +53,57 @@ variables reach browser code, so never put a secret in one.
 index.html                 fonts are loaded here, not from CSS
 src/
   main.jsx                 entry: StrictMode, imports styles/index.css, renders <App/>
-  app/                     App.jsx (BrowserRouter shell), routes.jsx (route table),
-                           RouteScrollManager.jsx (scroll-to-top / hash handling)
+  app/                     App.jsx (BrowserRouter + AuthProvider shell), routes.jsx (route
+                           table and guards), RouteScrollManager.jsx (scroll / hash handling)
   features/                one folder per product area, see "Features" below
     artists/ auth/ home/ productions/ talent/
       index.js             the feature's public API
       pages/               route-level components (*Page.jsx)
       components/          feature-private components
       hooks/               feature-private hooks (talent and auth today)
+      api/                 the feature's backend calls, built on lib/api (auth, talent)
       data/                mock data behind accessor functions (see "Mock vs real")
   components/              shared, feature-agnostic building blocks
     layout/                Navbar, MobileMenu, Footer, OnboardingBrand, navLinks.js
     sections/hero/         the landing hero and its parts
     ui/                    primitives: Button, Input, Select, Textarea, Loader, SectionHeading
-  catalog/                 reference data shared by features: crafts, India states/cities
-                           (index.js exposes getCrafts, getCraftTitles, getStates, getCities)
+  catalog/                 reference data from GET /api/bootstrap: BootstrapProvider (in
+                           App.jsx) and useCatalog() (crafts, states with cities, enums, and
+                           craftBySlug / stateById / cityById / enumOptions / enumLabel)
   animations/              easing.js, shared easing curve
-  hooks/                   shared hooks: useAutoAdvance, useClickOutside, useDialog
+  hooks/                   shared hooks: useAutoAdvance, useClickOutside, useDialog, useAuth
+                           (+ authContext.js; AuthProvider in features/auth fills it)
   lib/                     pure helpers: availability, calendar, cn, format, media, scroll,
                            types.js (JSDoc typedefs)
+    api/                   the HTTP client: every request to the backend goes through here
   styles/index.css         the single global stylesheet (Tailwind layers + global CSS)
 ```
 
-`src/lib/api/` does not exist yet. It is where all HTTP code goes once the backend is wired in.
+`src/lib/api/` is the only place that talks HTTP: `apiFetch` / `api.get|post|put|patch|delete`
+(base URL, JSON, `credentials: "include"`, Bearer token, one shared refresh-and-retry on a 401,
+absolute `next` URLs accepted), `ApiError` with `{ status, code, message, details }`, and the
+helpers `userMessage(error)` and `fieldErrors(error)` for showing errors.
 
 ### Features and routes
 
 Routes live in `src/app/routes.jsx`. Order matters: `/talent/onboarding` and `/talent/me` must
-stay above `/talent/:talentId`.
+stay above `/talent/:talentId`. Routes marked "signed in" are wrapped in `RequireAuth`, which
+sends signed-out visitors to `/login?next=<the page>`. `?next=` is only followed when it resolves
+to this origin (`safeNextPath` in `features/auth/nextPath.js`).
 
-| Path                 | Page                                                      | Feature       |
-| -------------------- | --------------------------------------------------------- | ------------- |
-| `/`                  | `HomePage`                                                | `home`        |
-| `/talent`            | `TalentDiscoveryPage`                                     | `talent`      |
-| `/talent/onboarding` | `TalentOnboardingPage`                                    | `talent`      |
-| `/talent/me`         | `TalentOwnerProfilePage` (owner view with settings panel) | `talent`      |
-| `/talent/:talentId`  | `TalentProfilePage` (public view)                         | `talent`      |
-| `/productions`       | `ProductionsPage`                                         | `productions` |
-| `/artists`           | `ArtistsPage`                                             | `artists`     |
-| `/login`             | `LoginPage` (not linked from the UI yet)                  | `auth`        |
-| `/register`          | `RegisterPage` (not linked from the UI yet)               | `auth`        |
-| `/verify-email`      | `VerifyEmailPage` (`?email=` shows the address)           | `auth`        |
-| `*`                  | `NotFoundPage` (404 catch-all)                            | `auth`        |
+| Path                 | Page                                                    | Feature       |
+| -------------------- | ------------------------------------------------------- | ------------- |
+| `/`                  | `HomePage`                                              | `home`        |
+| `/talent`            | `TalentDiscoveryPage`                                   | `talent`      |
+| `/talent/onboarding` | `TalentOnboardingPage` (signed in)                      | `talent`      |
+| `/talent/me`         | `TalentOwnerProfilePage` (signed in; owner view)        | `talent`      |
+| `/talent/:talentId`  | `TalentProfilePage` (public view)                       | `talent`      |
+| `/productions`       | `ProductionsPage`                                       | `productions` |
+| `/artists`           | `ArtistsPage`                                           | `artists`     |
+| `/login`             | `LoginPage` (`?next=` = where to go after)              | `auth`        |
+| `/register`          | `RegisterPage` (then the verify notice)                 | `auth`        |
+| `/verify-email`      | `VerifyEmailPage` (`?token=` verifies, else the notice) | `auth`        |
+| `*`                  | `NotFoundPage` (404 catch-all)                          | `auth`        |
 
 ## Import rules
 
@@ -98,7 +113,9 @@ stay above `/talent/:talentId`.
 - **Each feature's `index.js` is its public API.** Code outside a feature imports from
   `@/features/<name>`, never from its internals. Current exports:
   - `artists`: `ArtistsPage`, `ArtistCard`, `getArtists`
-  - `auth`: `LoginPage`, `RegisterPage`, `VerifyEmailPage`, `NotFoundPage`
+  - `auth`: `AuthProvider`, `RequireAuth`, `LoginPage`, `RegisterPage`, `VerifyEmailPage`,
+    `NotFoundPage`. Read the session anywhere with `useAuth()` from `@/hooks/useAuth`
+    (`status`, `user`, `login`, `register`, `logout`, `reloadUser`).
   - `home`: `HomePage`
   - `productions`: `ProductionsPage`, `ProductionCard`, `getProductions`
   - `talent`: `TalentDiscoveryPage`, `TalentProfilePage`, `TalentOwnerProfilePage`,
@@ -119,26 +136,26 @@ stay above `/talent/:talentId`.
 
 ## Mock vs real today
 
-**Everything is mock. There is no network code, no auth and no `.env` API URL in the app.**
+Auth is real (see the table). Everything else listed as mock still is.
 
-| Area                                                  | State                                                                                                                                                                                                                                                                                                                                                                                        |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Talent list and profiles (`/talent`, `/talent/:id`)   | Mock. `features/talent/data/talents.js`, read via `getTalents` / `getTalentById`. Ids are numbers.                                                                                                                                                                                                                                                                                           |
-| Owner profile (`/talent/me`)                          | Mock. `getOwnerTalent()` returns the first mock talent. There is no "signed-in user".                                                                                                                                                                                                                                                                                                        |
-| Talent settings panel                                 | Persists to `localStorage` key `pre-pro-post:talent-settings` (`settingsStorage.js`), read back by the owner talent. Not sent anywhere.                                                                                                                                                                                                                                                      |
-| Onboarding (`/talent/onboarding`)                     | Local component state only. Nothing is submitted. The chosen photo is a browser object URL.                                                                                                                                                                                                                                                                                                  |
-| Media upload / gallery                                | Mock seed (`MEDIA_SEED`). The file input only reads the file name; nothing is uploaded. Likes are static numbers.                                                                                                                                                                                                                                                                            |
-| Availability calendar                                 | UI over mock data, not persisted.                                                                                                                                                                                                                                                                                                                                                            |
-| Productions, artists, testimonials                    | Mock data via `getProductions`, `getArtists`, `getTestimonials`.                                                                                                                                                                                                                                                                                                                             |
-| Crafts, states, cities                                | Static files in `src/catalog/` (`getCrafts`, `getStates`, `getCities`). This is the seam to replace with `GET /api/bootstrap`. Mock crafts have numeric `id` and are matched by `title`.                                                                                                                                                                                                     |
-| Contact form (home)                                   | Markup only. It has no submit handler.                                                                                                                                                                                                                                                                                                                                                       |
-| Login, register, verify-email pages (`features/auth`) | UI exists at `/login`, `/register`, `/verify-email` but is **not connected**: client-side validation only, and a valid submit shows "Not connected yet" unless a page is given an `onSubmit` / `onResend` prop. No session, token or `lib/api` yet. Not linked from the Navbar; the wiring PR adds the entry point. No Google sign-in or password reset (the backend has no such endpoints). |
-| Recruiter side, offers, search ranking, notifications | Not built. No pages, no routes.                                                                                                                                                                                                                                                                                                                                                              |
+| Area                                                     | State                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Talent list and profiles (`/talent`, `/talent/:id`)      | Mock. `features/talent/data/talents.js`, read via `getTalents` / `getTalentById`. Ids are numbers.                                                                                                                                                                                                                                                                                                                            |
+| Owner profile (`/talent/me`)                             | Mock. `getOwnerTalent()` returns the first mock talent. There is no "signed-in user".                                                                                                                                                                                                                                                                                                                                         |
+| Talent settings panel                                    | Persists to `localStorage` key `pre-pro-post:talent-settings` (`settingsStorage.js`), read back by the owner talent. Not sent anywhere.                                                                                                                                                                                                                                                                                       |
+| Onboarding (`/talent/onboarding`)                        | **Real.** Signed in only. Finishing sends `POST /api/talent/me` -> `PUT /api/talent/me/crafts` -> `POST /api/talent/me/onboarding/complete` (`useOnboardingSubmit`, payloads from `toOnboardingRequests`), then opens `/talent/me`. A 409 on create fetches the existing profile and continues; a retry after a partial failure resumes. No profile photo step yet (it returns with media upload).                            |
+| Media upload / gallery                                   | Mock seed (`MEDIA_SEED`). The file input only reads the file name; nothing is uploaded. Likes are static numbers.                                                                                                                                                                                                                                                                                                             |
+| Availability calendar                                    | UI over mock data, not persisted.                                                                                                                                                                                                                                                                                                                                                                                             |
+| Productions, artists, testimonials                       | Mock data via `getProductions`, `getArtists`, `getTestimonials`.                                                                                                                                                                                                                                                                                                                                                              |
+| Crafts, states, cities, enums                            | **Real.** `GET /api/bootstrap` via `BootstrapProvider` / `useCatalog()`. Used by the home craft reel, onboarding and the discovery heading. `?craft=` takes a slug.                                                                                                                                                                                                                                                           |
+| Contact form (home)                                      | Markup only. It has no submit handler.                                                                                                                                                                                                                                                                                                                                                                                        |
+| Login, register, verify-email, session (`features/auth`) | **Real.** `POST /api/auth/login`, `/register`, `/logout`, `/refresh`, `/verify-email`, `/resend-verification` and `GET /api/me`. `AuthProvider` restores the session on load (refresh, then `/api/me`; a 401 means signed out). Navbar and mobile menu show "Login / Sign up" or "My profile" / "Log out" (and "Verify your email" when unverified). No Google sign-in or password reset (the backend has no such endpoints). |
+| Recruiter side, offers, search ranking, notifications    | Not built. No pages, no routes.                                                                                                                                                                                                                                                                                                                                                                                               |
 
 Rules that follow from this:
 
 - Page and component code reads data only through the accessor functions (`getTalents()`,
-  `getCrafts()`, ...), never by importing a data file directly. That keeps the swap to the API in
+  `useCatalog()`, ...), never by importing a data file directly. That keeps the swap to the API in
   one place per feature.
 - No half-wired UI. Do not add a button, form, toggle or link that looks functional but does
   nothing. Either wire it end to end, or leave it out, or render it visibly disabled with the
@@ -154,16 +171,18 @@ or is missing something, raise it on the backend repo; do not work around it or 
 frontend. Do not invent endpoints: if `openapi.yaml` does not list it, it does not exist.
 
 - **All HTTP goes through `src/lib/api/`.** No `fetch` or XHR in components, hooks or pages.
-  Components call feature-level functions that call `lib/api`. (The folder is not created yet.)
+  Components call feature-level functions that call `lib/api`.
 - **Auth.** The access token lives **in memory only**: a module variable or store. Never write it
   to `localStorage`, `sessionStorage`, cookies, IndexedDB or the URL, and never log it. The refresh
   token is an **HttpOnly cookie that JS never reads or sets**; the browser sends it, so requests to
   the refresh endpoint need `credentials: "include"`. After a page reload the access token is gone
-  and must be re-obtained through the refresh flow. The exact endpoints are TODO: read them from
-  `openapi.yaml`.
+  and must be re-obtained through the refresh flow. `src/lib/api/token.js` holds the token;
+  `apiFetch` refreshes once on a 401 (concurrent 401s share one `POST /api/auth/refresh`) and
+  retries; a 401 from refresh means signed out.
 - **Errors** have one shape: `{"error": {"code", "message", "details"}}`. Branch on `code`, show
   `message` to users only when it is meant for them, and use `details` for field-level form errors.
-  Parse this in one place in `lib/api`. The list of codes is TODO (see `openapi.yaml`).
+  Parsed only in `src/lib/api/errors.js`. 429 means rate limited (`userMessage` says so). The full
+  list of codes is TODO (see `openapi.yaml` and the backend services).
 - **Lists use cursor pagination:** `{ "next", "previous", "results" }`. Follow `next` / `previous`
   as opaque URLs or cursors; do not build page numbers or offsets, and do not assume a total count.
 - **Ids are UUID strings.** Treat them as opaque strings; never `Number()`, `parseInt` or compare
@@ -172,16 +191,18 @@ frontend. Do not invent endpoints: if `openapi.yaml` does not list it, it does n
 - **Reference data comes from `GET /api/bootstrap`**, loaded once at startup and cached (the
   backend documents ETag revalidation). Crafts and locations (states, cities) are referenced by
   `slug` or `id` as `openapi.yaml` specifies, **never by display name and never hardcoded**.
-  `src/catalog/` is the temporary mock for this; matching crafts by `title` must go away when
-  bootstrap is wired. Whether the frontend keeps bootstrap in a store or context is TODO.
+  `BootstrapProvider` (a plain React context in `src/catalog/`) loads it once; nothing renders
+  until it has, and a failure shows a full-page retry. Read it with `useCatalog()`. Crafts go in
+  URLs and requests by `slug`, cities by `id` (`city_id`). Use `enumLabel(name, value)` for the
+  labels of backend enums (gallery stages, media kinds, ...) instead of hardcoding them.
 - **Privacy.** The backend never returns a talent's `full_name`, `gender`, `date_of_birth`, email or
   phone in a public response. Do not add UI that expects them on public talent views.
 - **Money** is integer minor units (paise) plus a currency code. Never floats; format only at the
   display edge (`src/lib/format.js`). No money UI exists yet.
 - **Types.** `src/lib/types.js` describes today's mock shapes. When wiring an endpoint, update the
   typedefs to match `openapi.yaml`; generating a typed client from it is a possible later step (TODO).
-- Not yet decided (TODO): API base URL variable and dev proxy, CORS/cookie setup between dev server
-  and API, token refresh/retry strategy, error toasts vs inline errors, loading-state conventions.
+- Errors are shown inline, next to the form or section that caused them (no toasts).
+- Not yet decided (TODO): a dev proxy instead of CORS, loading-state conventions.
 
 ## Definition of Done (run before EVERY commit)
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCrafts } from "@/catalog";
+import { useCatalog } from "@/catalog";
 import CraftDetailDesktop from "@/features/home/components/cinema-reel/CraftDetailDesktop";
 import CraftDetailMobile from "@/features/home/components/cinema-reel/CraftDetailMobile";
 import CraftReel from "@/features/home/components/cinema-reel/CraftReel";
@@ -11,18 +11,23 @@ const DEFAULT_CRAFT_INDEX = 1;
 
 export default function CinemaReel() {
   const navigate = useNavigate();
-  const crafts = getCrafts();
-  const [activeCraft, setActiveCraft] = useState(crafts[DEFAULT_CRAFT_INDEX]);
+  const { crafts } = useCatalog();
+  const [activeSlug, setActiveSlug] = useState(crafts[DEFAULT_CRAFT_INDEX]?.slug);
+  const activeIndex = Math.max(
+    0,
+    crafts.findIndex((craft) => craft.slug === activeSlug),
+  );
+  const activeCraft = crafts[activeIndex];
   const detailSectionRef = useRef(null);
   const scrollToDetail = useScrollToCraftDetail(detailSectionRef);
 
   const handleCraftSelect = (craft) => {
-    setActiveCraft(craft);
+    setActiveSlug(craft.slug);
     scrollToDetail();
   };
 
   const exploreTalent = () => {
-    navigate(`/talent?craft=${encodeURIComponent(activeCraft.title)}`);
+    navigate(`/talent?craft=${encodeURIComponent(activeCraft.slug)}`);
   };
 
   return (
@@ -38,7 +43,7 @@ export default function CinemaReel() {
         </p>
       </header>
 
-      <CraftReel crafts={crafts} activeCraftId={activeCraft.id} onSelect={handleCraftSelect} />
+      <CraftReel crafts={crafts} activeSlug={activeCraft?.slug} onSelect={handleCraftSelect} />
 
       <section
         ref={detailSectionRef}
@@ -47,13 +52,21 @@ export default function CinemaReel() {
       >
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] rounded-full bg-amber-500/[0.05] blur-[140px] pointer-events-none" />
 
-        <CraftDetailMobile
-          key={`mobile-${activeCraft.id}`}
-          craft={activeCraft}
-          onExplore={exploreTalent}
-        />
-
-        <CraftDetailDesktop craft={activeCraft} onExplore={exploreTalent} />
+        {activeCraft && (
+          <>
+            <CraftDetailMobile
+              key={`mobile-${activeCraft.slug}`}
+              craft={activeCraft}
+              number={activeIndex + 1}
+              onExplore={exploreTalent}
+            />
+            <CraftDetailDesktop
+              craft={activeCraft}
+              number={activeIndex + 1}
+              onExplore={exploreTalent}
+            />
+          </>
+        )}
       </section>
     </section>
   );

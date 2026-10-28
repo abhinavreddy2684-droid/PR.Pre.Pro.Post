@@ -1,24 +1,20 @@
 import { AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import HeroSection from "@/components/sections/hero/HeroSection";
-import useOnboardingForm, { STEP_COMPLETE } from "@/features/talent/hooks/useOnboardingForm";
+import useOnboardingForm from "@/features/talent/hooks/useOnboardingForm";
+import useOnboardingSubmit from "@/features/talent/hooks/useOnboardingSubmit";
 import OnboardingShell from "@/features/talent/components/onboarding/OnboardingShell";
 import IdentityStep from "@/features/talent/components/onboarding/IdentityStep";
 import CraftStep from "@/features/talent/components/onboarding/CraftStep";
 import LocationStep from "@/features/talent/components/onboarding/LocationStep";
-import OnboardingComplete from "@/features/talent/components/onboarding/OnboardingComplete";
 
+/** Signed-in only (see routes). Finishing submits to the API and opens /talent/me. */
 export default function TalentOnboardingPage() {
-  const navigate = useNavigate();
   const form = useOnboardingForm();
+  const submission = useOnboardingSubmit();
   const { step, profile } = form;
 
   if (step === 0) {
     return <HeroSection variant="onboarding" onPrimaryAction={() => form.goTo(1)} />;
-  }
-
-  if (step === STEP_COMPLETE) {
-    return <OnboardingComplete profile={profile} onEnter={() => navigate("/talent")} />;
   }
 
   return (
@@ -29,7 +25,6 @@ export default function TalentOnboardingPage() {
             key="identity"
             profile={profile}
             updateProfile={form.updateProfile}
-            onPhotoChange={form.setPhoto}
             onContinue={() => form.goTo(2)}
           />
         )}
@@ -50,7 +45,9 @@ export default function TalentOnboardingPage() {
             profile={profile}
             updateProfile={form.updateProfile}
             selectState={form.selectState}
-            onContinue={() => form.goTo(STEP_COMPLETE)}
+            pending={submission.pending}
+            error={submission.error}
+            onFinish={() => submission.submit(profile)}
           />
         )}
       </AnimatePresence>

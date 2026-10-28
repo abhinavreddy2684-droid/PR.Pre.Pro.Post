@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Search } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { getCrafts } from "@/catalog";
+import { useCatalog } from "@/catalog";
 import { pad2 } from "@/lib/format";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
 import CraftGroup from "@/features/talent/components/onboarding/CraftGroup";
@@ -14,14 +14,15 @@ export default function CraftStep({
 }) {
   const [query, setQuery] = useState("");
   const canContinue = Boolean(profile.primaryCraft);
-  const crafts = getCrafts();
+  const { crafts, craftBySlug } = useCatalog();
+  const primaryTitle = craftBySlug(profile.primaryCraft)?.title;
   const normalizedQuery = query.trim().toLowerCase();
   const filteredCrafts = normalizedQuery
     ? crafts.filter((craft) => craft.title.toLowerCase().includes(normalizedQuery))
     : crafts;
 
   const supportingCraftOptions = filteredCrafts.filter(
-    (craft) => craft.title !== profile.primaryCraft,
+    (craft) => craft.slug !== profile.primaryCraft,
   );
 
   return (
@@ -86,7 +87,7 @@ export default function CraftStep({
                   Your lead frame
                 </p>
                 <p className="mt-1 text-lg font-semibold text-white">
-                  {profile.primaryCraft || "Choose your primary craft"}
+                  {primaryTitle || "Choose your primary craft"}
                 </p>
               </div>
 
@@ -128,9 +129,7 @@ export default function CraftStep({
 
           <div className="flex items-center justify-between gap-5 border-t border-white/[0.07] pt-5">
             <p className="text-xs text-white/30">
-              {profile.primaryCraft
-                ? `Primary: ${profile.primaryCraft}`
-                : "Select one primary craft to continue"}
+              {primaryTitle ? `Primary: ${primaryTitle}` : "Select one primary craft to continue"}
             </p>
             <Button
               disabled={!canContinue}

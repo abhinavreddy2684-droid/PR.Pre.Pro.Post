@@ -1,13 +1,22 @@
-import { useMemo } from "react";
 import { ArrowRight } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { getCities, getStates } from "@/catalog";
+import { useCatalog } from "@/catalog";
 import StepFrame from "@/features/talent/components/onboarding/StepFrame";
 import LocationSelect from "@/features/talent/components/onboarding/LocationSelect";
+import OnboardingError from "@/features/talent/components/onboarding/OnboardingError";
 
-export default function LocationStep({ profile, updateProfile, selectState, onContinue }) {
-  const states = useMemo(() => getStates(), []);
-  const cities = getCities(profile.state);
+export default function LocationStep({
+  profile,
+  updateProfile,
+  selectState,
+  pending,
+  error,
+  onFinish,
+}) {
+  const catalog = useCatalog();
+  const toOption = (place) => ({ value: place.id, label: place.name });
+  const stateOptions = catalog.states.map(toOption);
+  const cityOptions = (catalog.stateById(profile.state)?.cities ?? []).map(toOption);
   const canContinue = Boolean(profile.state && profile.city);
 
   return (
@@ -23,13 +32,18 @@ export default function LocationStep({ profile, updateProfile, selectState, onCo
       description="Your location is structured to keep the Talent Network consistent and searchable. India is currently the first supported country."
     >
       <div className="grid gap-4 lg:grid-cols-3">
-        <LocationSelect label="Country" value="India" disabled options={["India"]} />
+        <LocationSelect
+          label="Country"
+          value="india"
+          disabled
+          options={[{ value: "india", label: "India" }]}
+        />
 
         <LocationSelect
           label="State / Union Territory"
           value={profile.state}
           placeholder="Select state"
-          options={states}
+          options={stateOptions}
           onChange={selectState}
         />
 
@@ -37,19 +51,25 @@ export default function LocationStep({ profile, updateProfile, selectState, onCo
           label="City"
           value={profile.city}
           placeholder={profile.state ? "Select city" : "Select state first"}
-          options={cities}
+          options={cityOptions}
           disabled={!profile.state}
           onChange={(value) => updateProfile("city", value)}
         />
       </div>
 
+      {error && (
+        <div className="mt-8">
+          <OnboardingError error={error} />
+        </div>
+      )}
+
       <div className="mt-8 flex justify-end">
         <Button
-          disabled={!canContinue}
-          onClick={onContinue}
+          disabled={!canContinue || pending}
+          onClick={onFinish}
           className="inline-flex items-center gap-3 disabled:cursor-not-allowed disabled:opacity-35"
         >
-          Finish onboarding
+          {pending ? "Creating your profile…" : "Finish onboarding"}
           <ArrowRight size={17} />
         </Button>
       </div>

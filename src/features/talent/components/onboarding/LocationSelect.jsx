@@ -3,6 +3,9 @@ import { Check, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import useClickOutside from "@/hooks/useClickOutside";
 
+/**
+ * Dropdown of `options` ({ value, label }); `value` is the selected option's value.
+ */
 export default function LocationSelect({
   label,
   value,
@@ -13,6 +16,7 @@ export default function LocationSelect({
 }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
+  const selectedLabel = options.find((option) => option.value === value)?.label;
 
   useClickOutside(rootRef, () => setOpen(false));
 
@@ -36,8 +40,10 @@ export default function LocationSelect({
             : "border-white/10 bg-white/[0.025] hover:border-white/20"
         } ${disabled ? "cursor-not-allowed opacity-45" : ""}`}
       >
-        <span className={value ? "text-base font-medium text-white" : "text-sm text-white/30"}>
-          {value || placeholder}
+        <span
+          className={selectedLabel ? "text-base font-medium text-white" : "text-sm text-white/30"}
+        >
+          {selectedLabel || placeholder}
         </span>
         <ChevronDown
           size={18}
@@ -55,13 +61,13 @@ export default function LocationSelect({
             className="absolute left-0 right-0 z-30 mt-2 max-h-72 overflow-y-auto rounded-[1.35rem] border border-amber-400/20 bg-[#0b0a08]/95 p-2 shadow-2xl backdrop-blur-2xl"
           >
             {options.map((option) => {
-              const active = option === value;
+              const active = option.value === value;
               return (
                 <button
-                  key={option}
+                  key={option.value}
                   type="button"
                   onClick={() => {
-                    onChange?.(option);
+                    onChange?.(option.value);
                     setOpen(false);
                   }}
                   className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-sm transition-colors ${
@@ -70,7 +76,7 @@ export default function LocationSelect({
                       : "text-white/65 hover:bg-white/[0.06] hover:text-white"
                   }`}
                 >
-                  {option}
+                  {option.label}
                   {active && <Check size={15} />}
                 </button>
               );

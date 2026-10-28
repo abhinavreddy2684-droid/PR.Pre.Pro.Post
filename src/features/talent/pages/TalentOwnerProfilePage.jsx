@@ -27,7 +27,7 @@ export default function TalentOwnerProfilePage() {
       <main className="px-6 pb-24 pt-32">
         <div className="mx-auto max-w-7xl">
           <Link
-            to={`/talent?craft=${encodeURIComponent(talent.craft)}`}
+            to={`/talent?craft=${encodeURIComponent(talent.craftSlug)}`}
             className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-amber-400"
           >
             <span>←</span> Back to {talent.craft}

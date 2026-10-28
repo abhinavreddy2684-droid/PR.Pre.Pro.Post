@@ -1,10 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, Clapperboard } from "lucide-react";
+import useAuth from "@/hooks/useAuth";
 import AuthLayout from "@/features/auth/components/AuthLayout";
 import LoginForm from "@/features/auth/components/LoginForm";
+import { safeNextPath } from "@/features/auth/nextPath";
 
-/** @param {{ onSubmit?: (values: { email: string, password: string }) => Promise<void> }} props */
-export default function LoginPage({ onSubmit }) {
+/** Sign in, then continue to `?next=` (same-origin paths only) or the owner profile. */
+export default function LoginPage() {
+  const { status, login } = useAuth();
+  const [searchParams] = useSearchParams();
+  const rawNext = searchParams.get("next");
+  const next = safeNextPath(rawNext);
+
+  // Also covers a successful submit: the session flips to signed in and we move on.
+  if (status === "signedIn") return <Navigate to={next} replace />;
+
   return (
     <AuthLayout
       eyebrow="Talent Network / Authentication"
@@ -23,7 +33,7 @@ export default function LoginPage({ onSubmit }) {
             New to Pre Pro Post?
           </span>
           <Link
-            to="/register"
+            to={rawNext ? `/register?next=${encodeURIComponent(next)}` : "/register"}
             className="group flex items-center gap-2 text-xs font-medium text-amber-300 transition hover:text-amber-200"
           >
             Create an account
@@ -50,7 +60,7 @@ export default function LoginPage({ onSubmit }) {
         </div>
       </div>
 
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm onSubmit={login} />
 
       <div className="mt-9 flex items-center justify-between text-[8px] uppercase tracking-[0.22em] text-white/40">
         <span>PPP / Talent Network</span>

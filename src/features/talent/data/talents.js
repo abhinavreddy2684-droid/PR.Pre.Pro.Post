@@ -1,4 +1,3 @@
-import { getCrafts } from "@/catalog";
 import { readStoredSettings } from "./settingsStorage";
 
 const playbackSingers = [
@@ -6,6 +5,7 @@ const playbackSingers = [
     id: 1,
     name: "Aarav Menon",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Hyderabad, India",
     experience: "8 years",
     genres: ["Film", "Classical", "Romantic"],
@@ -28,6 +28,7 @@ const playbackSingers = [
     id: 2,
     name: "Meera Rao",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Mumbai, India",
     experience: "11 years",
     genres: ["Film", "Indie", "Soul"],
@@ -58,6 +59,7 @@ const playbackSingers = [
     id: 3,
     name: "Rohan Varma",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Chennai, India",
     experience: "6 years",
     genres: ["Film", "Pop", "Classical"],
@@ -96,6 +98,7 @@ const playbackSingers = [
     id: 4,
     name: "Ananya Iyer",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Bengaluru, India",
     experience: "9 years",
     genres: ["Film", "Folk", "Acoustic"],
@@ -142,6 +145,7 @@ const playbackSingers = [
     id: 5,
     name: "Kabir Shah",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Hyderabad, India",
     experience: "13 years",
     genres: ["Film", "Sufi", "Romantic"],
@@ -154,6 +158,7 @@ const playbackSingers = [
     id: 6,
     name: "Ishita Kapoor",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Pune, India",
     experience: "7 years",
     genres: ["Film", "Pop", "Jazz"],
@@ -166,6 +171,7 @@ const playbackSingers = [
     id: 7,
     name: "Vikram Das",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Kochi, India",
     experience: "10 years",
     genres: ["Film", "Melody", "Devotional"],
@@ -178,6 +184,7 @@ const playbackSingers = [
     id: 8,
     name: "Nisha Varma",
     craft: "Playback Singing",
+    craftSlug: "playback-singing",
     location: "Chennai, India",
     experience: "5 years",
     genres: ["Film", "Indie", "Soul"],
@@ -187,66 +194,6 @@ const playbackSingers = [
     bio: "Emerging vocalist bringing a modern indie sensibility to cinematic music.",
   },
 ];
-
-const names = [
-  ["Arjun Mehta", "Priya Nair", "Ritvik Rao"],
-  ["Dev Malhotra", "Ira Kapoor", "Karan Bose"],
-  ["Aditya Sen", "Tara Menon", "Neil Varma"],
-  ["Kabir Anand", "Maya Iyer", "Rishi Das"],
-  ["Vihaan Shah", "Anika Rao", "Samar Khan"],
-  ["Arnav Kapoor", "Diya Menon", "Rohan Nair"],
-  ["Ayaan Mehta", "Sara Bose", "Yash Varma"],
-  ["Reyansh Das", "Kiara Shah", "Manav Rao"],
-];
-
-const locations = [
-  "Mumbai, India",
-  "Hyderabad, India",
-  "Chennai, India",
-  "Bengaluru, India",
-  "Pune, India",
-  "Kochi, India",
-  "Delhi, India",
-  "Kolkata, India",
-];
-
-const images = [
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=85",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=85",
-  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=85",
-  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=900&q=85",
-  "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?auto=format&fit=crop&w=900&q=85",
-  "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=85",
-];
-
-const genres = ["Film", "Indie", "Commercial", "Classical", "Contemporary", "Experimental"];
-const availability = ["Available", "Available", "On request"];
-
-const generatedTalents = getCrafts()
-  .filter((craft) => craft.title !== "Playback Singing")
-  .flatMap((craft, craftIndex) =>
-    craft.talentTypes.slice(0, 3).map((role, index) => {
-      const person = names[craftIndex % names.length][index];
-      const id = 100 + craftIndex * 3 + index;
-
-      return {
-        id,
-        name: person,
-        craft: craft.title,
-        role,
-        location: locations[(craftIndex + index) % locations.length],
-        experience: `${5 + ((craftIndex + index) % 9)} years`,
-        genres: [
-          genres[(craftIndex + index) % genres.length],
-          genres[(craftIndex + index + 2) % genres.length],
-          genres[(craftIndex + index + 4) % genres.length],
-        ],
-        availability: availability[(craftIndex + index) % availability.length],
-        image: images[(craftIndex + index) % images.length],
-        bio: `${role} with a production-focused practice and experience across independent and commercial work.`,
-      };
-    }),
-  );
 
 const ownerTalent = new Proxy(playbackSingers[0], {
   get(target, property) {
@@ -264,4 +211,4 @@ const ownerTalent = new Proxy(playbackSingers[0], {
   },
 });
 
-export default [ownerTalent, ...playbackSingers.slice(1), ...generatedTalents];
+export default [ownerTalent, ...playbackSingers.slice(1)];
