@@ -50,3 +50,23 @@ export const startAvatarUpload = ({ content_type, size }) =>
 
 /** Withdraws the new photo that is uploading or in review. 204. */
 export const withdrawAvatarSubmission = () => api.delete("/api/talent/me/avatar/submission");
+
+/** The owner's gallery, every stage, ordered by position. */
+export const getMyGallery = ({ signal } = {}) => api.get("/api/talent/me/gallery", { signal });
+
+/** One item: poll it while its stage is uploading or processing. */
+export const getMyGalleryItem = (id, { signal } = {}) =>
+  api.get(`/api/talent/me/gallery/${encodeURIComponent(id)}`, { signal });
+
+/** Step 1 of a file upload: { title, description, year, craft, content_type, size }. */
+export const startGalleryUpload = (fields) => api.post("/api/talent/me/gallery/uploads", fields);
+
+/** https links only: { title, external_url, description, year, craft }. */
+export const addGalleryLink = (fields) => api.post("/api/talent/me/gallery/links", fields);
+
+/** Only title, description, year, craft and position can change. */
+export const updateGalleryItem = (id, changes) =>
+  api.patch(`/api/talent/me/gallery/${encodeURIComponent(id)}`, changes);
+
+export const deleteGalleryItem = (id) =>
+  api.delete(`/api/talent/me/gallery/${encodeURIComponent(id)}`);

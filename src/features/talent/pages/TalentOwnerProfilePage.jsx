@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { toTalentProfile } from "@/features/talent/api/talentAdapters";
 import useMyTalent from "@/features/talent/hooks/useMyTalent";
+import useMyGallery from "@/features/talent/hooks/useMyGallery";
 import useMyAvailability from "@/features/talent/hooks/useMyAvailability";
 import useMyAvatar from "@/features/talent/hooks/useMyAvatar";
 import useRefetchBefore from "@/hooks/useRefetchBefore";
@@ -13,6 +14,7 @@ import { OwnerTalentContext } from "@/features/talent/hooks/ownerTalentContext";
 import OwnerAvailability from "@/features/talent/components/owner/OwnerAvailability";
 import OwnerControls from "@/features/talent/components/owner/OwnerControls";
 import PhotoNotice from "@/features/talent/components/owner/PhotoNotice";
+import OwnerGallery from "@/features/talent/components/owner/OwnerGallery";
 import OwnerExperience from "@/features/talent/components/owner/OwnerExperience";
 import SettingsHint from "@/features/talent/components/owner/SettingsHint";
 import ProfileLoadState from "@/features/talent/components/profile/ProfileLoadState";
@@ -23,8 +25,7 @@ import TalentSettingsPanel from "@/features/talent/components/settings/TalentSet
 /**
  * /talent/me (signed in): the owner's own profile from GET /api/talent/me. An account without a
  * finished talent profile is sent to onboarding. The settings panel edits it through the API and
- * puts the saved profile (and availability) back here through OwnerTalentContext. The gallery
- * returns with the media work.
+ * puts the saved profile, availability, photo and gallery back here through OwnerTalentContext.
  */
 export default function TalentOwnerProfilePage() {
   const { craftBySlug } = useCatalog();
@@ -32,13 +33,14 @@ export default function TalentOwnerProfilePage() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsSection, setSettingsSection] = useState("professional");
   const availability = useMyAvailability();
+  const gallery = useMyGallery();
   const avatar = useMyAvatar({ onAvatarChanged: () => reload().catch(() => {}) });
   const refreshProfile = useCallback(() => reload().catch(() => {}), [reload]);
   // The avatar's signed URLs expire; fetch the profile again before they do.
   useRefetchBefore(data?.avatar?.expires_at, refreshProfile);
   const ownerContext = useMemo(
-    () => ({ talent: data, replace, reload, availability, avatar }),
-    [data, replace, reload, availability, avatar],
+    () => ({ talent: data, replace, reload, availability, avatar, gallery }),
+    [data, replace, reload, availability, avatar, gallery],
   );
   const openSettings = (section = "professional") => {
     setSettingsSection(section);
@@ -83,6 +85,7 @@ export default function TalentOwnerProfilePage() {
               )}
               <SettingsHint onOpen={() => openSettings()} />
             </TalentProfileHero>
+            <OwnerGallery talent={talent} onManage={() => openSettings("media")} />
             <OwnerExperience talent={talent} onManage={() => openSettings("experience")} />
             <OwnerAvailability
               availability={availability}
