@@ -1,6 +1,5 @@
-// Shared shapes, documented once. Import in JSDoc as import("@/lib/types").Talent etc.
-// The "API" section mirrors openapi.yaml in the backend repo (the source of truth); the rest
-// describes mock data that has not been wired yet.
+// Shared shapes, documented once. Import in JSDoc as import("@/lib/types").PrivateTalent etc.
+// They mirror openapi.yaml in the backend repo (the source of truth).
 
 // ---------------------------------------------------------------------------------------------
 // API
@@ -120,6 +119,45 @@
  */
 
 /**
+ * An item of the owner's gallery (GET /api/talent/me/gallery). `kind` is a media kind or "link";
+ * `stage` is a gallery_stages value; `urls` is null until a file is ready.
+ * @typedef {object} GalleryItemOwner
+ * @property {string} id
+ * @property {string} kind
+ * @property {string} external_url
+ * @property {string} link_provider
+ * @property {string} title
+ * @property {string} description
+ * @property {number | null} year
+ * @property {string} craft  a craft slug, or ""
+ * @property {number} position
+ * @property {"uploading" | "processing" | "under_review" | "live" | "hidden" | "failed" | "rejected"} stage
+ * @property {string} failure_reason  a media_failure_reasons value, or ""
+ * @property {string} moderation_reason  a moderation_reasons value, or ""
+ * @property {string} moderation_note
+ * @property {number} likes_count
+ * @property {SignedUrls | null} urls
+ */
+
+/**
+ * An item of a public gallery (GET /api/talent/{id}/gallery): counts only, no viewer flag.
+ * @typedef {object} PublicGalleryItem
+ * @property {string} id
+ * @property {string} kind
+ * @property {string} external_url
+ * @property {string} link_provider
+ * @property {string} title
+ * @property {string} description
+ * @property {number | null} year
+ * @property {string} craft
+ * @property {number} position
+ * @property {number} likes_count
+ * @property {number | null} width
+ * @property {number | null} height
+ * @property {SignedUrls | null} urls
+ */
+
+/**
  * A search result from GET /api/talent. Public fields only.
  * @typedef {object} TalentCard
  * @property {string} id
@@ -177,20 +215,6 @@
  * @property {boolean} [is_published]
  * @property {boolean} onboarding_completed
  * @property {Record<string, unknown>} completeness
- */
-
-// ---------------------------------------------------------------------------------------------
-// Mock shapes (not wired yet)
-
-/**
- * @typedef {object} MediaItem
- * @property {number | string} id
- * @property {string} title
- * @property {string} description
- * @property {"Video" | "Audio" | "Image"} type
- * @property {number} year
- * @property {number} [likes]
- * @property {string} [image]
  */
 
 export {};

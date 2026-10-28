@@ -7,13 +7,13 @@ import Footer from "@/components/layout/Footer";
 import useRefetchBefore from "@/hooks/useRefetchBefore";
 import { toTalentProfile } from "@/features/talent/api/talentAdapters";
 import usePublicTalent from "@/features/talent/hooks/usePublicTalent";
+import PublicGallery from "@/features/talent/components/profile/PublicGallery";
 import PublicExperience from "@/features/talent/components/profile/PublicExperience";
 import ProfileLoadState from "@/features/talent/components/profile/ProfileLoadState";
 import TalentProfileHero from "@/features/talent/components/profile/TalentProfileHero";
 import TalentNotFound from "@/features/talent/components/profile/TalentNotFound";
 
-// No availability section: the backend only exposes a talent's own calendar. The gallery
-// returns with the media work.
+// No availability section: the backend only exposes a talent's own calendar.
 /** /talent/:talentId, the public profile from GET /api/talent/{id}. */
 export default function TalentProfilePage() {
   const { talentId } = useParams();
@@ -44,6 +44,7 @@ export default function TalentProfilePage() {
             <ArrowLeft size={16} /> Back to {talent.primaryCraft?.title ?? "Talent Network"}
           </Link>
           <TalentProfileHero talent={talent} />
+          <PublicGallery talentId={talent.id} talentName={talent.name} />
           <PublicExperience talent={talent} />
         </div>
       </main>
