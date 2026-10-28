@@ -45,7 +45,10 @@ Copy `.env.example` to `.env.local` (git-ignored; only `.env.example` is committ
 
 Add every new variable to `.env.example`. Only `VITE_`-prefixed variables reach browser code, so
 never put a secret in one. The backend must list the dev origin in `CORS_ALLOWED_ORIGINS` (its
-default is `FRONTEND_URL`, `http://localhost:5173`).
+default is `FRONTEND_URL`, `http://localhost:5173`). Uploads go straight from the browser to the
+**storage origin** (MinIO locally, S3 in production), which needs its own CORS rule for the same
+origin: the backend's `MEDIA_CORS_ALLOWED_ORIGINS` (default `FRONTEND_URL`) configures it, and
+`docs/MEDIA_STORAGE.md` in the backend repo describes the bucket setup.
 
 ## Folder map
 

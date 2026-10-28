@@ -118,7 +118,7 @@ export default function useMyGallery() {
           setFailures((current) => [
             ...current,
             {
-              key: itemId ?? crypto.randomUUID(),
+              key: itemId ?? `failed-${Date.now()}`,
               title: fields.title,
               message: userMessage(error),
             },
