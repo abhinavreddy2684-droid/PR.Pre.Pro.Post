@@ -40,3 +40,33 @@ export const getMyAvailability = (start, end) =>
 
 /** 204. `status: "available"` clears a day. Refetch afterwards. */
 export const setMyAvailability = (entries) => api.put("/api/talent/me/availability", { entries });
+
+/** @returns {Promise<{ avatar: object | null, submission: object | null }>} */
+export const getMyAvatar = ({ signal } = {}) => api.get("/api/talent/me/avatar", { signal });
+
+/** Step 1 of the avatar upload; 409 avatar_submission_open while another photo is in flight. */
+export const startAvatarUpload = ({ content_type, size }) =>
+  api.post("/api/talent/me/avatar/uploads", { content_type, size });
+
+/** Withdraws the new photo that is uploading or in review. 204. */
+export const withdrawAvatarSubmission = () => api.delete("/api/talent/me/avatar/submission");
+
+/** The owner's gallery, every stage, ordered by position. */
+export const getMyGallery = ({ signal } = {}) => api.get("/api/talent/me/gallery", { signal });
+
+/** One item: poll it while its stage is uploading or processing. */
+export const getMyGalleryItem = (id, { signal } = {}) =>
+  api.get(`/api/talent/me/gallery/${encodeURIComponent(id)}`, { signal });
+
+/** Step 1 of a file upload: { title, description, year, craft, content_type, size }. */
+export const startGalleryUpload = (fields) => api.post("/api/talent/me/gallery/uploads", fields);
+
+/** https links only: { title, external_url, description, year, craft }. */
+export const addGalleryLink = (fields) => api.post("/api/talent/me/gallery/links", fields);
+
+/** Only title, description, year, craft and position can change. */
+export const updateGalleryItem = (id, changes) =>
+  api.patch(`/api/talent/me/gallery/${encodeURIComponent(id)}`, changes);
+
+export const deleteGalleryItem = (id) =>
+  api.delete(`/api/talent/me/gallery/${encodeURIComponent(id)}`);

@@ -7,6 +7,7 @@ export const ONBOARDING_STEPS = [
 export const INITIAL_PROFILE = {
   fullName: "",
   professionalName: "",
+  photo: null, // File, optional; uploaded after the profile exists
   primaryCraft: "", // craft slug
   supportingCrafts: [], // craft slugs
   state: "", // state id (bootstrap locations)

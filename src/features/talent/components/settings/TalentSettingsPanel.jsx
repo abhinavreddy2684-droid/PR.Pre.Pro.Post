@@ -2,20 +2,18 @@ import { AnimatePresence } from "framer-motion";
 import useTalentSettings from "@/features/talent/hooks/useTalentSettings";
 import { SETTINGS_SECTIONS } from "@/features/talent/components/settings/settingsConfig";
 import SettingsDialog from "@/features/talent/components/settings/SettingsDialog";
-import SectionUnavailable from "@/features/talent/components/settings/SectionUnavailable";
 import ProfessionalSettings from "@/features/talent/components/settings/sections/ProfessionalSettings";
 import CraftSettings from "@/features/talent/components/settings/sections/CraftSettings";
 import ExperienceSettings from "@/features/talent/components/settings/sections/ExperienceSettings";
 import AvailabilitySettings from "@/features/talent/components/settings/sections/AvailabilitySettings";
+import MediaSettings from "@/features/talent/components/settings/sections/MediaSettings";
 import NotificationsSettings from "@/features/talent/components/settings/sections/NotificationsSettings";
-
-const MEDIA_NOT_YET = "Portfolio uploads and editing arrive in the next update";
 
 // The view for each section. Sections read and save the owner profile through useOwnerTalent.
 const SECTION_VIEWS = {
   professional: ProfessionalSettings,
   crafts: CraftSettings,
-  media: () => <SectionUnavailable reason={MEDIA_NOT_YET} />,
+  media: MediaSettings,
   experience: ExperienceSettings,
   calendar: AvailabilitySettings,
   notifications: NotificationsSettings,

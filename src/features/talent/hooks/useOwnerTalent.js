@@ -6,7 +6,9 @@ import { OwnerTalentContext } from "@/features/talent/hooks/ownerTalentContext";
  * @returns {{ talent: import("@/lib/types").PrivateTalent,
  *   replace: (talent: import("@/lib/types").PrivateTalent) => void,
  *   reload: () => Promise<void>,
- *   availability: ReturnType<typeof import("@/features/talent/hooks/useMyAvailability").default> }}
+ *   availability: ReturnType<typeof import("@/features/talent/hooks/useMyAvailability").default>,
+ *   avatar: ReturnType<typeof import("@/features/talent/hooks/useMyAvatar").default>,
+ *   gallery: ReturnType<typeof import("@/features/talent/hooks/useMyGallery").default> }}
  */
 export default function useOwnerTalent() {
   const value = useContext(OwnerTalentContext);

@@ -3,10 +3,11 @@
 React frontend for **Pre Pro Post**, a marketplace for filmmakers: cinema talent builds a profile
 and portfolio, and recruiters discover talent and send offers.
 
-> Status: being wired to the backend. Auth, reference data (bootstrap), talent onboarding,
-> discovery (`/talent`, `/artists`, the home strip), the public and owner profiles and the talent
-> settings (except notifications and media) are real; media and the rest are still mock. See
-> [CLAUDE.md](./CLAUDE.md) for what is mock vs real.
+> Status: wired to the backend. Auth, reference data (bootstrap), talent onboarding, discovery
+> (`/talent`, `/artists`, the home strip), public and owner profiles, the settings panel (profile,
+> crafts, experience, availability, photo and gallery with uploads and likes) are real.
+> Productions, testimonials and the home contact form are still mock, and notifications have no
+> backend yet. See [CLAUDE.md](./CLAUDE.md) for what is mock vs real.
 
 ## Stack
 
@@ -31,6 +32,8 @@ npm run dev
 `VITE_API_BASE_URL` is the backend origin (default `http://localhost:8000`; use `localhost`, not
 `127.0.0.1`). `VITE_ALLOWED_HOSTS` (optional) lists extra hostnames the dev server accepts, e.g. an
 ngrok tunnel. The app needs the backend running: it loads `GET /api/bootstrap` before rendering.
+File uploads need the backend's storage (MinIO locally) to allow `http://localhost:5173` through its
+CORS settings (`MEDIA_CORS_ALLOWED_ORIGINS`).
 
 ## Layout
 

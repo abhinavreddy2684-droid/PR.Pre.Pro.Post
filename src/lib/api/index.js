@@ -11,3 +11,4 @@ export {
   userMessage,
 } from "./errors";
 export { getAccessToken, onSessionEnded, setAccessToken } from "./token";
+export { cancelUpload, UploadError, uploadMedia } from "./upload";
