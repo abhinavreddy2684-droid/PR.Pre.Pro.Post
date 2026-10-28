@@ -103,6 +103,23 @@
  */
 
 /**
+ * A signed storage form: POST every `fields` entry in order, then the file as `file`, to `url`.
+ * @typedef {object} SignedUpload
+ * @property {string} url  the storage origin, not the API
+ * @property {Record<string, string>} fields
+ * @property {string} expires_at
+ */
+
+/**
+ * The byte lifecycle of an upload, from POST /api/media/{id}/confirm.
+ * @typedef {object} MediaState
+ * @property {string} id
+ * @property {"image" | "audio" | "video" | "pdf"} kind
+ * @property {"pending_upload" | "uploaded" | "processing" | "ready" | "failed" | "expired"} status
+ * @property {string} failure_reason
+ */
+
+/**
  * A search result from GET /api/talent. Public fields only.
  * @typedef {object} TalentCard
  * @property {string} id

@@ -83,7 +83,12 @@ src/
 `src/lib/api/` is the only place that talks HTTP: `apiFetch` / `api.get|post|put|patch|delete`
 (base URL, JSON, `credentials: "include"`, Bearer token, one shared refresh-and-retry on a 401,
 absolute `next` URLs accepted), `ApiError` with `{ status, code, message, details }`, and the
-helpers `userMessage(error)` and `fieldErrors(error)` for showing errors.
+helpers `userMessage(error)` and `fieldErrors(error)` for showing errors. `uploadMedia` (in
+`upload.js`) runs steps 1-3 of the media upload sequence for the avatar and the gallery: it posts
+the file to the storage origin (no Authorization header, credentials omitted, XHR for progress),
+confirms it, retries `upload_missing`, replaces an expired signed form, and cancels on abort.
+`src/lib/mediaRules.js` holds the client-side file checks (types, sizes, no HEIC); the backend
+stays the authority.
 
 ### Features and routes
 
