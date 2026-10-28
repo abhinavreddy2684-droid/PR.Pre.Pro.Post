@@ -4,8 +4,12 @@ import { useState } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SectionAction from "@/features/talent/components/owner/SectionAction";
 
-export default function OwnerExperience({ talent, onManage }) {
-  const entries = Array.isArray(talent.experiences) ? talent.experiences : [];
+/**
+ * The owner's work history. `onManage` opens the editor; without it the action is disabled
+ * with `manageDisabledReason`.
+ */
+export default function OwnerExperience({ talent, onManage, manageDisabledReason }) {
+  const entries = talent.experiences;
   const [start, setStart] = useState(0);
   const visible = entries.slice(start, start + 3);
   return (
@@ -16,17 +20,22 @@ export default function OwnerExperience({ talent, onManage }) {
           title="The Career Behind The Craft"
           subtitle={`A look at the experiences that shaped ${talent.name}'s professional journey.`}
         />
-        <SectionAction onClick={onManage}>
+        <SectionAction onClick={onManage} disabledReason={manageDisabledReason}>
           <Pencil size={13} />
           Manage experience
         </SectionAction>
       </div>
+      {entries.length === 0 && (
+        <p className="mt-10 rounded-[2rem] bg-white/[0.03] p-8 text-sm text-neutral-400">
+          No experience added yet.
+        </p>
+      )}
       <div
         className={`mt-10 grid gap-5 ${entries.length > 2 ? "md:grid-cols-2 lg:grid-cols-3" : "md:grid-cols-2"}`}
       >
-        {visible.map((entry, index) => (
+        {visible.map((entry) => (
           <motion.article
-            key={`${entry.company}-${entry.period}-${index}`}
+            key={entry.id}
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -42,11 +51,17 @@ export default function OwnerExperience({ talent, onManage }) {
                 {entry.period}
               </p>
               <h3 className="mt-4 text-3xl font-black leading-tight text-white">{entry.title}</h3>
-              <p className="mt-2 text-sm text-neutral-400">{entry.company}</p>
-              <p className="mt-6 text-base leading-relaxed text-neutral-400">{entry.description}</p>
-              <span className="mt-6 inline-flex w-fit rounded-full bg-white/5 px-4 py-2 text-xs font-semibold text-white/50">
-                {entry.craft || talent.craft}
-              </span>
+              {entry.company && <p className="mt-2 text-sm text-neutral-400">{entry.company}</p>}
+              {entry.description && (
+                <p className="mt-6 whitespace-pre-line text-base leading-relaxed text-neutral-400">
+                  {entry.description}
+                </p>
+              )}
+              {entry.craft && (
+                <span className="mt-6 inline-flex w-fit rounded-full bg-white/5 px-4 py-2 text-xs font-semibold text-white/50">
+                  {entry.craft}
+                </span>
+              )}
             </div>
           </motion.article>
         ))}
@@ -60,6 +75,7 @@ export default function OwnerExperience({ talent, onManage }) {
             <button
               type="button"
               disabled={!start}
+              aria-label="Previous experiences"
               onClick={() => setStart((value) => Math.max(0, value - 1))}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-white/50 disabled:opacity-20"
             >
@@ -68,6 +84,7 @@ export default function OwnerExperience({ talent, onManage }) {
             <button
               type="button"
               disabled={start >= entries.length - 3}
+              aria-label="Next experiences"
               onClick={() => setStart((value) => Math.min(entries.length - 3, value + 1))}
               className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-white/50 disabled:opacity-20"
             >

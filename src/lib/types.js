@@ -103,6 +103,47 @@
  */
 
 /**
+ * A search result from GET /api/talent. Public fields only.
+ * @typedef {object} TalentCard
+ * @property {string} id
+ * @property {string} professional_name
+ * @property {string} [bio]  full bio (<= 1000 chars), may be empty
+ * @property {CityOut | null} city
+ * @property {number | null} [years_experience]
+ * @property {string[]} [genres]
+ * @property {{ slug: string, title: string } | null} primary_craft
+ * @property {SignedUrls | null} avatar  thumbnails "96" and "400"
+ * @property {boolean} is_available  false only when the next 7 days are all unavailable
+ */
+
+/**
+ * One work-history entry. `end_year` null means ongoing ("Present").
+ * @typedef {object} Experience
+ * @property {string} id
+ * @property {string} title
+ * @property {string} [company]
+ * @property {number} start_year
+ * @property {number | null} [end_year]
+ * @property {string} [description]
+ * @property {string} craft  a craft slug on the talent's profile, or ""
+ */
+
+/**
+ * GET /api/talent/{id}: a published talent's public profile.
+ * @typedef {object} PublicTalent
+ * @property {string} id
+ * @property {string} professional_name
+ * @property {string} [bio]
+ * @property {CityOut | null} city
+ * @property {number | null} [years_experience]
+ * @property {string[]} [genres]
+ * @property {string | null} avatar_id
+ * @property {SignedUrls | null} avatar
+ * @property {TalentCraftOut[]} crafts
+ * @property {Experience[]} experiences
+ */
+
+/**
  * GET /api/talent/me (the owner's own profile, including private fields).
  * @typedef {object} PrivateTalent
  * @property {string} id
@@ -114,7 +155,7 @@
  * @property {string | null} avatar_id
  * @property {SignedUrls | null} avatar
  * @property {TalentCraftOut[]} crafts
- * @property {object[]} experiences
+ * @property {Experience[]} experiences
  * @property {string} full_name  private: never shown on public views
  * @property {boolean} [is_published]
  * @property {boolean} onboarding_completed
@@ -133,32 +174,6 @@
  * @property {number} year
  * @property {number} [likes]
  * @property {string} [image]
- */
-
-/**
- * @typedef {object} ExperienceEntry
- * @property {string} period  e.g. "2021 — Present"
- * @property {string} title
- * @property {string} company
- * @property {string} description
- * @property {string} craft
- */
-
-/**
- * @typedef {object} Talent
- * @property {number} id
- * @property {string} name
- * @property {string} craft  primary craft's title
- * @property {string} craftSlug  primary craft's slug, used in ?craft= links
- * @property {string} [role]
- * @property {string} location  "City, Country"
- * @property {string} experience  e.g. "8 years"
- * @property {string[]} genres
- * @property {"Available" | "On request"} availability
- * @property {string} image
- * @property {string} bio
- * @property {MediaItem[]} [media]
- * @property {ExperienceEntry[]} [experiences]
  */
 
 export {};

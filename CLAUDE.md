@@ -71,7 +71,8 @@ src/
                            App.jsx) and useCatalog() (crafts, states with cities, enums, and
                            craftBySlug / stateById / cityById / enumOptions / enumLabel)
   animations/              easing.js, shared easing curve
-  hooks/                   shared hooks: useAutoAdvance, useClickOutside, useDialog, useAuth
+  hooks/                   shared hooks: useAutoAdvance, useClickOutside, useDebouncedValue,
+                           useDialog, useAuth
                            (+ authContext.js; AuthProvider in features/auth fills it)
   lib/                     pure helpers: availability, calendar, cn, format, media, scroll,
                            types.js (JSDoc typedefs)
@@ -112,14 +113,15 @@ to this origin (`safeNextPath` in `features/auth/nextPath.js`).
   files in the same folder or a direct child.
 - **Each feature's `index.js` is its public API.** Code outside a feature imports from
   `@/features/<name>`, never from its internals. Current exports:
-  - `artists`: `ArtistsPage`, `ArtistCard`, `getArtists`
+  - `artists`: `ArtistsPage`
   - `auth`: `AuthProvider`, `RequireAuth`, `LoginPage`, `RegisterPage`, `VerifyEmailPage`,
     `NotFoundPage`. Read the session anywhere with `useAuth()` from `@/hooks/useAuth`
     (`status`, `user`, `login`, `register`, `logout`, `reloadUser`).
   - `home`: `HomePage`
   - `productions`: `ProductionsPage`, `ProductionCard`, `getProductions`
   - `talent`: `TalentDiscoveryPage`, `TalentProfilePage`, `TalentOwnerProfilePage`,
-    `TalentOnboardingPage`
+    `TalentOnboardingPage`, `TalentDirectory` (filters + paginated grid, used by `/artists`),
+    `FeaturedTalent` (first 6 results, used by the home Talent Network strip)
 - Inside a feature, files may import their own feature by full `@/features/<name>/...` path
   (the existing code does). Do not reach into another feature's `components/`, `hooks/` or `data/`.
   If something is needed by two features, export it from the owner's `index.js` or move it to
@@ -140,13 +142,15 @@ Auth is real (see the table). Everything else listed as mock still is.
 
 | Area                                                     | State                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Talent list and profiles (`/talent`, `/talent/:id`)      | Mock. `features/talent/data/talents.js`, read via `getTalents` / `getTalentById`. Ids are numbers.                                                                                                                                                                                                                                                                                                                            |
-| Owner profile (`/talent/me`)                             | Mock. `getOwnerTalent()` returns the first mock talent. There is no "signed-in user".                                                                                                                                                                                                                                                                                                                                         |
-| Talent settings panel                                    | Persists to `localStorage` key `pre-pro-post:talent-settings` (`settingsStorage.js`), read back by the owner talent. Not sent anywhere.                                                                                                                                                                                                                                                                                       |
+| Talent discovery (`/talent`)                             | **Real.** `GET /api/talent` through `useTalentSearch` (300 ms debounced `q`, stale requests aborted, filters reset the cursor, "Load more" follows `next`). Filters: `?craft=<slug>`, state and city slugs from bootstrap, available. Cards come from `toTalentCard` (`features/talent/api/talentAdapters.js`).                                                                                                               |
+| Public profiles (`/talent/:id`)                          | **Real.** `GET /api/talent/{id}` (`usePublicTalent`); 404 shows `TalentNotFound`. One adapter, `toTalentProfile`, for public and owner views. Experiences come from the API. No availability section (the backend has no public availability endpoint) and no gallery yet.                                                                                                                                                    |
+| Owner profile (`/talent/me`)                             | **Real.** `GET /api/talent/me` (`useMyTalent`) behind `RequireAuth`; 403 `talent_role_required` or unfinished onboarding sends the user to `/talent/onboarding`. Settings, notifications and "Manage experience" are visibly disabled ("Profile editing arrives in the next update"); gallery and availability sections are not shown yet.                                                                                    |
+| Talent settings panel                                    | Mock and not reachable (its entry points are disabled). Its code still persists to `localStorage` key `pre-pro-post:talent-settings` (`settingsStorage.js`).                                                                                                                                                                                                                                                                  |
 | Onboarding (`/talent/onboarding`)                        | **Real.** Signed in only. Finishing sends `POST /api/talent/me` -> `PUT /api/talent/me/crafts` -> `POST /api/talent/me/onboarding/complete` (`useOnboardingSubmit`, payloads from `toOnboardingRequests`), then opens `/talent/me`. A 409 on create fetches the existing profile and continues; a retry after a partial failure resumes. No profile photo step yet (it returns with media upload).                            |
-| Media upload / gallery                                   | Mock seed (`MEDIA_SEED`). The file input only reads the file name; nothing is uploaded. Likes are static numbers.                                                                                                                                                                                                                                                                                                             |
-| Availability calendar                                    | UI over mock data, not persisted.                                                                                                                                                                                                                                                                                                                                                                                             |
-| Productions, artists, testimonials                       | Mock data via `getProductions`, `getArtists`, `getTestimonials`.                                                                                                                                                                                                                                                                                                                                                              |
+| Media upload / gallery                                   | Mock seed (`MEDIA_SEED`), not rendered on either profile until it is wired.                                                                                                                                                                                                                                                                                                                                                   |
+| Availability calendar                                    | Mock UI, not rendered on either profile until it is wired.                                                                                                                                                                                                                                                                                                                                                                    |
+| Productions, testimonials                                | Mock data via `getProductions`, `getTestimonials`.                                                                                                                                                                                                                                                                                                                                                                            |
+| `/artists`, home Talent Network strip                    | **Real.** The same `GET /api/talent` list as discovery (`TalentDirectory`; the home strip uses `FeaturedTalent`, `limit=6`).                                                                                                                                                                                                                                                                                                  |
 | Crafts, states, cities, enums                            | **Real.** `GET /api/bootstrap` via `BootstrapProvider` / `useCatalog()`. Used by the home craft reel, onboarding and the discovery heading. `?craft=` takes a slug.                                                                                                                                                                                                                                                           |
 | Contact form (home)                                      | Markup only. It has no submit handler.                                                                                                                                                                                                                                                                                                                                                                                        |
 | Login, register, verify-email, session (`features/auth`) | **Real.** `POST /api/auth/login`, `/register`, `/logout`, `/refresh`, `/verify-email`, `/resend-verification` and `GET /api/me`. `AuthProvider` restores the session on load (refresh, then `/api/me`; a 401 means signed out). Navbar and mobile menu show "Login / Sign up" or "My profile" / "Log out" (and "Verify your email" when unverified). No Google sign-in or password reset (the backend has no such endpoints). |
@@ -154,7 +158,7 @@ Auth is real (see the table). Everything else listed as mock still is.
 
 Rules that follow from this:
 
-- Page and component code reads data only through the accessor functions (`getTalents()`,
+- Page and component code reads data only through the accessor functions (`getProductions()`,
   `useCatalog()`, ...), never by importing a data file directly. That keeps the swap to the API in
   one place per feature.
 - No half-wired UI. Do not add a button, form, toggle or link that looks functional but does
@@ -186,8 +190,7 @@ frontend. Do not invent endpoints: if `openapi.yaml` does not list it, it does n
 - **Lists use cursor pagination:** `{ "next", "previous", "results" }`. Follow `next` / `previous`
   as opaque URLs or cursors; do not build page numbers or offsets, and do not assume a total count.
 - **Ids are UUID strings.** Treat them as opaque strings; never `Number()`, `parseInt` or compare
-  with numbers. Mock ids today are numbers, which is a known mismatch to fix when wiring talent
-  endpoints (routes already read `:talentId` as a string).
+  with numbers. `:talentId` is passed to the API as is; a malformed id is a 404 like any unknown one.
 - **Reference data comes from `GET /api/bootstrap`**, loaded once at startup and cached (the
   backend documents ETag revalidation). Crafts and locations (states, cities) are referenced by
   `slug` or `id` as `openapi.yaml` specifies, **never by display name and never hardcoded**.

@@ -1,17 +1,15 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-
-import { getArtists } from "@/features/artists/data";
-
-import ArtistCard from "@/features/artists/components/ArtistCard";
 import SectionHeading from "@/components/ui/SectionHeading";
+import { TalentDirectory } from "@/features/talent";
 
+/** /artists: the same searchable, paginated talent list as /talent, under its own heading. */
 export default function ArtistsPage() {
   return (
-    <>
+    <div className="min-h-screen bg-[#090909] text-white">
       <Navbar />
 
-      <section className="pt-40 pb-32 px-6">
+      <main className="pt-32 sm:pt-40 pb-24 sm:pb-32 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <SectionHeading
             eyebrow="Talent Network"
@@ -19,16 +17,11 @@ export default function ArtistsPage() {
             subtitle="Directors, writers, editors, actors, cinematographers, composers, and creators."
             center
           />
-
-          <div className="mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {getArtists().map((artist) => (
-              <ArtistCard key={artist.name} artist={artist} />
-            ))}
-          </div>
+          <TalentDirectory heading="Cinema Professionals" />
         </div>
-      </section>
+      </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

@@ -3,8 +3,10 @@
 React frontend for **Pre Pro Post**, a marketplace for filmmakers: cinema talent builds a profile
 and portfolio, and recruiters discover talent and send offers.
 
-> Status: being wired to the backend. Auth, reference data (bootstrap) and talent onboarding are
-> real; the rest is still mock. See [CLAUDE.md](./CLAUDE.md) for what is mock vs real.
+> Status: being wired to the backend. Auth, reference data (bootstrap), talent onboarding,
+> discovery (`/talent`, `/artists`, the home strip) and the public and owner profiles are real;
+> settings, media and the rest are still mock. See [CLAUDE.md](./CLAUDE.md) for what is mock vs
+> real.
 
 ## Stack
 

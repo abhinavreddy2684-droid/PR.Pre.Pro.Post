@@ -1,4 +1,3 @@
-import { getOwnerTalent } from "@/features/talent/data/ownerTalent";
 import { readStoredSettings } from "@/features/talent/data/settingsStorage";
 
 const FALLBACK_MEDIA = [
@@ -31,23 +30,24 @@ export const DEFAULT_NOTIFICATIONS = {
   platformUpdates: false,
 };
 
+// The settings panel is not reachable until it is wired to the API; it no longer seeds from a
+// mock owner talent.
 export function getInitialSettings() {
-  const talent = getOwnerTalent() || {};
   const stored = readStoredSettings();
   return {
     professional: {
-      name: stored?.professional?.name ?? talent.name ?? "",
-      location: stored?.professional?.location ?? talent.location ?? "",
-      experience: stored?.professional?.experience ?? talent.experience ?? "",
-      bio: stored?.professional?.bio ?? talent.bio ?? "",
+      name: stored?.professional?.name ?? "",
+      location: stored?.professional?.location ?? "",
+      experience: stored?.professional?.experience ?? "",
+      bio: stored?.professional?.bio ?? "",
     },
     crafts: {
-      primary: stored?.crafts?.primary ?? talent.craft ?? "",
+      primary: stored?.crafts?.primary ?? "",
       supporting: stored?.crafts?.supporting ?? [],
-      genres: stored?.crafts?.genres ?? talent.genres ?? [],
+      genres: stored?.crafts?.genres ?? [],
     },
-    media: stored?.media ?? talent.media ?? FALLBACK_MEDIA,
-    experiences: stored?.experiences ?? talent.experiences ?? [],
+    media: stored?.media ?? FALLBACK_MEDIA,
+    experiences: stored?.experiences ?? [],
     availability: stored?.availability ?? {},
     notifications: { ...DEFAULT_NOTIFICATIONS, ...(stored?.notifications || {}) },
   };
