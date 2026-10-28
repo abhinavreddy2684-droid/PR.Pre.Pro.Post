@@ -15,11 +15,21 @@ export function monthGrid(date) {
   };
 }
 
-/**
- * "YYYY-MM-DD" key for a date, as used for stored availability overrides.
- * Note: derived from the UTC date (toISOString), so local midnight east of UTC maps to the
- * previous day. Kept as-is because stored overrides already use this key.
- */
+/** "YYYY-MM-DD" for the date's local calendar day (the format the API uses for dates). */
 export function dateKey(date) {
-  return date.toISOString().slice(0, 10);
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+/** Local midnight today. */
+export function startOfToday() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
+}
+
+/** A new date `days` calendar days after `date`. */
+export function addDays(date, days) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }

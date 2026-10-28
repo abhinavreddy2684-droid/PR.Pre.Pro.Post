@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { isApiError } from "@/lib/api";
 import { getMyTalent } from "@/features/talent/api/talentMeApi";
 
@@ -26,10 +26,20 @@ export default function useMyTalent() {
   else if (isApiError(result.error, "talent_role_required")) status = "noProfile";
   else if (result.error) status = "error";
 
+  /** Use a fresher PrivateTalent the API just returned (PATCH /me, PUT /crafts ...). */
+  const replace = useCallback((talent) => {
+    setResult((current) => ({ ...current, talent, error: null }));
+  }, []);
+
+  /** Refetch quietly (no loading state), e.g. after an experience was added. */
+  const reload = useCallback(async () => replace(await getMyTalent()), [replace]);
+
   return {
     status,
     talent: result.talent,
     error: result.error,
     retry: () => setAttempt((value) => value + 1),
+    replace,
+    reload,
   };
 }

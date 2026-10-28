@@ -4,7 +4,8 @@ import useDialog from "@/hooks/useDialog";
 
 /**
  * Centered editor dialog used inside the settings panel: eyebrow + title header, content, and a
- * Cancel / Save footer. `widthClass` sets the card width (e.g. "max-w-lg").
+ * Cancel / Save footer. `widthClass` sets the card width (e.g. "max-w-lg"). While `pending` the
+ * Save button shows progress and both buttons are disabled.
  */
 export default function SettingsModal({
   eyebrow,
@@ -13,6 +14,7 @@ export default function SettingsModal({
   saveLabel,
   onClose,
   onSave,
+  pending = false,
   children,
 }) {
   const dialogRef = useRef(null);
@@ -29,7 +31,7 @@ export default function SettingsModal({
       className="fixed inset-0 z-[100] grid place-items-center bg-black/70 p-5 backdrop-blur-sm"
     >
       <div
-        className={`w-full ${widthClass} rounded-3xl bg-[#111] p-6 shadow-2xl ring-1 ring-white/10 sm:p-8`}
+        className={`max-h-full w-full overflow-y-auto ${widthClass} rounded-3xl bg-[#111] p-6 shadow-2xl ring-1 ring-white/10 sm:p-8`}
       >
         <div className="flex items-center justify-between">
           <div>
@@ -52,16 +54,18 @@ export default function SettingsModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full px-5 py-2.5 text-xs font-semibold text-white/50 hover:text-white"
+            disabled={pending}
+            className="rounded-full px-5 py-2.5 text-xs font-semibold text-white/50 hover:text-white disabled:opacity-40"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={onSave}
-            className="rounded-full bg-amber-500 px-6 py-2.5 text-xs font-bold text-black"
+            disabled={pending}
+            className="rounded-full bg-amber-500 px-6 py-2.5 text-xs font-bold text-black disabled:opacity-50"
           >
-            {saveLabel}
+            {pending ? "Saving…" : saveLabel}
           </button>
         </div>
       </div>

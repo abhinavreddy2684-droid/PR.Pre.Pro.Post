@@ -4,44 +4,59 @@ import { useCatalog } from "@/catalog";
 import SaveButton from "@/features/talent/components/settings/fields/SaveButton";
 import FloatingCard from "@/features/talent/components/settings/fields/FloatingCard";
 import CustomDropdown from "@/features/talent/components/settings/fields/CustomDropdown";
-import ChipInput from "@/features/talent/components/settings/fields/ChipInput";
-import useSavedFlash from "@/features/talent/hooks/useSavedFlash";
+import SettingsError from "@/features/talent/components/settings/fields/SettingsError";
+import { setMyCrafts } from "@/features/talent/api/talentMeApi";
+import useOwnerTalent from "@/features/talent/hooks/useOwnerTalent";
+import useSectionSave from "@/features/talent/hooks/useSectionSave";
 
-export default function CraftSettings({ settings, onSave }) {
-  const [draft, setDraft] = useState(settings);
+const FIELD_LABELS = { primary: "Primary craft", supporting: "Supporting crafts" };
+
+const toDraft = (talent) => ({
+  primary: talent.crafts.find((craft) => craft.is_primary)?.slug ?? "",
+  supporting: talent.crafts.filter((craft) => !craft.is_primary).map((craft) => craft.slug),
+});
+
+const sameSet = (a, b) => a.length === b.length && a.every((item) => b.includes(item));
+
+/** Crafts: PUT /api/talent/me/crafts with the primary and supporting slugs. */
+export default function CraftSettings() {
+  const { talent, replace } = useOwnerTalent();
+  const { crafts, craftBySlug } = useCatalog();
+  const [draft, setDraft] = useState(() => toDraft(talent));
   const [query, setQuery] = useState("");
-  const [saved, flashSaved] = useSavedFlash(1400);
   const [mode, setMode] = useState("supporting");
-  const { crafts } = useCatalog();
-  // TODO: the settings mock stores craft titles; use slugs when settings are wired to the API.
-  const allCrafts = useMemo(() => crafts.map((craft) => craft.title), [crafts]);
-  const filtered = useMemo(
-    () => allCrafts.filter((craft) => craft.toLowerCase().includes(query.trim().toLowerCase())),
-    [allCrafts, query],
-  );
-  const isPrimary = (craft) => draft.primary === craft;
-  const isSupporting = (craft) => draft.supporting.includes(craft);
-  const selectCraft = (craft) => {
+  const save = useSectionSave();
+  const before = toDraft(talent);
+  const changed = draft.primary !== before.primary || !sameSet(draft.supporting, before.supporting);
+
+  const filtered = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return needle ? crafts.filter((craft) => craft.title.toLowerCase().includes(needle)) : crafts;
+  }, [crafts, query]);
+  const isPrimary = (slug) => draft.primary === slug;
+  const isSupporting = (slug) => draft.supporting.includes(slug);
+  const selectCraft = (slug) => {
     if (mode === "primary") {
       setDraft((current) => ({
-        ...current,
-        primary: craft,
-        supporting: current.supporting.filter((item) => item !== craft),
+        primary: slug,
+        supporting: current.supporting.filter((item) => item !== slug),
       }));
       return;
     }
-    if (craft === draft.primary) return;
+    if (slug === draft.primary) return;
     setDraft((current) => ({
       ...current,
-      supporting: current.supporting.includes(craft)
-        ? current.supporting.filter((item) => item !== craft)
-        : [...current.supporting, craft],
+      supporting: current.supporting.includes(slug)
+        ? current.supporting.filter((item) => item !== slug)
+        : [...current.supporting, slug],
     }));
   };
-  const save = () => {
-    onSave(draft);
-    flashSaved();
-  };
+  const submit = () =>
+    save.run(async () => {
+      const updated = await setMyCrafts(draft);
+      replace(updated);
+      setDraft(toDraft(updated));
+    });
   const options = [
     { value: "primary", label: "Primary craft" },
     { value: "supporting", label: "Supporting craft" },
@@ -75,7 +90,9 @@ export default function CraftSettings({ settings, onSave }) {
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl bg-amber-500/[0.06] p-4">
             <p className="text-[10px] uppercase tracking-[0.18em] text-amber-400">Primary</p>
-            <p className="mt-2 text-lg font-bold text-white">{draft.primary || "Not selected"}</p>
+            <p className="mt-2 text-lg font-bold text-white">
+              {craftBySlug(draft.primary)?.title || "Not selected"}
+            </p>
             <p className="mt-1 text-xs text-white/30">
               The craft recruiters discover you through first.
             </p>
@@ -119,17 +136,17 @@ export default function CraftSettings({ settings, onSave }) {
         </div>
         <div className="mt-5 flex flex-wrap gap-2.5">
           {filtered.map((craft) => {
-            const primary = isPrimary(craft);
-            const supporting = isSupporting(craft);
+            const primary = isPrimary(craft.slug);
+            const supporting = isSupporting(craft.slug);
             return (
               <button
                 type="button"
-                key={craft}
+                key={craft.slug}
                 aria-pressed={primary || supporting}
-                onClick={() => selectCraft(craft)}
+                onClick={() => selectCraft(craft.slug)}
                 className={`rounded-full px-4 py-2.5 text-xs font-semibold transition ${primary ? "bg-amber-500 text-black shadow-[0_0_24px_rgba(245,158,11,.13)]" : supporting ? "bg-white/[0.11] text-white ring-1 ring-amber-500/30" : "bg-white/[0.035] text-white/50 hover:-translate-y-0.5 hover:bg-white/[0.07] hover:text-white"}`}
               >
-                {craft}
+                {craft.title}
                 {primary && (
                   <span className="ml-2 text-[9px] uppercase tracking-wider opacity-60">
                     Primary
@@ -150,18 +167,15 @@ export default function CraftSettings({ settings, onSave }) {
           </div>
         )}
       </div>
-      <FloatingCard
-        title="Genres & specialities"
-        description="These tags help recruiters understand your range and improve matching."
-      >
-        <ChipInput
-          values={draft.genres}
-          onChange={(genres) => setDraft({ ...draft, genres })}
-          placeholder="Add a genre or speciality"
+      {save.error && <SettingsError error={save.error} fieldLabels={FIELD_LABELS} />}
+      <div className="flex items-center justify-end gap-4">
+        {!changed && !save.saved && <p className="text-xs text-white/30">No unsaved changes</p>}
+        <SaveButton
+          onClick={submit}
+          saved={save.saved}
+          pending={save.pending}
+          disabled={(!changed && !save.saved) || !draft.primary}
         />
-      </FloatingCard>
-      <div className="flex justify-end">
-        <SaveButton onClick={save} saved={saved} />
       </div>
     </div>
   );

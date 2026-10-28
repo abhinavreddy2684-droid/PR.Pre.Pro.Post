@@ -4,11 +4,8 @@ import { useState } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import SectionAction from "@/features/talent/components/owner/SectionAction";
 
-/**
- * The owner's work history. `onManage` opens the editor; without it the action is disabled
- * with `manageDisabledReason`.
- */
-export default function OwnerExperience({ talent, onManage, manageDisabledReason }) {
+/** The owner's work history, with a shortcut to the experience settings. */
+export default function OwnerExperience({ talent, onManage }) {
   const entries = talent.experiences;
   const [start, setStart] = useState(0);
   const visible = entries.slice(start, start + 3);
@@ -20,7 +17,7 @@ export default function OwnerExperience({ talent, onManage, manageDisabledReason
           title="The Career Behind The Craft"
           subtitle={`A look at the experiences that shaped ${talent.name}'s professional journey.`}
         />
-        <SectionAction onClick={onManage} disabledReason={manageDisabledReason}>
+        <SectionAction onClick={onManage}>
           <Pencil size={13} />
           Manage experience
         </SectionAction>
